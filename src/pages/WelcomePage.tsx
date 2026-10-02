@@ -274,7 +274,7 @@ function AuthModal({ initialMode = 'login', onClose, onSuccess, onGoogleSignIn, 
 
         {/* Brand */}
         <div className="flex flex-col items-center mb-6 mt-1">
-          <TransparentLogo src="/Logo-SentinelX.PNG" alt="SENTINEL-X" className="h-14 sm:h-16 w-auto object-contain mb-2 drop-shadow-lg" />
+          <TransparentLogo src="/MAILVEIL_DARKMODE.png" alt="Mailveil" className="h-14 sm:h-16 w-auto object-contain mb-2 drop-shadow-lg" />
           <p className="text-[10px] text-gray-500 tracking-[0.2em] uppercase font-medium">Secure Access Portal</p>
         </div>
 
@@ -616,7 +616,7 @@ export function WelcomePage({ onNavigate }: WelcomePageProps) {
         }}
       />
 
-      {/* ══ LAYER 1 — SENTINEL-X UI ══ */}
+      {/* ══ LAYER 1 — MAILVEIL UI ══ */}
       <div className="absolute inset-0 z-10 flex flex-col overflow-y-auto md:overflow-hidden touch-scroll" style={{ pointerEvents: 'none' }}>
 
         {/* ─ Top bar ─ */}
@@ -627,7 +627,7 @@ export function WelcomePage({ onNavigate }: WelcomePageProps) {
             paddingTop: 'max(1.25rem, calc(env(safe-area-inset-top, 0px) + 0.75rem))',
           }}
         >
-          <TransparentLogo src="/Logo-SentinelX.PNG" alt="SENTINEL-X" className="h-12 sm:h-16 md:h-20 w-auto object-contain drop-shadow-xl" />
+          <TransparentLogo src="/MAILVEIL_DARKMODE.png" alt="Mailveil" className="h-12 sm:h-16 md:h-20 w-auto object-contain drop-shadow-xl" />
 
           {/* Auth controls — only shown when NOT logged in */}
           {!isLoggedIn && (

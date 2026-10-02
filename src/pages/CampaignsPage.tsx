@@ -131,7 +131,7 @@ function buildCaseFromAnalysis(r: EmailAnalysisResult): InvestigationCase {
     severity: alertToSeverity(r.alert_level),
     status,
     created: now,
-    assignedAnalyst: 'SENTINEL-X Engine',
+    assignedAnalyst: 'Mailveil Engine',
     threatType: (r.verdict?.split(' ')[0] ?? 'BEC') as any,
     relatedCampaign: r.campaign_id ?? 'UNKNOWN',
     lastUpdated: now,
@@ -141,16 +141,16 @@ function buildCaseFromAnalysis(r: EmailAnalysisResult): InvestigationCase {
         ? r.recommended_actions.map((a) => ({
           time: now,
           event: `[${a.priority.toUpperCase()}] ${a.action}: ${a.detail}`,
-          actor: 'SENTINEL-X Engine',
+          actor: 'Mailveil Engine',
         }))
-        : [{ time: now, event: `Analysis completed — threat score ${r.threat_score}/100`, actor: 'SENTINEL-X Engine' }],
+        : [{ time: now, event: `Analysis completed — threat score ${r.threat_score}/100`, actor: 'Mailveil Engine' }],
     analystNotes: r.ai_inferences.slice(0, 3).map((inf) => ({
       author: 'AI Engine',
       timestamp: now,
       note: `${inf.inference} — ${inf.confidence}% confidence. Basis: ${inf.basis}`,
     })),
     activityHistory: [
-      { time: now, action: 'Case generated via live email analysis', actor: 'SENTINEL-X Engine' },
+      { time: now, action: 'Case generated via live email analysis', actor: 'Mailveil Engine' },
     ],
     relatedEvidence: r.evidence?.map((e) => e.id) ?? [],
   };

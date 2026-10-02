@@ -1,6 +1,6 @@
 {
-  "name": "SENTINEL-X | Enterprise Email Forensics",
-  "short_name": "SENTINEL-X",
+  "name": "Mailveil | Enterprise Email Forensics",
+  "short_name": "Mailveil",
   "description": "Enterprise AI Email Forensics & Threat Intelligence Platform",
   "start_url": "/",
   "display": "standalone",
@@ -8,13 +8,13 @@
   "theme_color": "#0a0c14",
   "icons": [
     {
-      "src": "/Logo-Shield_SentinelX.png",
+      "src": "/MAILVEIL.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/sentinel-x-logo-512.png",
+      "src": "/favicon.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"

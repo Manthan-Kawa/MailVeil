@@ -19,8 +19,8 @@ self.addEventListener('push', (event) => {
 
   const options = {
     body: data.body,
-    icon: data.icon || '/Logo-SentinelX.PNG',
-    badge: '/Logo-SentinelX.PNG',
+    icon: data.icon || '/MAILVEIL.png',
+    badge: '/MAILVEIL.png',
     data: data.url || '/',
     vibrate: [200, 100, 200],
     tag: 'sentinel-critical-alert',

@@ -286,7 +286,7 @@ function getApiKey(): string {
 }
 
 // ─── Prompt ──────────────────────────────────────────────────────────────────
-const SYSTEM_PROMPT = `You are Sentinel-X, an elite email forensics AI.
+const SYSTEM_PROMPT = `You are Mailveil, an elite email forensics AI.
 Analyze the raw email provided and return ONLY a valid JSON object — no markdown, no explanation, no code fences.
 
 Required JSON shape (all fields required, arrays may be empty):

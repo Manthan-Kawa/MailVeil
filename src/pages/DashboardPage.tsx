@@ -357,7 +357,7 @@ export function DashboardPage({ onNavigate }: { onNavigate?: (route: string) => 
     });
   }, [analyzedReports]);
 
-  // Sentinel AI Card Metrics
+  // Mailveil AI Card Metrics
   const activeAIResult = currentResult || analyzedReports[0] || null;
   const confidence = activeAIResult ? (activeAIResult.confidence || 92) : 0;
   const aiSummary = activeAIResult
@@ -634,7 +634,7 @@ export function DashboardPage({ onNavigate }: { onNavigate?: (route: string) => 
         </SlideIn>
       </div>
 
-      {/* ── Volume Bar Chart + Live Feed + Sentinel AI ── */}
+      {/* ── Volume Bar Chart + Live Feed + Mailveil AI ── */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
 
         {/* Volume bars + live feed stacked */}
@@ -730,7 +730,7 @@ export function DashboardPage({ onNavigate }: { onNavigate?: (route: string) => 
           </SlideIn>
         </div>
 
-        {/* Sentinel AI */}
+        {/* Mailveil AI */}
         <SlideIn delay={820} direction="right" className="lg:col-span-2">
           <div className="rounded-2xl p-5 h-full"
             style={{ background: isDark ? 'linear-gradient(145deg,#09090f,#0c0e18)' : '#ffffff', border: isDark ? '1px solid rgba(255,255,255,0.07)' : '1px solid #e2e8f0', boxShadow: isDark ? '0 8px 32px rgba(0,0,0,0.5)' : '0 1px 3px rgba(0,0,0,0.05)' }}>
@@ -741,7 +741,7 @@ export function DashboardPage({ onNavigate }: { onNavigate?: (route: string) => 
                 <Bot className="w-4 h-4 text-violet-400" />
               </div>
               <div>
-                <p className="text-sm font-bold text-slate-900 dark:text-white tracking-wide">SENTINEL AI</p>
+                <p className="text-sm font-bold text-slate-900 dark:text-white tracking-wide">MAILVEIL AI</p>
                 <p className="text-[10px] text-slate-500 dark:text-gray-400">AI-powered threat investigation assistant</p>
               </div>
             </div>

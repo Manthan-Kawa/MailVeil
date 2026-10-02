@@ -237,7 +237,7 @@ export function downloadAttachmentFile(attachment: {
   }
 
   // Fallback: create simulated placeholder file with metadata
-  const fallbackText = `Sentinel-X Forensic Attachment Export\nFilename: ${attachment.filename}\nMIME Type: ${mime}\nTimestamp: ${new Date().toISOString()}\n`;
+  const fallbackText = `Mailveil Forensic Attachment Export\nFilename: ${attachment.filename}\nMIME Type: ${mime}\nTimestamp: ${new Date().toISOString()}\n`;
   const blob = new Blob([fallbackText], { type: 'text/plain' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -295,7 +295,7 @@ export async function downloadZipBundle(
     // Fallback file content if raw data missing
     zip.file(
       name,
-      `Sentinel-X Archived File: ${name}\nMIME: ${att.mimeType || guessMimeType(name)}\nExtracted: ${new Date().toISOString()}`
+      `Mailveil Archived File: ${name}\nMIME: ${att.mimeType || guessMimeType(name)}\nExtracted: ${new Date().toISOString()}`
     );
   }
 

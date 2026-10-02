@@ -709,7 +709,7 @@ export class EmailForensicsService {
       aiSynthesis: {
         executiveSummary,
         riskNarrative,
-        plainLanguageExplanation: `Sentinel-X AI reviewed the email payload, extracted links, and cryptographic authentication headers. ${riskNarrative}`,
+        plainLanguageExplanation: `Mailveil AI reviewed the email payload, extracted links, and cryptographic authentication headers. ${riskNarrative}`,
         mitigationChecklist,
       },
       headerForensics: {

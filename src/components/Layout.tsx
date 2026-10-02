@@ -236,8 +236,8 @@ export function Sidebar({ activeId, onNavigate, onSignOut, mobileOpen, onMobileC
           className="soc-sidebar-header relative h-[88px] flex items-center justify-between pl-4 pr-3 shrink-0 border-b border-slate-200 dark:border-white/[0.06]"
         >
           <TransparentLogo
-            src={isDark ? "/Logo-SentinelX.PNG" : "/Logo-SentinelX-black.png"}
-            alt="SENTINEL-X"
+            src={isDark ? "/MAILVEIL_DARKMODE.png" : "/MAILVEIL_LIGHTMODE.png"}
+            alt="Mailveil"
             className="h-[60px] max-w-[232px] w-auto object-contain drop-shadow-[0_0_12px_rgba(6,182,212,0.25)] transition-transform hover:scale-105"
           />
           <button

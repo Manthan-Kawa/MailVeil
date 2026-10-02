@@ -395,7 +395,7 @@ export class GmailIngestionService {
           throw new Error('Gmail API is not enabled in your Google Cloud Console project. Please enable it at: https://console.cloud.google.com/apis/library/gmail.googleapis.com');
         }
         if (errText.includes('insufficientPermissions') || errText.includes('SCOPE')) {
-          throw new Error('Gmail read permission was not granted. Please disconnect and sign in again, ensuring you check the box to allow Sentinel-X to view email messages.');
+          throw new Error('Gmail read permission was not granted. Please disconnect and sign in again, ensuring you check the box to allow Mailveil to view email messages.');
         }
       }
       throw new Error(`Gmail API error (${res.status}): ${res.statusText} - ${errText}`);

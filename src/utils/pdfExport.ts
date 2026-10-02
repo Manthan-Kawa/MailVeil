@@ -31,7 +31,7 @@ export function generateTextReport(result: EmailAnalysisResult): string {
   const subDivider = '-'.repeat(78);
 
   return `${divider}
-SENTINEL-X EMAIL FORENSIC ANALYSIS REPORT
+MAILVEIL EMAIL FORENSIC ANALYSIS REPORT
 Generated: ${timestamp}
 Classification: CONFIDENTIAL / SOC INCIDENT REPORT
 ${divider}
@@ -80,7 +80,7 @@ ${subDivider}
 ${result.headers.map((h) => `${h.key}: ${h.value}`).join('\n')}
 
 ${divider}
-END OF FORENSIC REPORT — SENTINEL-X SECURITY PLATFORM
+END OF FORENSIC REPORT — MAILVEIL SECURITY PLATFORM
 ${divider}
 `;
 }
@@ -94,7 +94,7 @@ export function downloadTextReport(result: EmailAnalysisResult, filename?: strin
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = filename || `SENTINEL-X_${result.case_id}_Forensic_Report.txt`;
+  a.download = filename || `Mailveil_${result.case_id}_Forensic_Report.txt`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -149,7 +149,7 @@ export function generateFormattedPdfHtml(
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>SENTINEL-X ${typeLabel} — ${data.caseId}</title>
+  <title>Mailveil ${typeLabel} — ${data.caseId}</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
@@ -470,7 +470,7 @@ export function generateFormattedPdfHtml(
     <!-- Header -->
     <div class="header-bar">
       <div>
-        <div class="brand-title">SENTINEL<span>-X</span> SOC</div>
+        <div class="brand-title">MAIL<span>VEIL</span> SOC</div>
         <div class="brand-sub">${typeLabel} · Cyber Threat Intelligence</div>
       </div>
       <div class="meta-box">
@@ -747,7 +747,7 @@ export function generateFormattedPdfHtml(
 
     <!-- Footer -->
     <div class="footer avoid-break">
-      <div>SENTINEL-X SECURITY OPERATIONS PLATFORM · CRYPTOGRAPHICALLY SECURED</div>
+      <div>MAILVEIL SECURITY OPERATIONS PLATFORM · CRYPTOGRAPHICALLY SECURED</div>
       <div>CONFIDENTIAL FORENSIC DOSSIER</div>
     </div>
   </div>
@@ -825,7 +825,7 @@ export function exportReportAsPDF(
 ) {
   const printWindow = window.open('', '_blank', 'width=1100,height=950');
   if (!printWindow) {
-    alert('Please allow popups for Sentinel-X to export and print the PDF report.');
+    alert('Please allow popups for Mailveil to export and print the PDF report.');
     return;
   }
 

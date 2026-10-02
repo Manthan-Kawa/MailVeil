@@ -62,7 +62,7 @@ export function resultToAlert(r: EmailAnalysisResult): SecurityAlert {
     detected,
     status: severity === 'critical' || severity === 'high' ? 'new' : 'acknowledged',
     relatedCase: r.case_id,
-    summary: r.summary ?? `Email analyzed by SENTINEL-X. Verdict: ${r.verdict}. Risk score ${score}/100.`,
+    summary: r.summary ?? `Email analyzed by Mailveil. Verdict: ${r.verdict}. Risk score ${score}/100.`,
     observedFacts,
     aiInference,
     relatedIndicators,

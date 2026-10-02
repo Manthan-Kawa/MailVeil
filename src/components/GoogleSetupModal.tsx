@@ -88,7 +88,7 @@ export function GoogleSetupModal({ isOpen, onClose, onSuccessConnect }: GoogleSe
               <span>Read-Only & Client-Side Privacy</span>
             </div>
             <p>
-              Sentinel-X connects directly to your Gmail account with <strong>read-only access</strong>. No emails are ever deleted, sent, or stored externally.
+              Mailveil connects directly to your Gmail account with <strong>read-only access</strong>. No emails are ever deleted, sent, or stored externally.
             </p>
           </div>
 

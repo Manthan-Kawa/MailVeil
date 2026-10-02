@@ -153,7 +153,7 @@ function getGeminiApiKey(): string | null {
   return null;
 }
 
-const TRIAGE_SYSTEM_PROMPT = `You are Sentinel-X Automated Ingestion Triage AI.
+const TRIAGE_SYSTEM_PROMPT = `You are Mailveil Automated Ingestion Triage AI.
 Evaluate the incoming email for security threats, phishing, spoofing, BEC, and malicious links.
 You MUST return ONLY valid JSON matching this exact schema:
 {
@@ -239,7 +239,7 @@ ${email.body_text.slice(0, 3000)}
               threat_level: parsed.threat_level || (threatScore >= 70 ? 'malicious' : threatScore >= 26 ? 'suspicious' : 'clean'),
               threat_score: threatScore,
               confidence: typeof parsed.confidence === 'number' ? parsed.confidence : 85,
-              summary: parsed.summary || 'Initial security evaluation completed by Sentinel-X AI.',
+              summary: parsed.summary || 'Initial security evaluation completed by Mailveil AI.',
               indicators: Array.isArray(parsed.indicators) ? parsed.indicators : [],
               recommended_action: parsed.recommended_action || 'Proceed with caution.',
               model_used: model,
@@ -399,7 +399,7 @@ Microsoft Security Operations Team`,
         mimeType: 'application/pdf',
         size: 148400,
         formattedSize: '148.4 KB',
-        data: btoa('%PDF-1.7\n%Sentinel-X Validated PDF Payload\n1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\nxref\n0 2\ntrailer\n<< /Root 1 0 R >>\n%%EOF'),
+        data: btoa('%PDF-1.7\n%Mailveil Validated PDF Payload\n1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\nxref\n0 2\ntrailer\n<< /Root 1 0 R >>\n%%EOF'),
       },
     ],
   },
@@ -568,29 +568,29 @@ Cloud Services 360`,
     sender: 'engineering-updates@github.com',
     sender_name: 'GitHub',
     recipient: 'user@company.com',
-    subject: '[GitHub] Dependabot alert: security updates available in sentinel-x',
+    subject: '[GitHub] Dependabot alert: security updates available in mailveil',
     snippet: 'Dependabot detected 1 vulnerability in dependencies: axios 0.21.1 has a moderate severity advisory.',
     body_text: `GitHub Security Advisory
 
 Dependabot detected 1 vulnerability in your repository dependencies:
-Repository: sentinel-x/web-platform
+Repository: mailveil/web-platform
 Advisory: GHSA-cph5-m8f8-6625 (Moderate)
 
 View details and automated pull request:
-https://github.com/sentinel-x/web-platform/security/dependabot/1
+https://github.com/mailveil/web-platform/security/dependabot/1
 
 GitHub Security Notifications`,
     headers: {
       from: '"GitHub" <engineering-updates@github.com>',
       to: 'user@company.com',
       date: new Date(Date.now() - 6 * 3600 * 1000).toUTCString(),
-      subject: '[GitHub] Dependabot alert: security updates available in sentinel-x',
+      subject: '[GitHub] Dependabot alert: security updates available in mailveil',
       spf: 'PASS',
       dkim: 'PASS',
       dmarc: 'PASS',
     },
     extracted_urls: [
-      'https://github.com/sentinel-x/web-platform/security/dependabot/1',
+      'https://github.com/mailveil/web-platform/security/dependabot/1',
     ],
     is_read: true,
     received_at: new Date(Date.now() - 6 * 3600 * 1000).toISOString(),

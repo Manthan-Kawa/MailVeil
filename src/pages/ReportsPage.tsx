@@ -173,7 +173,7 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `SENTINEL-X_${reportData.caseId}_${reportType}_report.txt`;
+    a.download = `Mailveil_${reportData.caseId}_${reportType}_report.txt`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -184,7 +184,7 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
     if (!reportData) return;
     const printWindow = window.open('', '_blank', 'width=1100,height=950');
     if (!printWindow) {
-      alert('Please allow popups for Sentinel-X to generate and print the PDF report.');
+      alert('Please allow popups for Mailveil to generate and print the PDF report.');
       return;
     }
 
@@ -1584,7 +1584,7 @@ function TacticalSvgMap({
 
       {/* Compass / HUD Overlay */}
       <g transform="translate(20, 20)" fill="#64748b" fontSize="9" fontFamily="'Inter', sans-serif">
-        <text x="0" y="0" fill="#38bdf8" fontWeight="bold">SENTINEL-X GLOBAL SOC GEO-LOCATOR</text>
+        <text x="0" y="0" fill="#38bdf8" fontWeight="bold">MAILVEIL GLOBAL SOC GEO-LOCATOR</text>
         <text x="0" y="14">PROJECTION: CYBER-CYLINDRICAL · WGS84</text>
       </g>
     </svg>
@@ -1604,7 +1604,7 @@ function generateReportText(
 ): string {
   const typeLabel = REPORT_TYPES.find((r) => r.id === type)?.label ?? 'Report';
   let text = `=================================================================\n`;
-  text += `SENTINEL-X ${typeLabel.toUpperCase()} — CASE ${data.caseId}\n`;
+  text += `MAILVEIL ${typeLabel.toUpperCase()} — CASE ${data.caseId}\n`;
   text += `=================================================================\n\n`;
   text += `Generated: ${new Date().toISOString()}\n`;
   text += `Classification: CONFIDENTIAL // SOC INCIDENT DOSSIER\n`;
@@ -1650,7 +1650,7 @@ function generateReportText(
   text += `\n`;
 
   text += `=================================================================\n`;
-  text += `End of Sentinel-X Forensic Dossier\n`;
+  text += `End of Mailveil Forensic Dossier\n`;
   return text;
 }
 
@@ -1725,7 +1725,7 @@ function SentinelAI({ currentResult }: { currentResult: EmailAnalysisResult }) {
         <div>
           <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
             <Brain className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-            SENTINEL SOC AI Assistant
+            MAILVEIL SOC AI Assistant
           </h3>
           <p className="text-[11px] text-slate-500 dark:text-gray-500 mt-0.5">
             Grounded in active case <span className="text-purple-600 dark:text-purple-300 font-mono font-semibold">{currentResult.case_id}</span> ({currentResult.verdict})

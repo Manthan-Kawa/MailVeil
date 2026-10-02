@@ -105,7 +105,7 @@ export class GoogleAuthService {
       return localId.trim();
     }
     // 3. Hardcoded fallback — guarantees Google sign-in always works for every user
-    return '52682109136-m25arg455feji85a2dkahudh68v03359.apps.googleusercontent.com';
+    return '1067826540808-u61hk5rtkpe8tjtfj1lv8us2km8np55p.apps.googleusercontent.com';
   }
 
   /**

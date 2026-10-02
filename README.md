@@ -1,4 +1,4 @@
-# 🛡️ SENTINEL-X
+# 🛡️ MAILVEIL
 
 ### AI-Powered Email Forensics & Threat Intelligence Platform
 
@@ -16,9 +16,9 @@
 
 ## 📖 Overview
 
-**SENTINEL-X** is a premium, dark-themed enterprise SOC/forensic-style web application built as a prototype for the Smart India Hackathon problem statement on **AI-powered email threat detection, geolocation, and forensic intelligence**.
+**Mailveil** is a premium, dark-themed enterprise SOC/forensic-style web application built as a prototype for the Smart India Hackathon problem statement on **AI-powered email threat detection, geolocation, and forensic intelligence**.
 
-Rather than a generic dashboard, SENTINEL-X is designed to look and feel like a real Security Operations Center (SOC) tool — enabling analysts to ingest suspicious emails, detect threats with AI-explainable reasoning, trace network/geographic origin, correlate indicators into attack graphs, manage investigations, and preserve tamper-evident forensic evidence.
+Rather than a generic dashboard, Mailveil is designed to look and feel like a real Security Operations Center (SOC) tool — enabling analysts to ingest suspicious emails, detect threats with AI-explainable reasoning, trace network/geographic origin, correlate indicators into attack graphs, manage investigations, and preserve tamper-evident forensic evidence.
 
 > All data in this prototype is **synthetic/mock data**, generated for demonstration purposes. No real email content, IPs, or attacker data are used.
 
@@ -77,8 +77,8 @@ Email → Detect → Explain → Trace → Correlate → Investigate → Preserv
 - Simulated integrity chain: `Evidence → SHA-256 → Immutable Ledger → Integrity Verified`
 - Uses **mock blockchain-style ledger data** only
 
-### 📊 Reports & Sentinel AI
-- Conversational **Sentinel AI** assistant (e.g. "Why is this suspicious?", "Summarize this case")
+### 📊 Reports & Mailveil AI
+- Conversational **Mailveil AI** assistant (e.g. "Why is this suspicious?", "Summarize this case")
 - Report previews for **Executive**, **Technical**, and **Forensic** audiences
 
 ---

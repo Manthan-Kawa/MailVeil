@@ -164,7 +164,7 @@ export class NotificationRulesService {
       return false;
     }
 
-    const notifIcon = icon || '/Logo-SentinelX.PNG';
+    const notifIcon = icon || '/MAILVEIL.png';
 
     // 1. Service Worker push display (REQUIRED for iOS Home Screen PWAs & WebKit)
     if ('serviceWorker' in navigator) {
@@ -215,7 +215,7 @@ export class NotificationRulesService {
       }
       if (Notification.permission === 'granted') {
         nativeSent = this.sendBrowserPush(
-          'SENTINEL-X: Critical Threat Alert',
+          'MAILVEIL: Critical Threat Alert',
           'High-confidence phishing indicator intercepted (Score: 92/100). Perimeter protection active.'
         );
       }

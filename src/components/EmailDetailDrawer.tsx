@@ -252,7 +252,7 @@ export function EmailDetailDrawer({
     if (!email.attachments || email.attachments.length === 0) return;
     setIsZippingAll(true);
     try {
-      await downloadZipBundle(email.attachments, `Sentinel-X_${email.id}_Attachments.zip`);
+      await downloadZipBundle(email.attachments, `Mailveil_${email.id}_Attachments.zip`);
     } catch (err: any) {
       alert(`ZIP bundle creation failed: ${err?.message}`);
     } finally {
@@ -265,7 +265,7 @@ export function EmailDetailDrawer({
     if (images.length === 0) return;
     setIsZippingImages(true);
     try {
-      await downloadZipBundle(images, `Sentinel-X_${email.id}_Images.zip`);
+      await downloadZipBundle(images, `Mailveil_${email.id}_Images.zip`);
     } catch (err: any) {
       alert(`Image ZIP creation failed: ${err?.message}`);
     } finally {

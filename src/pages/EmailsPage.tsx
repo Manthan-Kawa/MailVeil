@@ -116,7 +116,7 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
     disconnectGoogle();
     UserNotificationService.addUserNotification({
       title: 'Gmail Disconnected',
-      message: 'Gmail account disconnected from Sentinel-X monitoring.',
+      message: 'Gmail account disconnected from Mailveil monitoring.',
       category: 'system',
       userEmail: currentUser?.email,
     });

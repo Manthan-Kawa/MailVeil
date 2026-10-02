@@ -204,8 +204,8 @@ export function AttachmentForensicsSection({
     setIsZippingAll(true);
     try {
       const zipName = email?.subject
-        ? `Sentinel-X_${email.subject.replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 30)}_Attachments.zip`
-        : `Sentinel-X_Email_Attachments_${Date.now()}.zip`;
+        ? `Mailveil_${email.subject.replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 30)}_Attachments.zip`
+        : `Mailveil_Email_Attachments_${Date.now()}.zip`;
 
       await downloadZipBundle(items, zipName);
     } catch (err: any) {
@@ -221,7 +221,7 @@ export function AttachmentForensicsSection({
     if (imageItems.length === 0) return;
     setIsZippingImages(true);
     try {
-      const zipName = `Sentinel-X_Images_Bundle_${Date.now()}.zip`;
+      const zipName = `Mailveil_Images_Bundle_${Date.now()}.zip`;
       await downloadZipBundle(imageItems, zipName);
     } catch (err: any) {
       console.error('ZIP Images failed:', err);

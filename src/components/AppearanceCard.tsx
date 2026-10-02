@@ -1,4 +1,5 @@
 import { Monitor, Sun, Moon } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/context/ThemeContext';
 
 export function AppearanceCard() {
@@ -24,28 +25,59 @@ export function AppearanceCard() {
         </div>
 
         {/* Toggle switch pill */}
-        <button
+        <motion.button
           type="button"
           onClick={(e) => toggleTheme(e)}
           aria-label="Toggle dark/light mode"
-          className={`relative w-16 h-8 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-2 ${
-            theme === 'dark'
-              ? 'bg-gradient-to-r from-indigo-600 to-purple-600'
-              : 'bg-gradient-to-r from-sky-400 to-cyan-400'
-          }`}
+          animate={{
+            background: theme === 'dark'
+              ? 'linear-gradient(to right, #4f46e5, #9333ea)'
+              : 'linear-gradient(to right, #38bdf8, #22d3ee)'
+          }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+          className="relative w-16 h-8 rounded-full focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-2"
         >
-          <span
-            className={`absolute top-1 w-6 h-6 rounded-full flex items-center justify-center shadow-md transition-all duration-300 ${
-              theme === 'dark' ? 'translate-x-8 bg-slate-900' : 'translate-x-1 bg-white'
-            }`}
+          <motion.div
+            layout
+            initial={false}
+            animate={{
+              x: theme === 'dark' ? 32 : 4,
+              backgroundColor: theme === 'dark' ? '#0f172a' : '#ffffff'
+            }}
+            transition={{
+              type: 'spring',
+              stiffness: 500,
+              damping: 30,
+            }}
+            className="absolute top-1 w-6 h-6 rounded-full flex items-center justify-center shadow-md"
           >
-            {theme === 'dark' ? (
-              <Moon className="w-3.5 h-3.5 text-indigo-300" />
-            ) : (
-              <Sun className="w-3.5 h-3.5 text-amber-500" />
-            )}
-          </span>
-        </button>
+            <AnimatePresence mode="wait" initial={false}>
+              {theme === 'dark' ? (
+                <motion.div
+                  key="moon"
+                  initial={{ opacity: 0, rotate: -90, scale: 0.5 }}
+                  animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                  exit={{ opacity: 0, rotate: 90, scale: 0.5 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute flex items-center justify-center"
+                >
+                  <Moon className="w-3.5 h-3.5 text-indigo-300" />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="sun"
+                  initial={{ opacity: 0, rotate: 90, scale: 0.5 }}
+                  animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                  exit={{ opacity: 0, rotate: -90, scale: 0.5 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute flex items-center justify-center"
+                >
+                  <Sun className="w-3.5 h-3.5 text-amber-500" />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        </motion.button>
       </div>
 
       {/* Visual preview tiles */}

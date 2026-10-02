@@ -524,7 +524,7 @@ export function EvidenceProvider({ children }: { children: React.ReactNode }) {
   // Export all evidence package
   const exportAllEvidence = useCallback(() => {
     const archiveManifest = {
-      archive_title: 'SENTINEL-X Forensic Chain of Custody Evidence Ledger Export',
+      archive_title: 'MAILVEIL Forensic Chain of Custody Evidence Ledger Export',
       exported_at: new Date().toISOString(),
       total_records: evidenceList.length,
       verified_blocks: evidenceList.filter((e) => e.integrityStatus === 'verified').length,

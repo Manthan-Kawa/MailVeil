@@ -277,7 +277,7 @@ export function EmailDetailDrawer({
     const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(email, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute('href', dataStr);
-    downloadAnchor.setAttribute('download', `sentinel-email-report-${email.id}.json`);
+    downloadAnchor.setAttribute('download', `mailveil-email-report-${email.id}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
@@ -484,7 +484,7 @@ export function EmailDetailDrawer({
               >
                 <div className="space-y-1">
                   <div className="text-xs uppercase tracking-wider text-slate-500 dark:text-gray-400 flex items-center gap-2 font-medium">
-                    <span>Sentinel Automated Threat Triage</span>
+                    <span>Mailveil Automated Threat Triage</span>
                     <span className="text-[10px] px-2 py-0.5 rounded bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-gray-300">
                       {analysis?.model_used || 'Gemini Flash'}
                     </span>

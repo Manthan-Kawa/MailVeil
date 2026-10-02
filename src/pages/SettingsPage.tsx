@@ -342,7 +342,7 @@ export function SettingsPage({ userRole }: { onResetCache?: () => void; userRole
   }, [currentUser?.email, email, userRole]);
 
   const handleSaveProfile = async () => {
-    const targetEmail = (email || currentUser?.email || localStorage.getItem('sentinel_user') || 'user@sentinel.local').trim().toLowerCase();
+    const targetEmail = (email || currentUser?.email || localStorage.getItem('sentinel_user') || 'user@mailveil.local').trim().toLowerCase();
     const role = (currentUser?.role || userRole || 'user') as 'analyst' | 'user';
     const newName = displayName.trim() || targetEmail.split('@')[0];
     const newBio = bio.trim();
@@ -409,7 +409,7 @@ export function SettingsPage({ userRole }: { onResetCache?: () => void; userRole
     weeklyDigest: boolean;
     customAiKey: string;
   }>) => {
-    const targetEmail = email || currentUser?.email || 'user@sentinel.local';
+    const targetEmail = email || currentUser?.email || 'user@mailveil.local';
     const role = (currentUser?.role || userRole || 'user') as 'analyst' | 'user';
 
     SupabaseDataService.upsertSettings({

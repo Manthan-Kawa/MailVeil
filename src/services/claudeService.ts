@@ -951,7 +951,7 @@ export async function askSentinelAssistant(
     evidence: analysis.evidence,
   }, null, 2);
 
-  const systemInstructionText = `You are SENTINEL SOC AI Assistant, an elite Tier-3 Cybersecurity & Email Forensics Analyst.
+  const systemInstructionText = `You are Mailveil SOC AI Assistant, an elite Tier-3 Cybersecurity & Email Forensics Analyst.
 You are assisting a security operations center investigator analyze a specific email security case.
 The analyzed case telemetry and forensic artifacts are provided below in JSON:
 ${analysisContext}
@@ -1062,7 +1062,7 @@ Guidelines:
   }
 
   // Default summary response
-  return `**SENTINEL Analysis for Case ${analysis.case_id}**\n\n` +
+  return `**Mailveil Analysis for Case ${analysis.case_id}**\n\n` +
     `**Verdict**: ${analysis.verdict} (Risk Score: ${analysis.threat_score}/100, Alert Level: ${analysis.alert_level.toUpperCase()})\n\n` +
     `**Summary**: ${analysis.summary}\n\n` +
     `**Key Indicators**: Sender \`${domain}\` via IP \`${ip}\` (${analysis.origin.country || 'Unknown'}). Authentication: SPF=${analysis.threat_intel.spf}, DKIM=${analysis.threat_intel.dkim}, DMARC=${analysis.threat_intel.dmarc}.\n\n` +

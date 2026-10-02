@@ -114,12 +114,17 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
 
   const handleDisconnectGmail = () => {
     disconnectGoogle();
-    UserNotificationService.addUserNotification({
-      title: 'Gmail Disconnected',
-      message: 'Gmail account disconnected from Mailveil monitoring.',
-      category: 'system',
-      userEmail: currentUser?.email,
-    });
+    const userEmail = (currentUser?.email || '').trim().toLowerCase();
+    if (userEmail) {
+      UserNotificationService.addUserNotification(userEmail, {
+        id: `notif-gmail-dc-${Date.now()}`,
+        title: 'Gmail Disconnected',
+        msg: 'Gmail account disconnected from Mailveil monitoring.',
+        category: 'system',
+        sev: 'info',
+        route: 'emails',
+      });
+    }
     setSyncNotice('Gmail account disconnected successfully.');
     setTimeout(() => setSyncNotice(null), 4000);
   };

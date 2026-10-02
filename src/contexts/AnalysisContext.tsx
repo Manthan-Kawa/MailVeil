@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
-import type { EmailAnalysisResult } from '@/services/claudeService';
+import type { EmailAnalysisResult, AlertLevel } from '@/services/claudeService';
 import { buildDemoAnalysisResult } from '@/services/claudeService';
 import type { ReportData } from '@/data/mockData';
 import {
@@ -98,7 +98,7 @@ export function convertAnalysisToReportData(result: EmailAnalysisResult): Report
   const now = new Date();
   const dateStr = now.toISOString().replace('T', ' ').slice(0, 19);
   const timeline = [
-    { time: dateStr, event: `Email analyzed by SENTINEL engine — Risk Score: ${result.threat_score}/100 (${result.alert_level.toUpperCase()})` },
+    { time: dateStr, event: `Email analyzed by Mailveil engine — Risk Score: ${result.threat_score}/100 (${result.alert_level.toUpperCase()})` },
     { time: dateStr, event: `Verdict established: ${result.verdict}` },
     { time: dateStr, event: `Authentication verification completed (SPF=${result.threat_intel.spf}, DKIM=${result.threat_intel.dkim}, DMARC=${result.threat_intel.dmarc})` },
     { time: dateStr, event: `Origin resolved: ${result.origin.country || 'Global'} (${result.origin.asn || 'AS Unknown'})` },

@@ -1677,7 +1677,7 @@ export const SETTING_SECTIONS: SettingSection[] = [
     id: 'detection',
     label: 'Detection',
     settings: [
-      { id: 'ai-analysis', label: 'AI Analysis', description: 'Enable SENTINEL AI analysis on detected threats', type: 'toggle', default: true },
+      { id: 'ai-analysis', label: 'AI Analysis', description: 'Enable Mailveil AI analysis on detected threats', type: 'toggle', default: true },
       { id: 'auto-evidence-checks', label: 'Automatic Evidence Integrity Checks', description: 'Verify evidence hashes against the immutable ledger on schedule', type: 'toggle', default: true },
     ],
   },

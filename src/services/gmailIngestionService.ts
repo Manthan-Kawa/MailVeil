@@ -633,6 +633,7 @@ export class GmailIngestionService {
     return {
       newEmailsCount: newCount,
       emails: merged,
+      newlyIngested,
     };
   }
 

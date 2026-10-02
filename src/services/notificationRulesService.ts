@@ -174,7 +174,7 @@ export class NotificationRulesService {
             body,
             icon: notifIcon,
             badge: notifIcon,
-            tag: 'sentinel-x-threat',
+            tag: 'mailveil-threat',
             renotify: true,
           } as NotificationOptions);
         })
@@ -237,13 +237,13 @@ export class NotificationRulesService {
   /**
    * Dispatches a sample automated email incident report notification.
    */
-  static sendSampleEmailNotification(userEmail: string): void {
-    const clean = (userEmail || localStorage.getItem('sentinel_user') || 'user@sentinel.local').trim().toLowerCase();
+  static sendSampleEmailNotification(userEmail: string, customMsg?: string): void {
+    const clean = (userEmail || localStorage.getItem('sentinel_user') || 'user@mailveil.local').trim().toLowerCase();
     
     UserNotificationService.addUserNotification(clean, {
       id: `notif-test-email-${Date.now()}`,
       title: 'Email Incident Report Dispatched',
-      msg: `Automated incident findings report dispatched to ${clean} for Case CASE-2026-889.`,
+      msg: customMsg || `Automated incident findings report dispatched to ${clean} for Case CASE-2026-889.`,
       sev: 'info',
       category: 'system',
       route: 'check-status',

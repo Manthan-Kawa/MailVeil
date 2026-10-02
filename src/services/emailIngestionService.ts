@@ -330,7 +330,7 @@ function fallbackHeuristicEvaluator(
         : threat_level === 'suspicious'
         ? 'Verify sender identity through out-of-band communication before taking action.'
         : 'Safe to interact with standard caution.',
-    model_used: 'sentinel-heuristic-v1',
+    model_used: 'mailveil-heuristic-v1',
     analyzed_at: new Date().toISOString(),
     is_reviewed: false,
     escalated_to_soc: false,

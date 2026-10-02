@@ -1775,7 +1775,7 @@ function SentinelAI({ currentResult }: { currentResult: EmailAnalysisResult }) {
           <div className="flex flex-col items-center justify-center text-center py-8">
             <Brain className="w-8 h-8 text-slate-400 dark:text-gray-700 mb-2" />
             <p className="text-xs text-slate-700 dark:text-gray-400 font-mono font-semibold">
-              SENTINEL SOC AI is ready to analyze case {currentResult.case_id}
+              MAILVEIL SOC AI is ready to analyze case {currentResult.case_id}
             </p>
             <p className="text-[11px] text-slate-500 dark:text-gray-600 font-mono mt-1">
               Ask any specific question about headers, threat vectors, IOCs, or remediation
@@ -1792,7 +1792,7 @@ function SentinelAI({ currentResult }: { currentResult: EmailAnalysisResult }) {
             >
               {msg.role === 'ai' && (
                 <div className="flex items-center gap-1.5 mb-2 text-[10px] font-mono font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider">
-                  <Brain className="w-3.5 h-3.5" /> SENTINEL SOC AI FORENSICS
+                  <Brain className="w-3.5 h-3.5" /> MAILVEIL SOC AI FORENSICS
                 </div>
               )}
               {msg.content}
@@ -1818,7 +1818,7 @@ function SentinelAI({ currentResult }: { currentResult: EmailAnalysisResult }) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-          placeholder={`Ask SENTINEL AI anything about case ${currentResult.case_id}...`}
+          placeholder={`Ask MAILVEIL AI anything about case ${currentResult.case_id}...`}
           className="w-full rounded-xl pl-3.5 pr-20 sm:pr-24 py-2.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-600 bg-white dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.08] focus:outline-none font-mono transition-all focus:border-purple-500/40 focus:ring-1 focus:ring-purple-500/30"
         />
         <button

@@ -693,7 +693,7 @@ export class EmailForensicsService {
         severity: rf.severity as any,
       })),
       recommended_action: mitigationChecklist[0]?.action || 'Proceed with caution.',
-      model_used: 'Sentinel Forensic Engine / Gemini Pro',
+      model_used: 'Mailveil Forensic Engine / Gemini Pro',
       analyzed_at: new Date().toISOString(),
       is_reviewed: false,
     };

@@ -1,4 +1,4 @@
-// Sentinel-X Service Worker for Web Push & Mobile Notifications
+// Mailveil Service Worker for Web Push & Mobile Notifications
 self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
@@ -8,7 +8,7 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('push', (event) => {
-  let data = { title: 'SENTINEL-X: Critical Threat Alert', body: 'New security incident detected.' };
+  let data = { title: 'Mailveil: Critical Threat Alert', body: 'New security incident detected.' };
   try {
     if (event.data) {
       data = event.data.json();
@@ -23,7 +23,7 @@ self.addEventListener('push', (event) => {
     badge: '/MAILVEIL.png',
     data: data.url || '/',
     vibrate: [200, 100, 200],
-    tag: 'sentinel-critical-alert',
+    tag: 'mailveil-critical-alert',
     renotify: true,
   };
 

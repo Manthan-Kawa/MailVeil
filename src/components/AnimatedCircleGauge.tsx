@@ -1,6 +1,6 @@
 import { useState, useEffect, useId } from 'react';
 
-interface AnimatedCircleGaugeProps {
+export interface AnimatedCircleGaugeProps {
   score: number;
   max?: number;
   size?: number; // width/height in px
@@ -8,37 +8,38 @@ interface AnimatedCircleGaugeProps {
   label?: string;
   gradientColors?: [string, string, string];
   align?: 'center' | 'left';
+  showTrack?: boolean;
 }
 
 export function AnimatedCircleGauge({
   score,
   max = 100,
   size = 135,
-  strokeWidth = 9,
-  label = 'CRITICAL RISK',
+  strokeWidth = 9.5,
+  label,
   gradientColors,
   align = 'center',
+  showTrack = false,
 }: AnimatedCircleGaugeProps) {
   const [currentScore, setCurrentScore] = useState(0);
   const idPrefix = useId().replace(/:/g, '_');
 
-  const radius = 38;
-  const circumference = 2 * Math.PI * radius; // ~238.76
+  const radius = 42;
+  const circumference = 2 * Math.PI * radius; // ~263.89
 
-  // Clamp progress percentage between 0.02 and 1
-  const progressRatio = Math.min(Math.max(score / max, 0.02), 1);
-  const activeLength = progressRatio * circumference;
-  const targetOffset = circumference - activeLength;
+  // Clamp progress percentage between 0 and 1
+  const clampedScore = Math.min(Math.max(score, 0), max);
+  const targetOffset = circumference - (clampedScore / max) * circumference;
 
   const [fillOffset, setFillOffset] = useState(circumference);
 
   useEffect(() => {
-    // Smooth SVG stroke fill-up animation
+    // 1. Animate arc fill
     const timer = setTimeout(() => {
       setFillOffset(targetOffset);
     }, 50);
 
-    // Count up the center number in sync
+    // 2. Animate counter text with ease-out cubic
     let animationFrameId: number;
     const duration = 1200;
     const startTime = performance.now();
@@ -48,7 +49,7 @@ export function AnimatedCircleGauge({
       const progress = Math.min(elapsed / duration, 1);
       const easeOut = 1 - Math.pow(1 - progress, 3);
 
-      setCurrentScore(score * easeOut);
+      setCurrentScore(clampedScore * easeOut);
 
       if (progress < 1) {
         animationFrameId = requestAnimationFrame(animate);
@@ -61,166 +62,145 @@ export function AnimatedCircleGauge({
       clearTimeout(timer);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [score, max, targetOffset]);
+  }, [clampedScore, max, targetOffset]);
 
-  // Color scheme matching Sentinel-X based on risk level
-  const getThemeColors = () => {
+  // Color scheme matching risk level if custom gradient not provided
+  const getColors = () => {
     if (gradientColors && gradientColors.length >= 3) {
       return {
-        base: gradientColors,
-        rayStop: gradientColors[0],
+        gradient: gradientColors,
         textColor: score >= 80 ? 'text-red-500' : score >= 50 ? 'text-amber-500' : 'text-blue-500',
       };
     }
 
     if (score >= 80) {
       return {
-        base: ['#ef4444', '#dc2626', '#b91c1c'] as [string, string, string],
-        rayStop: '#fca5a5',
+        gradient: ['#f87171', '#ef4444', '#b91c1c'] as [string, string, string],
         textColor: 'text-red-500',
       };
     } else if (score >= 60) {
       return {
-        base: ['#f97316', '#ea580c', '#c2410c'] as [string, string, string],
-        rayStop: '#fed7aa',
+        gradient: ['#fb923c', '#ea580c', '#c2410c'] as [string, string, string],
         textColor: 'text-orange-500',
       };
     } else if (score >= 40) {
       return {
-        base: ['#f59e0b', '#d97706', '#b45309'] as [string, string, string],
-        rayStop: '#fde68a',
+        gradient: ['#fbbf24', '#d97706', '#b45309'] as [string, string, string],
         textColor: 'text-amber-500',
       };
     } else {
       return {
-        base: ['#3b82f6', '#2563eb', '#1d4ed8'] as [string, string, string],
-        rayStop: '#93c5fd',
-        textColor: 'text-sky-400',
+        gradient: ['#38bdf8', '#3b82f6', '#1d4ed8'] as [string, string, string],
+        textColor: 'text-blue-500',
       };
     }
   };
 
-  const colors = getThemeColors();
-  const rayLength = Math.max(Math.min(activeLength * 0.45, 42), 16);
+  const colors = getColors();
 
   return (
-    <div className={`flex flex-col ${align === 'left' ? 'items-start' : 'items-center'} justify-center`}>
-      <div className="relative" style={{ width: size, height: size }}>
+    <div className={`flex flex-col ${align === 'left' ? 'items-start' : 'items-center'} justify-center select-none`}>
+      <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
         <svg
           viewBox="0 0 100 100"
-          className="w-full h-full"
-          style={{ transform: 'rotate(-90deg)' }}
+          className="w-full h-full -rotate-90"
           shapeRendering="geometricPrecision"
         >
           <defs>
-            {/* Primary active stroke gradient */}
-            <linearGradient id={`${idPrefix}_baseGrad`} x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor={colors.base[0]} />
-              <stop offset="50%" stopColor={colors.base[1]} />
-              <stop offset="100%" stopColor={colors.base[2]} />
+            {/* Base Color Gradient */}
+            <linearGradient id={`${idPrefix}_gaugeGradient`} x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor={colors.gradient[0]} />
+              <stop offset="60%" stopColor={colors.gradient[1]} />
+              <stop offset="100%" stopColor={colors.gradient[2]} />
             </linearGradient>
 
-            {/* Specular Ray of Light gradient */}
-            <linearGradient id={`${idPrefix}_rayGrad`} x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor={colors.base[0]} stopOpacity="0" />
-              <stop offset="30%" stopColor={colors.rayStop} stopOpacity="0.6" />
-              <stop offset="50%" stopColor="#ffffff" stopOpacity="1" />
-              <stop offset="70%" stopColor={colors.rayStop} stopOpacity="0.6" />
-              <stop offset="100%" stopColor={colors.base[0]} stopOpacity="0" />
-            </linearGradient>
-
-            {/* Strict SVG luminance mask ensuring wave shine is ONLY rendered INSIDE the active filled bar and never outside */}
-            <mask id={`${idPrefix}_activeMask`}>
-              <circle
-                cx="50"
-                cy="50"
-                r={radius}
-                fill="none"
-                stroke="#ffffff"
-                strokeWidth={strokeWidth + 1}
-                strokeDasharray={circumference}
-                strokeDashoffset={fillOffset}
-                strokeLinecap="round"
+            {/* Continuous Rotating Wave Shine */}
+            <linearGradient id={`${idPrefix}_shimmerSweepGradient`} x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="transparent" stopOpacity="0" />
+              <stop offset="40%" stopColor="transparent" stopOpacity="0" />
+              <stop offset="50%" stopColor="#ffffff" stopOpacity="0.85" />
+              <stop offset="60%" stopColor="transparent" stopOpacity="0" />
+              <stop offset="100%" stopColor="transparent" stopOpacity="0" />
+              <animateTransform
+                attributeName="gradientTransform"
+                type="rotate"
+                from="0 0.5 0.5"
+                to="360 0.5 0.5"
+                dur="2.8s"
+                repeatCount="indefinite"
               />
-            </mask>
+            </linearGradient>
           </defs>
 
-          {/* Base active arc */}
+          {/* Background Track (optional) */}
+          {showTrack && (
+            <circle
+              cx="50"
+              cy="50"
+              r={radius}
+              fill="none"
+              stroke="rgba(255, 255, 255, 0.08)"
+              strokeWidth={strokeWidth}
+            />
+          )}
+
+          {/* Base Progress Arc */}
           <circle
             cx="50"
             cy="50"
             r={radius}
             fill="none"
-            stroke={`url(#${idPrefix}_baseGrad)`}
+            stroke={`url(#${idPrefix}_gaugeGradient)`}
             strokeWidth={strokeWidth}
             strokeDasharray={circumference}
             strokeDashoffset={fillOffset}
             strokeLinecap="round"
             shapeRendering="geometricPrecision"
             style={{
-              transition: 'stroke-dashoffset 1.2s cubic-bezier(0.34, 1.25, 0.64, 1)',
+              transition: 'stroke-dashoffset 1.35s cubic-bezier(0.34, 1.25, 0.64, 1)',
             }}
           />
 
-          {/* Sentinel-X Specular Ray of Light moving strictly from UP to DOWN inside the active filled arc */}
+          {/* Rotating Light Wave Overlay */}
           <circle
             cx="50"
             cy="50"
             r={radius}
             fill="none"
-            stroke={`url(#${idPrefix}_rayGrad)`}
+            stroke={`url(#${idPrefix}_shimmerSweepGradient)`}
             strokeWidth={strokeWidth}
-            strokeDasharray={`${rayLength} ${circumference}`}
+            strokeDasharray={circumference}
+            strokeDashoffset={fillOffset}
             strokeLinecap="round"
-            mask={`url(#${idPrefix}_activeMask)`}
             shapeRendering="geometricPrecision"
             style={{
-              '--ray-start': '0px',
-              '--ray-end': `${Math.max(activeLength - rayLength, 0)}px`,
-              animation: 'sentinelXWaveDown 2s cubic-bezier(0.4, 0, 0.2, 1) infinite',
-            } as React.CSSProperties}
+              transition: 'stroke-dashoffset 1.35s cubic-bezier(0.34, 1.25, 0.64, 1)',
+              mixBlendMode: 'screen',
+              pointerEvents: 'none',
+            }}
           />
         </svg>
 
-        {/* Center score counter matching Sentinel-X: big bold clean text without glow */}
+        {/* Center Value */}
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-          <span className="text-4xl font-extrabold tracking-tight text-white dark:text-white leading-none">
+          <span className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white leading-none">
             {Math.round(currentScore)}
           </span>
-          <span className="text-xs font-mono font-medium text-zinc-500 dark:text-zinc-400 mt-1">
+          <span className="text-[11px] font-mono font-medium text-zinc-400 mt-1">
             / {max}
           </span>
         </div>
       </div>
 
-      {/* Clean unboxed colored text below gauge matching Sentinel-X */}
+      {/* Optional Risk Label */}
       {label && (
-        <span
-          className={`mt-4 text-xs font-black uppercase tracking-wider ${colors.textColor}`}
-        >
+        <span className={`mt-3.5 text-xs font-black uppercase tracking-wider ${colors.textColor}`}>
           {label}
         </span>
       )}
-
-      {/* Hardware-accelerated CSS keyframe for wave flowing ONLY from UP to DOWN inside the filled bar */}
-      <style>{`
-        @keyframes sentinelXWaveDown {
-          0% {
-            stroke-dashoffset: 0px;
-            opacity: 0;
-          }
-          15% {
-            opacity: 1;
-          }
-          75% {
-            opacity: 1;
-          }
-          95%, 100% {
-            stroke-dashoffset: calc(-1 * var(--ray-end, 45px));
-            opacity: 0;
-          }
-        }
-      `}</style>
     </div>
   );
 }
+
+// Export alias for compatibility
+export const CircularShineGauge = AnimatedCircleGauge;

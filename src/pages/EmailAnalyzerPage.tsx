@@ -23,6 +23,7 @@ import {
   Zap,
   RefreshCw,
   Settings,
+  X,
   Target,
   MapPin,
   Share2,
@@ -199,6 +200,7 @@ export function EmailAnalyzerPage({ onNavigate }: { onNavigate?: (route: string)
     return subj ? `${subj}.eml` : `${currentResult.case_id}.eml`;
   });
   const [pastedEmail, setPastedEmail] = useState('');
+  const [uploadedFile, setUploadedFile] = useState<{ name: string; size: number; text: string } | null>(null);
   const [activeTab, setActiveTab] = useState<'facts' | 'inference' | 'headers' | 'raw'>('facts');
   const [result, setResult] = useState<EmailAnalysisResult | null>(() => currentResult ?? null);
   const [error, setError] = useState<string | null>(null);
@@ -265,7 +267,11 @@ export function EmailAnalyzerPage({ onNavigate }: { onNavigate?: (route: string)
     const reader = new FileReader();
     reader.onload = (e) => {
       const text = (e.target?.result as string) ?? '';
-      runAnalysis(text);
+      setUploadedFile({
+        name: file.name,
+        size: file.size,
+        text,
+      });
     };
     reader.readAsText(file, 'utf-8');
   };
@@ -295,6 +301,7 @@ export function EmailAnalyzerPage({ onNavigate }: { onNavigate?: (route: string)
     setUserRequestedIdle(true);
     setState('idle');
     setFileName(null);
+    setUploadedFile(null);
     setPastedEmail('');
     setActiveStage('Email');
     setProgressStep(0);
@@ -386,7 +393,20 @@ export function EmailAnalyzerPage({ onNavigate }: { onNavigate?: (route: string)
           onDemo={handleDemo}
           pastedEmail={pastedEmail}
           setPastedEmail={setPastedEmail}
-          onAnalyzePasted={() => runAnalysis(pastedEmail)}
+          uploadedFile={uploadedFile}
+          onRemoveUploadedFile={() => {
+            setUploadedFile(null);
+            setFileName(null);
+            if (fileInputRef.current) fileInputRef.current.value = '';
+          }}
+          onAnalyze={() => {
+            if (uploadedFile?.text) {
+              setFileName(uploadedFile.name);
+              runAnalysis(uploadedFile.text);
+            } else if (pastedEmail.trim()) {
+              runAnalysis(pastedEmail);
+            }
+          }}
         />
       )}
 
@@ -415,11 +435,17 @@ export function EmailAnalyzerPage({ onNavigate }: { onNavigate?: (route: string)
 }
 
 /* ═══════════════════════════════════════════════════════════
-   IDLE VIEW
+   IDLE VIEW (40% Upload, 60% Paste, Centered Action Buttons)
 ═══════════════════════════════════════════════════════════ */
+function formatFileSize(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+}
+
 function IdleView({
   dragOver, setDragOver, handleDrop, fileInputRef, handleFile,
-  onDemo, pastedEmail, setPastedEmail, onAnalyzePasted,
+  onDemo, pastedEmail, setPastedEmail, uploadedFile, onRemoveUploadedFile, onAnalyze,
 }: {
   dragOver: boolean;
   setDragOver: (v: boolean) => void;
@@ -429,94 +455,173 @@ function IdleView({
   onDemo: () => void;
   pastedEmail: string;
   setPastedEmail: (s: string) => void;
-  onAnalyzePasted: () => void;
+  uploadedFile: { name: string; size: number; text: string } | null;
+  onRemoveUploadedFile: () => void;
+  onAnalyze: () => void;
 }) {
+  const isDemoDisabled = Boolean(uploadedFile || pastedEmail.trim().length > 0);
+  const canAnalyze = Boolean(uploadedFile || pastedEmail.trim().length > 0);
+
   return (
-    <div className="space-y-6">
-      {/* ── Drag & Drop Area ── */}
+    <div className="space-y-5">
+      {/* ── 40% Upload & 60% Paste Section Side-by-Side ── */}
       <SlideIn delay={100} direction="up">
-        <div
-          onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-          onDragLeave={() => setDragOver(false)}
-          onDrop={handleDrop}
-          onClick={() => fileInputRef.current?.click()}
-          className={`relative rounded-2xl py-10 sm:py-16 px-4 sm:px-6 text-center cursor-pointer transition-all duration-300 border border-dashed ${dragOver
-              ? 'bg-blue-500/10 border-blue-500'
-              : 'bg-white dark:bg-[#121316] border-gray-300 dark:border-zinc-800 hover:border-blue-400 dark:hover:border-zinc-700'
-            }`}
-        >
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".eml,.msg,.txt,.EML,.MSG,.TXT,message/rfc822,text/plain"
-            className="hidden"
-            onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
-          />
-          <div className="w-14 h-14 bg-gray-100 dark:bg-[#1b1c21] border border-gray-200 dark:border-zinc-700/60 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <Upload className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 sm:gap-5 items-stretch">
+          
+          {/* ── 40% Upload Section (2 columns of 5) ── */}
+          <div className="lg:col-span-2 flex flex-col space-y-2">
+            <p className="text-[11px] font-mono font-bold text-gray-500 dark:text-zinc-500 uppercase tracking-wider">
+              RAW EMAIL / RFC-822 FILE UPLOAD
+            </p>
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".eml,.msg,.txt,.EML,.MSG,.TXT,message/rfc822,text/plain"
+              className="hidden"
+              onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
+            />
+
+            {!uploadedFile ? (
+              <div
+                onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+                onDragLeave={() => setDragOver(false)}
+                onDrop={handleDrop}
+                onClick={() => fileInputRef.current?.click()}
+                className={`relative rounded-2xl flex-1 min-h-[220px] p-6 text-center cursor-pointer transition-all duration-300 border border-dashed flex flex-col items-center justify-center ${
+                  dragOver
+                    ? 'bg-blue-500/10 border-blue-500'
+                    : 'bg-white dark:bg-[#121316] border-gray-300 dark:border-zinc-800 hover:border-blue-400 dark:hover:border-zinc-700'
+                }`}
+              >
+                <div className="w-12 h-12 bg-gray-100 dark:bg-[#1b1c21] border border-gray-200 dark:border-zinc-700/60 rounded-2xl flex items-center justify-center mb-3">
+                  <Upload className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                </div>
+                <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-1">
+                  Drag &amp; drop .EML or .MSG here
+                </h3>
+                <p className="text-xs text-gray-500 dark:text-zinc-500 font-mono">
+                  or click to browse local files
+                </p>
+              </div>
+            ) : (
+              <div className="relative rounded-2xl flex-1 min-h-[220px] p-5 border border-emerald-500/30 bg-emerald-500/5 dark:bg-[#121316] dark:border-emerald-500/30 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] font-bold font-mono tracking-wider text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800/60">
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      FILE LOADED
+                    </span>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onRemoveUploadedFile();
+                      }}
+                      className="p-1 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors cursor-pointer"
+                      title="Remove uploaded file"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  <div className="flex items-start gap-3 mt-2">
+                    <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0 text-blue-600 dark:text-blue-400">
+                      <FileText className="w-5 h-5" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <h4 className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white truncate" title={uploadedFile.name}>
+                        {uploadedFile.name}
+                      </h4>
+                      <p className="text-xs text-gray-500 dark:text-zinc-400 font-mono mt-0.5">
+                        File Size: <span className="font-semibold text-gray-800 dark:text-zinc-200">{formatFileSize(uploadedFile.size)}</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-3 border-t border-gray-200 dark:border-zinc-800/80 flex items-center justify-between">
+                  <span className="text-[11px] text-gray-500 dark:text-zinc-500 font-mono">
+                    Ready to analyze
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="text-[11px] font-bold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+                  >
+                    Change file
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
-          <h3 className="text-sm sm:text-base font-bold text-gray-900 dark:text-white mb-1.5">Drag &amp; drop .EML or .MSG file here</h3>
-          <p className="text-xs text-gray-500 dark:text-zinc-500 font-mono">or click to browse — or paste raw session data below</p>
+
+          {/* ── 60% Paste Raw Email Section (3 columns of 5) ── */}
+          <div className="lg:col-span-3 flex flex-col space-y-2">
+            <p className="text-[11px] font-mono font-bold text-gray-500 dark:text-zinc-500 uppercase tracking-wider">
+              PASTE RAW EMAIL / RFC-5322 SESSION TRANSCRIPT
+            </p>
+            <div className="bg-white dark:bg-[#121316] border border-gray-200 dark:border-zinc-800/80 rounded-2xl shadow-sm p-1 overflow-hidden flex-1 flex flex-col min-h-[220px]">
+              <textarea
+                value={pastedEmail}
+                onChange={(e) => setPastedEmail(e.target.value)}
+                placeholder="Paste raw email headers, MIME structure, or session packet stream..."
+                className="w-full flex-1 h-full min-h-[190px] bg-transparent p-4 text-xs text-gray-900 dark:text-zinc-200 placeholder-gray-400 dark:placeholder-zinc-600 focus:outline-none resize-none font-mono"
+              />
+            </div>
+          </div>
+
         </div>
       </SlideIn>
 
-      {/* ── Action Buttons Row ── */}
+      {/* ── Action Buttons Row Below 40%/60% Layout ── */}
       <SlideIn delay={180} direction="up">
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-          <button
-            onClick={onDemo}
-            className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-xs font-bold text-white transition-all duration-200 shadow-md shadow-blue-500/25 border border-blue-400/30 font-mono cursor-pointer hover:brightness-110 active:scale-98"
-            style={{ background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 45%, #6366f1 100%)' }}
-          >
-            <Sparkles className="w-4 h-4 text-white" />
-            Load Demo Email Session
-          </button>
+          {/* Load Demo Email Session Button */}
+          {isDemoDisabled ? (
+            <button
+              disabled
+              type="button"
+              className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-xs font-bold font-mono text-zinc-400 dark:text-zinc-600 bg-gray-100 dark:bg-[#16171a] border border-gray-200 dark:border-zinc-800/80 opacity-50 cursor-not-allowed select-none pointer-events-none"
+            >
+              <Sparkles className="w-4 h-4 text-zinc-400 dark:text-zinc-600" />
+              Load Demo Email Session
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={onDemo}
+              className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-xs font-bold text-white transition-all duration-200 shadow-md shadow-blue-500/25 border border-blue-400/30 font-mono cursor-pointer hover:brightness-110 active:scale-98"
+              style={{ background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 45%, #6366f1 100%)' }}
+            >
+              <Sparkles className="w-4 h-4 text-white" />
+              Load Demo Email Session
+            </button>
+          )}
 
-          <button
-            onClick={onAnalyzePasted}
-            disabled={!pastedEmail.trim()}
-            className={`flex items-center justify-center gap-2.5 px-6 py-2.5 rounded-full text-xs font-bold transition-all duration-200 font-mono cursor-pointer ${pastedEmail.trim()
-                ? 'btn-voice-pill shadow-lg shadow-purple-500/25 hover:brightness-110 active:scale-98'
-                : 'text-zinc-400 bg-gray-100 dark:bg-[#18181b] border border-gray-200 dark:border-zinc-800/80 opacity-40 cursor-not-allowed'
-              }`}
-          >
-            <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${pastedEmail.trim() ? 'bg-white/20' : 'bg-transparent'}`}>
-              <Zap className={`w-3.5 h-3.5 ${pastedEmail.trim() ? 'text-white' : 'text-zinc-500'}`} />
-            </div>
-            <span>{pastedEmail.trim() ? 'Analyze Email' : 'Analyze Session Data'}</span>
-          </button>
-        </div>
-      </SlideIn>
-
-      {/* ── Paste Raw Email Section ── */}
-      <SlideIn delay={260} direction="up">
-        <div className="space-y-2.5">
-          <p className="text-[11px] font-mono font-bold text-gray-500 dark:text-zinc-500 uppercase tracking-wider">
-            PASTE RAW EMAIL / RFC-5322 SESSION TRANSCRIPT
-          </p>
-          <div
-            className="bg-white dark:bg-[#121316] border border-gray-200 dark:border-zinc-800/80 rounded-2xl shadow-sm p-1 overflow-hidden"
-          >
-            <textarea
-              value={pastedEmail}
-              onChange={(e) => setPastedEmail(e.target.value)}
-              placeholder="Paste raw email headers, MIME structure, or session packet stream..."
-              rows={7}
-              className="w-full bg-transparent p-4 text-xs text-gray-900 dark:text-zinc-200 placeholder-gray-400 dark:placeholder-zinc-600 focus:outline-none resize-none font-mono"
-            />
-          </div>
-          {pastedEmail.trim() && (
-            <div className="flex justify-end pt-1">
-              <button
-                onClick={onAnalyzePasted}
-                className="btn-voice-pill flex items-center gap-2.5 px-6 py-2.5 rounded-full text-xs font-bold text-white transition-all duration-200 font-mono cursor-pointer shadow-lg shadow-purple-500/25 hover:brightness-110 active:scale-98"
-              >
-                <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center shrink-0">
-                  <Zap className="w-3.5 h-3.5 text-white" />
-                </div>
-                <span>Analyze Email</span>
-              </button>
-            </div>
+          {/* Single Analyze Email Button */}
+          {canAnalyze ? (
+            <button
+              type="button"
+              onClick={onAnalyze}
+              className="btn-voice-pill flex items-center justify-center gap-2.5 px-6 py-2.5 rounded-full text-xs font-bold text-white transition-all duration-200 font-mono cursor-pointer shadow-lg shadow-purple-500/25 hover:brightness-110 active:scale-98"
+            >
+              <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+                <Zap className="w-3.5 h-3.5 text-white" />
+              </div>
+              <span>Analyze Email</span>
+            </button>
+          ) : (
+            <button
+              disabled
+              type="button"
+              className="flex items-center justify-center gap-2.5 px-6 py-2.5 rounded-full text-xs font-bold font-mono text-zinc-400 dark:text-zinc-600 bg-gray-100 dark:bg-[#16171a] border border-gray-200 dark:border-zinc-800/80 opacity-40 cursor-not-allowed select-none pointer-events-none"
+            >
+              <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 bg-transparent">
+                <Zap className="w-3.5 h-3.5 text-zinc-500 dark:text-zinc-600" />
+              </div>
+              <span>Analyze Email</span>
+            </button>
           )}
         </div>
       </SlideIn>

@@ -77,28 +77,28 @@ const FACT_COLOR = {
 } as const;
 
 const ALERT_COLORS: Record<AlertLevel, { bg: string; border: string; text: string; glow: string }> = {
-  critical: { bg: 'rgba(239,68,68,0.08)',    border: 'rgba(239,68,68,0.3)',    text: 'text-red-400',    glow: 'rgba(239,68,68,0.15)' },
-  high:     { bg: 'rgba(249,115,22,0.08)',   border: 'rgba(249,115,22,0.3)',   text: 'text-orange-400', glow: 'rgba(249,115,22,0.1)' },
-  medium:   { bg: 'rgba(245,158,11,0.08)',   border: 'rgba(245,158,11,0.3)',   text: 'text-amber-400',  glow: 'rgba(245,158,11,0.08)' },
-  low:      { bg: 'rgba(59,130,246,0.08)',   border: 'rgba(59,130,246,0.3)',   text: 'text-blue-400',   glow: 'rgba(59,130,246,0.08)' },
-  info:     { bg: 'rgba(107,114,128,0.08)',  border: 'rgba(107,114,128,0.3)',  text: 'text-gray-400',   glow: 'rgba(107,114,128,0.05)' },
+  critical: { bg: 'rgba(239,68,68,0.08)', border: 'rgba(239,68,68,0.3)', text: 'text-red-400', glow: 'rgba(239,68,68,0.15)' },
+  high: { bg: 'rgba(249,115,22,0.08)', border: 'rgba(249,115,22,0.3)', text: 'text-orange-400', glow: 'rgba(249,115,22,0.1)' },
+  medium: { bg: 'rgba(245,158,11,0.08)', border: 'rgba(245,158,11,0.3)', text: 'text-amber-400', glow: 'rgba(245,158,11,0.08)' },
+  low: { bg: 'rgba(59,130,246,0.08)', border: 'rgba(59,130,246,0.3)', text: 'text-blue-400', glow: 'rgba(59,130,246,0.08)' },
+  info: { bg: 'rgba(107,114,128,0.08)', border: 'rgba(107,114,128,0.3)', text: 'text-gray-400', glow: 'rgba(107,114,128,0.05)' },
 };
 
 // Gauge gradient colours keyed by alert level
 const GAUGE_COLORS: Record<AlertLevel, [string, string, string]> = {
   critical: ['#f87171', '#ef4444', '#b91c1c'],
-  high:     ['#fb923c', '#f97316', '#c2410c'],
-  medium:   ['#fcd34d', '#f59e0b', '#b45309'],
-  low:      ['#60a5fa', '#3b82f6', '#1d4ed8'],
-  info:     ['#9ca3af', '#6b7280', '#4b5563'],
+  high: ['#fb923c', '#f97316', '#c2410c'],
+  medium: ['#fcd34d', '#f59e0b', '#b45309'],
+  low: ['#60a5fa', '#3b82f6', '#1d4ed8'],
+  info: ['#9ca3af', '#6b7280', '#4b5563'],
 };
 
 const GAUGE_LABEL: Record<AlertLevel, string> = {
   critical: 'CRITICAL RISK',
-  high:     'HIGH RISK',
-  medium:   'MEDIUM RISK',
-  low:      'LOW RISK',
-  info:     'INFO',
+  high: 'HIGH RISK',
+  medium: 'MEDIUM RISK',
+  low: 'LOW RISK',
+  info: 'INFO',
 };
 
 export const ANALYSIS_STEPS = [
@@ -148,7 +148,7 @@ export const INGESTION_STAGES = ANALYSIS_STEPS;
 
 /* ─── Slide-in entrance wrapper ─── */
 function SlideIn({ children, delay = 0, direction = 'up', className = '' }: {
-  children: React.ReactNode; delay?: number; direction?: 'up'|'left'|'right'|'down'; className?: string;
+  children: React.ReactNode; delay?: number; direction?: 'up' | 'left' | 'right' | 'down'; className?: string;
 }) {
   const [vis, setVis] = useState(false);
   useEffect(() => { const t = setTimeout(() => setVis(true), delay); return () => clearTimeout(t); }, [delay]);
@@ -440,11 +440,10 @@ function IdleView({
           onDragLeave={() => setDragOver(false)}
           onDrop={handleDrop}
           onClick={() => fileInputRef.current?.click()}
-          className={`relative rounded-2xl py-10 sm:py-16 px-4 sm:px-6 text-center cursor-pointer transition-all duration-300 border border-dashed ${
-            dragOver
+          className={`relative rounded-2xl py-10 sm:py-16 px-4 sm:px-6 text-center cursor-pointer transition-all duration-300 border border-dashed ${dragOver
               ? 'bg-blue-500/10 border-blue-500'
               : 'bg-white dark:bg-[#121316] border-gray-300 dark:border-zinc-800 hover:border-blue-400 dark:hover:border-zinc-700'
-          }`}
+            }`}
         >
           <input
             ref={fileInputRef}
@@ -476,11 +475,10 @@ function IdleView({
           <button
             onClick={onAnalyzePasted}
             disabled={!pastedEmail.trim()}
-            className={`flex items-center justify-center gap-2.5 px-6 py-2.5 rounded-full text-xs font-bold transition-all duration-200 font-mono cursor-pointer ${
-              pastedEmail.trim()
+            className={`flex items-center justify-center gap-2.5 px-6 py-2.5 rounded-full text-xs font-bold transition-all duration-200 font-mono cursor-pointer ${pastedEmail.trim()
                 ? 'btn-voice-pill shadow-lg shadow-purple-500/25 hover:brightness-110 active:scale-98'
                 : 'text-zinc-400 bg-gray-100 dark:bg-[#18181b] border border-gray-200 dark:border-zinc-800/80 opacity-40 cursor-not-allowed'
-            }`}
+              }`}
           >
             <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${pastedEmail.trim() ? 'bg-white/20' : 'bg-transparent'}`}>
               <Zap className={`w-3.5 h-3.5 ${pastedEmail.trim() ? 'text-white' : 'text-zinc-500'}`} />
@@ -685,9 +683,8 @@ function ResultsView({
             <div className="lg:col-span-6 p-6 space-y-3.5">
               {/* Meta pills matching Sentinel-X */}
               <div className="flex items-center gap-2 flex-wrap">
-                <span className={`px-2.5 py-1 rounded text-xs font-bold text-white uppercase ${
-                  result.threat_score >= 80 ? 'bg-red-600' : result.threat_score >= 60 ? 'bg-orange-600' : result.threat_score >= 40 ? 'bg-amber-600' : 'bg-blue-600'
-                }`}>
+                <span className={`px-2.5 py-1 rounded text-xs font-bold text-white uppercase ${result.threat_score >= 80 ? 'bg-red-600' : result.threat_score >= 60 ? 'bg-orange-600' : result.threat_score >= 40 ? 'bg-amber-600' : 'bg-blue-600'
+                  }`}>
                   {result.threat_score >= 80 ? 'CRITICAL' : result.threat_score >= 60 ? 'HIGH' : result.threat_score >= 40 ? 'MED' : 'LOW'}
                 </span>
                 <span className="px-3 py-1 rounded text-xs font-medium text-white bg-orange-600">
@@ -742,7 +739,7 @@ function ResultsView({
                   className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs font-semibold text-gray-700 dark:text-zinc-200 bg-gray-100 dark:bg-[#18181b] hover:dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800 transition-all cursor-pointer active:scale-98"
                 >
                   <ArrowRight className="w-4 h-4 text-zinc-400" />
-                  Crypto Forensics
+                  Header Forensics
                 </button>
               )}
               <button
@@ -769,9 +766,8 @@ function ResultsView({
                 <p className="text-xs text-gray-500 dark:text-zinc-400 mt-0.5">Extracted from TLS Handshake (Server Certificate)</p>
               </div>
             </div>
-            <span className={`px-3 py-1 rounded text-xs font-bold text-white ${
-              result.threat_score >= 60 ? 'bg-red-600' : 'bg-emerald-600'
-            }`}>
+            <span className={`px-3 py-1 rounded text-xs font-bold text-white ${result.threat_score >= 60 ? 'bg-red-600' : 'bg-emerald-600'
+              }`}>
               {result.threat_score >= 60 ? 'UNTRUSTED CHAIN' : 'VALID CERTIFICATE CHAIN'}
             </span>
           </div>
@@ -856,9 +852,9 @@ function ResultsView({
               {(result.recommended_actions || []).map((a, i) => {
                 const colors: Record<string, { bg: string; border: string; text: string }> = {
                   immediate: { bg: 'bg-red-50 dark:bg-red-500/[0.08]', border: 'border-red-200 dark:border-red-500/30', text: 'text-red-700 dark:text-red-400' },
-                  high:      { bg: 'bg-orange-50 dark:bg-orange-500/[0.08]', border: 'border-orange-200 dark:border-orange-500/30', text: 'text-orange-700 dark:text-orange-400' },
-                  medium:    { bg: 'bg-amber-50 dark:bg-amber-500/[0.08]', border: 'border-amber-200 dark:border-amber-500/30', text: 'text-amber-700 dark:text-amber-400' },
-                  low:       { bg: 'bg-gray-50 dark:bg-gray-500/[0.08]', border: 'border-gray-200 dark:border-gray-500/20', text: 'text-gray-700 dark:text-zinc-300 dark:text-gray-400' },
+                  high: { bg: 'bg-orange-50 dark:bg-orange-500/[0.08]', border: 'border-orange-200 dark:border-orange-500/30', text: 'text-orange-700 dark:text-orange-400' },
+                  medium: { bg: 'bg-amber-50 dark:bg-amber-500/[0.08]', border: 'border-amber-200 dark:border-amber-500/30', text: 'text-amber-700 dark:text-amber-400' },
+                  low: { bg: 'bg-gray-50 dark:bg-gray-500/[0.08]', border: 'border-gray-200 dark:border-gray-500/20', text: 'text-gray-700 dark:text-zinc-300 dark:text-gray-400' },
                 };
                 const c = colors[a.priority] ?? colors.low;
                 return (
@@ -960,10 +956,10 @@ function ResultsView({
             className="flex items-center gap-1 p-1 rounded-2xl bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm mb-5 overflow-x-auto scrollbar-none select-none max-w-full"
           >
             {[
-              { id: 'facts',     label: 'Observed Facts', icon: Eye },
-              { id: 'inference', label: 'AI Inference',   icon: Brain },
-              { id: 'headers',   label: 'Headers',        icon: FileSearch },
-              { id: 'raw',       label: 'Raw Email',      icon: FileText },
+              { id: 'facts', label: 'Observed Facts', icon: Eye },
+              { id: 'inference', label: 'AI Inference', icon: Brain },
+              { id: 'headers', label: 'Headers', icon: FileSearch },
+              { id: 'raw', label: 'Raw Email', icon: FileText },
             ].map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -972,11 +968,10 @@ function ResultsView({
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveTab(tab.id as typeof activeTab)}
-                  className={`relative h-9 px-4 rounded-xl text-xs sm:text-sm font-semibold transition-colors duration-200 shrink-0 whitespace-nowrap cursor-pointer select-none ${
-                    isActive
+                  className={`relative h-9 px-4 rounded-xl text-xs sm:text-sm font-semibold transition-colors duration-200 shrink-0 whitespace-nowrap cursor-pointer select-none ${isActive
                       ? 'text-white font-bold'
                       : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/40'
-                  }`}
+                    }`}
                 >
                   {isActive && (
                     <motion.div
@@ -998,10 +993,10 @@ function ResultsView({
             })}
           </div>
 
-          {activeTab === 'facts'     && <ObservedFactsTab facts={result.observed_facts || []} />}
+          {activeTab === 'facts' && <ObservedFactsTab facts={result.observed_facts || []} />}
           {activeTab === 'inference' && <AIInferenceTab inferences={result.ai_inferences || []} />}
-          {activeTab === 'headers'   && <HeadersTab headers={result.headers || []} />}
-          {activeTab === 'raw'       && <RawEmailTab raw={result.raw_email || ''} />}
+          {activeTab === 'headers' && <HeadersTab headers={result.headers || []} />}
+          {activeTab === 'raw' && <RawEmailTab raw={result.raw_email || ''} />}
         </div>
       </SlideIn>
     </div>

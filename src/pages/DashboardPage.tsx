@@ -328,7 +328,6 @@ export function DashboardPage({ onNavigate }: { onNavigate?: (route: string) => 
           <div>
             <h1 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-zinc-100 tracking-tight flex items-center gap-2.5">
               <span>Threat Operations Center</span>
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             </h1>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
               Real-time email forensics, threat intelligence feeds, and automated anomaly telemetry
@@ -400,9 +399,13 @@ export function DashboardPage({ onNavigate }: { onNavigate?: (route: string) => 
                     <h2 className="text-sm sm:text-base font-bold text-gray-900 dark:text-zinc-100">
                       Email Ingestion &amp; Threat Telemetry
                     </h2>
-                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold font-mono bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/40">
+                    <motion.span
+                      animate={{ opacity: [1, 0.25, 1], scale: [1, 0.97, 1] }}
+                      transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+                      className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-black font-mono tracking-wider text-white bg-emerald-500 dark:bg-emerald-500 shadow-sm shadow-emerald-500/30 border border-emerald-400/40 select-none cursor-default"
+                    >
                       LIVE
-                    </span>
+                    </motion.span>
                   </div>
                   <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">
                     {activeTab === '24H' ? '24-hour inbound email telemetry · threat verdict breakdown' : '7-day trend analysis · threat posture history'}

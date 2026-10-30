@@ -728,10 +728,13 @@ function ResultsView({
             >
               <button
                 onClick={() => onNavigate?.('reports')}
-                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs font-bold text-white bg-purple-600 hover:bg-purple-500 transition-all cursor-pointer shadow-sm active:scale-98"
+                className="w-full flex items-center justify-center gap-2.5 py-3 px-4 rounded-xl text-xs font-bold text-white transition-all cursor-pointer shadow-lg shadow-purple-500/25 border border-white/20 active:scale-98 hover:brightness-110"
+                style={{ background: 'linear-gradient(135deg, #a855f7 0%, #7c3aed 50%, #4361ee 100%)' }}
               >
-                <Printer className="w-4 h-4 text-white" />
-                View Report
+                <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+                  <Printer className="w-3.5 h-3.5 text-white" />
+                </div>
+                <span>View Report</span>
               </button>
               {onNavigate && (
                 <button

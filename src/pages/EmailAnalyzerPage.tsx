@@ -526,8 +526,15 @@ function IdleView({
                   </div>
 
                   <div className="flex items-start gap-3 mt-2">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-md shadow-blue-500/30 flex items-center justify-center shrink-0">
-                      <FileText className="w-5 h-5 text-white" />
+                    <div
+                      className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 shadow-md shadow-blue-500/25 border border-blue-400/30 hover:brightness-110 active:scale-98 transition-all select-none p-2"
+                      style={{ background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 45%, #6366f1 100%)' }}
+                    >
+                      <img
+                        src="/file-icon.png"
+                        alt="Uploaded email file"
+                        className="w-full h-full object-contain drop-shadow-sm pointer-events-none"
+                      />
                     </div>
                     <div className="min-w-0 flex-1">
                       <h4 className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white truncate" title={uploadedFile.name}>

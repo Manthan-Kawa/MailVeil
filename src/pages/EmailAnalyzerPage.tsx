@@ -334,12 +334,18 @@ export function EmailAnalyzerPage({ onNavigate }: { onNavigate?: (route: string)
                 return (
                   <div key={s.stage} className="flex items-center shrink-0">
                     {isActive ? (
-                      <div className="flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap text-white bg-blue-600 shadow-xs">
+                      <div
+                        className="flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap text-white shadow-md shadow-blue-500/20 border border-blue-400/30"
+                        style={{ background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 45%, #6366f1 100%)' }}
+                      >
                         <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
                         <span>{s.stage}</span>
                       </div>
                     ) : isDone ? (
-                      <div className="relative overflow-hidden flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap text-white bg-blue-600 shadow-xs">
+                      <div
+                        className="relative overflow-hidden flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap text-white shadow-md shadow-blue-500/20 border border-blue-400/30"
+                        style={{ background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 45%, #6366f1 100%)' }}
+                      >
                         <Check className="w-3.5 h-3.5 text-white stroke-[2.5] relative z-10" />
                         <span className="relative z-10">{s.stage}</span>
                         {/* Sentinel-X smooth wave-like shine effect */}
@@ -460,7 +466,8 @@ function IdleView({
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
           <button
             onClick={onDemo}
-            className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 transition-all duration-200 shadow-sm font-mono cursor-pointer"
+            className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-xs font-bold text-white transition-all duration-200 shadow-md shadow-blue-500/25 border border-blue-400/30 font-mono cursor-pointer hover:brightness-110 active:scale-98"
+            style={{ background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 45%, #6366f1 100%)' }}
           >
             <Sparkles className="w-4 h-4 text-white" />
             Load Demo Email Session
@@ -471,9 +478,10 @@ function IdleView({
             disabled={!pastedEmail.trim()}
             className={`flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-xs font-bold transition-all duration-200 font-mono cursor-pointer ${
               pastedEmail.trim()
-                ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-sm ring-1 ring-blue-500/40'
+                ? 'text-white shadow-md shadow-blue-500/25 border border-blue-400/30 hover:brightness-110 active:scale-98'
                 : 'text-zinc-400 bg-gray-100 dark:bg-[#18181b] border border-gray-200 dark:border-zinc-800/80 opacity-40 cursor-not-allowed'
             }`}
+            style={pastedEmail.trim() ? { background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 45%, #6366f1 100%)' } : undefined}
           >
             <Zap className={`w-4 h-4 ${pastedEmail.trim() ? 'text-white' : 'text-zinc-500'}`} />
             {pastedEmail.trim() ? 'Analyze Demo Email' : 'Analyze Session Data'}
@@ -736,7 +744,8 @@ function ResultsView({
               )}
               <button
                 onClick={onReset}
-                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 transition-all cursor-pointer shadow-sm active:scale-98"
+                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs font-bold text-white transition-all cursor-pointer shadow-md shadow-blue-500/25 border border-blue-400/30 active:scale-98 hover:brightness-110"
+                style={{ background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 45%, #6366f1 100%)' }}
               >
                 <Mail className="w-4 h-4 text-white" />
                 New Analysis

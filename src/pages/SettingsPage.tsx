@@ -462,7 +462,8 @@ export function SettingsPage({ userRole }: { onResetCache?: () => void; userRole
                     {active && (
                       <motion.div
                         layoutId="settingsActiveTabPill"
-                        className="absolute inset-0 rounded-xl bg-blue-600 dark:bg-blue-600 shadow-md shadow-blue-500/25 border border-blue-500/60 z-0 pointer-events-none"
+                        className="absolute inset-0 rounded-xl shadow-md shadow-blue-500/25 border border-blue-400/30 z-0 pointer-events-none"
+                        style={{ background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 45%, #6366f1 100%)' }}
                         transition={{ type: 'spring', stiffness: 450, damping: 35 }}
                       />
                     )}

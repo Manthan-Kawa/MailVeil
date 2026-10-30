@@ -483,7 +483,7 @@ function IdleView({
             <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${pastedEmail.trim() ? 'bg-white/20' : 'bg-transparent'}`}>
               <Zap className={`w-3.5 h-3.5 ${pastedEmail.trim() ? 'text-white' : 'text-zinc-500'}`} />
             </div>
-            <span>{pastedEmail.trim() ? 'Analyze Demo Email' : 'Analyze Session Data'}</span>
+            <span>{pastedEmail.trim() ? 'Analyze Email' : 'Analyze Session Data'}</span>
           </button>
         </div>
       </SlideIn>
@@ -514,7 +514,7 @@ function IdleView({
                 <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center shrink-0">
                   <Zap className="w-3.5 h-3.5 text-white" />
                 </div>
-                <span>Analyze Demo Email</span>
+                <span>Analyze Email</span>
               </button>
             </div>
           )}

@@ -476,15 +476,16 @@ function IdleView({
           <button
             onClick={onAnalyzePasted}
             disabled={!pastedEmail.trim()}
-            className={`flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-xs font-bold transition-all duration-200 font-mono cursor-pointer ${
+            className={`flex items-center justify-center gap-2.5 px-6 py-2.5 rounded-full text-xs font-bold transition-all duration-200 font-mono cursor-pointer ${
               pastedEmail.trim()
-                ? 'text-white shadow-md shadow-blue-500/25 border border-blue-400/30 hover:brightness-110 active:scale-98'
+                ? 'btn-voice-pill shadow-lg shadow-purple-500/25 hover:brightness-110 active:scale-98'
                 : 'text-zinc-400 bg-gray-100 dark:bg-[#18181b] border border-gray-200 dark:border-zinc-800/80 opacity-40 cursor-not-allowed'
             }`}
-            style={pastedEmail.trim() ? { background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 45%, #6366f1 100%)' } : undefined}
           >
-            <Zap className={`w-4 h-4 ${pastedEmail.trim() ? 'text-white' : 'text-zinc-500'}`} />
-            {pastedEmail.trim() ? 'Analyze Demo Email' : 'Analyze Session Data'}
+            <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${pastedEmail.trim() ? 'bg-white/20' : 'bg-transparent'}`}>
+              <Zap className={`w-3.5 h-3.5 ${pastedEmail.trim() ? 'text-white' : 'text-zinc-500'}`} />
+            </div>
+            <span>{pastedEmail.trim() ? 'Analyze Demo Email' : 'Analyze Session Data'}</span>
           </button>
         </div>
       </SlideIn>
@@ -510,10 +511,12 @@ function IdleView({
             <div className="flex justify-end pt-1">
               <button
                 onClick={onAnalyzePasted}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 transition-all duration-200 font-mono cursor-pointer shadow-sm"
+                className="btn-voice-pill flex items-center gap-2.5 px-6 py-2.5 rounded-full text-xs font-bold text-white transition-all duration-200 font-mono cursor-pointer shadow-lg shadow-purple-500/25 hover:brightness-110 active:scale-98"
               >
-                <Zap className="w-4 h-4 text-white" />
-                Analyze Demo Email
+                <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+                  <Zap className="w-3.5 h-3.5 text-white" />
+                </div>
+                <span>Analyze Demo Email</span>
               </button>
             </div>
           )}

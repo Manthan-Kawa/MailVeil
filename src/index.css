@@ -1067,3 +1067,32 @@ html:not(.dark) .soc-sidebar .soc-nav-active .soc-badge-solid {
     transform: translateX(260%) skewX(-20deg);
   }
 }
+
+/* ── Voice Analysis Cyber Violet-to-Blue Gradient (Reusable utility) ── */
+:root {
+  --voice-gradient: linear-gradient(135deg, #a855f7 0%, #7c3aed 50%, #4361ee 100%);
+}
+
+.bg-voice-gradient,
+.btn-voice-gradient,
+.cyber-violet-gradient {
+  background: linear-gradient(135deg, #a855f7 0%, #7c3aed 50%, #4361ee 100%) !important;
+}
+
+.btn-voice-pill {
+  background: linear-gradient(135deg, #a855f7 0%, #7c3aed 50%, #4361ee 100%);
+  color: #ffffff;
+  border-radius: 9999px;
+  box-shadow: 0 4px 18px rgba(124, 58, 237, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-voice-pill:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 6px 24px rgba(124, 58, 237, 0.45);
+}
+
+.btn-voice-pill:active {
+  transform: scale(0.98);
+}

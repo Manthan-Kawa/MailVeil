@@ -1376,7 +1376,7 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
               {/* Notification subheader / tab bar */}
               {isAnalyst ? (
                 <div className="p-2 bg-white dark:bg-black border-b border-gray-200 dark:border-zinc-800">
-                  <div className="flex items-center gap-1 p-1 rounded-xl bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm overflow-x-auto scrollbar-none select-none max-w-full">
+                  <div className="flex items-center gap-1 p-1 rounded-2xl bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm overflow-x-auto scrollbar-none select-none max-w-full">
                     {(['all', 'requests', 'alerts', 'intel', 'system'] as const).map((cat) => {
                       const active = notifCategory === cat;
                       const label = cat === 'requests' ? 'USER REQUESTS' : cat.toUpperCase();
@@ -1385,7 +1385,7 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
                           key={cat}
                           type="button"
                           onClick={() => setNotifCategory(cat as any)}
-                          className={`relative h-7 px-3 rounded-lg text-[10px] font-mono font-bold uppercase whitespace-nowrap shrink-0 transition-colors duration-200 cursor-pointer select-none ${
+                          className={`relative h-8 px-3.5 rounded-xl text-[11px] font-mono font-bold uppercase whitespace-nowrap shrink-0 transition-colors duration-200 cursor-pointer select-none ${
                             active
                               ? 'text-white font-bold'
                               : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/40'
@@ -1394,7 +1394,7 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
                           {active && (
                             <motion.div
                               layoutId="activeNotifCategoryTab"
-                              className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
+                              className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
                               transition={{
                                 type: 'spring',
                                 stiffness: 450,

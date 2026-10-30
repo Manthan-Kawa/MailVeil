@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import { motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import {
   ClipboardList, Clock, CheckCircle2, Download, X,
@@ -788,45 +789,34 @@ export function CheckStatusPage({ onNavigate }: CheckStatusPageProps) {
         <div className="flex items-center gap-3 flex-wrap">
           {/* Status  tabs */}
           <div
-            className="relative isolate h-10 flex items-center gap-1 p-1 rounded-xl overflow-x-auto overflow-y-hidden scrollbar-none max-w-full touch-scroll touch-pan-x overscroll-x-contain"
-            style={{
-              background: isDark ? 'rgba(39,39,42,0.5)' : '#ffffff',
-              border: isDark ? '1px solid rgba(39,39,42,0.5)' : '1px solid #e2e8f0',
-              boxShadow: isDark ? 'none' : '0 1px 3px rgba(0,0,0,0.05)',
-              touchAction: 'pan-x',
-              WebkitOverflowScrolling: 'touch',
-              overscrollBehaviorY: 'none' }}
+            className="flex items-center gap-1 p-1 rounded-2xl bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm overflow-x-auto scrollbar-none select-none max-w-full"
           >
-            {/* Smooth sliding indicator pill */}
-            <div
-              className="absolute z-0 pointer-events-none rounded-lg bg-emerald-500/15 dark:bg-emerald-500/20 border border-emerald-500/35 dark:border-emerald-500/40 shadow-sm"
-              style={{
-                transform: `translate3d(${filterIndicatorStyle.left}px, ${filterIndicatorStyle.top}px, 0)`,
-                width: filterIndicatorStyle.width,
-                height: filterIndicatorStyle.height,
-                opacity: filterIndicatorStyle.opacity,
-                transition: 'transform 300ms cubic-bezier(0.25, 1, 0.5, 1), width 300ms cubic-bezier(0.25, 1, 0.5, 1), height 300ms cubic-bezier(0.25, 1, 0.5, 1), opacity 150ms ease',
-                left: 0,
-                top: 0,
-                zIndex: 0 }}
-            />
-
-            <Filter className="w-3.5 h-3.5 text-gray-500 dark:text-gray-500 ml-2 mr-1 shrink-0 relative z-10" />
+            <Filter className="w-3.5 h-3.5 text-gray-400 dark:text-zinc-500 ml-2 mr-1 shrink-0" />
             {(['all', 'pending', 'in_review', 'analyzed', 'resolved'] as const).map((s) => {
               const active = filterStatus === s;
               return (
                 <button
                   key={s}
-                  ref={(el) => { filterRefs.current[s] = el; }}
+                  type="button"
                   onClick={() => setFilterStatus(s)}
-                  style={{ zIndex: 10 }}
-                  className={`relative z-10 h-8 px-3.5 rounded-lg text-xs font-bold capitalize transition-colors duration-200 flex items-center justify-center shrink-0 whitespace-nowrap cursor-pointer select-none ${
-                      active
-                        ? 'text-emerald-900 dark:text-white font-bold'
-                        : 'text-gray-600 dark:text-zinc-400 font-medium hover:bg-gray-100/80 dark:hover:bg-zinc-800/80'
-                    }`}
+                  className={`relative h-9 px-3.5 rounded-xl text-xs sm:text-sm font-semibold capitalize transition-colors duration-200 flex items-center justify-center shrink-0 whitespace-nowrap cursor-pointer select-none ${
+                    active
+                      ? 'text-white font-bold'
+                      : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/40'
+                  }`}
                 >
-                  {s.replace('_', ' ')}
+                  {active && (
+                    <motion.div
+                      layoutId="activeCheckStatusFilterTab"
+                      className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
+                      transition={{
+                        type: 'spring',
+                        stiffness: 450,
+                        damping: 32,
+                      }}
+                    />
+                  )}
+                  <span className="relative z-10">{s.replace('_', ' ')}</span>
                 </button>
               );
             })}

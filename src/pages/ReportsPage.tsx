@@ -201,17 +201,9 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
       <SlideIn delay={0} direction="down">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-1.5 sm:px-0">
           <div className="flex-1 min-w-0 -ml-1 sm:ml-0">
-            <div className="flex items-center gap-2.5 sm:gap-3 flex-nowrap w-full">
-              <h2 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-zinc-100 tracking-tight whitespace-nowrap">
-                Reports &amp; Export
-              </h2>
-              {currentResult && (
-                <span className="px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-mono font-bold uppercase tracking-wider bg-purple-500/15 border border-purple-500/30 text-purple-700 dark:text-purple-300 inline-flex items-center gap-1.5 whitespace-nowrap shrink-0  ml-auto">
-                  <span className="w-1.5 h-1.5 rounded-full bg-purple-500 dark:bg-purple-400 animate-pulse" />
-                  Synced with Analyzer
-                </span>
-              )}
-            </div>
+            <h2 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-zinc-100 tracking-tight">
+              Reports &amp; Export
+            </h2>
             <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">
               Complete forensic analysis, threat intelligence, and interactive attack graphs.
             </p>

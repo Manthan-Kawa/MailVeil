@@ -128,19 +128,20 @@ export function HeaderForensicsPage({ onNavigate }: { onNavigate?: (route: strin
       {/* ── Page Header ── */}
       <SlideIn delay={0} direction="down">
         <div className="space-y-4">
-          <div className="flex items-start gap-2.5 sm:gap-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-2.5 flex-wrap">
-                <h2 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white tracking-tight leading-snug">
-                  Header Forensics
-                </h2>
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-purple-950/50 text-purple-300 border border-purple-500/40">
-                  RFC 5322 &amp; SMTP Forensics
-                </span>
-              </div>
+              <h2 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white tracking-tight leading-snug">
+                Header Forensics
+              </h2>
               <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-300 mt-0.5 leading-relaxed font-medium">
                 Deep forensic parsing of SMTP relay hops, email authentication, and header anomalies
               </p>
+            </div>
+            <div className="hidden sm:flex items-center gap-2 shrink-0 self-start sm:self-center">
+              <div className="flex items-center gap-2 px-3 py-1 rounded-full border border-purple-500/30 bg-purple-950/40 text-purple-300">
+                <span className="w-1.5 h-1.5 rounded-full bg-purple-400 shrink-0" />
+                <span className="text-[11px] font-bold text-purple-300 font-mono tracking-wider">LIVE FORENSICS ACTIVE</span>
+              </div>
             </div>
           </div>
 

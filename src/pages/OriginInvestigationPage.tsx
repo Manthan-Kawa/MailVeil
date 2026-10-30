@@ -50,7 +50,7 @@ import { resolveGeoLocation, extractOriginatingSenderTelemetry } from '@/utils/g
 
 /* ─── Slide-in entrance wrapper ─── */
 function SlideIn({ children, delay = 0, direction = 'up', className = '' }: {
-  children: React.ReactNode; delay?: number; direction?: 'up'|'left'|'right'|'down'; className?: string;
+  children: React.ReactNode; delay?: number; direction?: 'up' | 'left' | 'right' | 'down'; className?: string;
 }) {
   const [vis, setVis] = useState(false);
   useEffect(() => { const t = setTimeout(() => setVis(true), delay); return () => clearTimeout(t); }, [delay]);
@@ -63,11 +63,11 @@ function SlideIn({ children, delay = 0, direction = 'up', className = '' }: {
 }
 
 const LEVEL_COLORS: Record<string, { bg: string; border: string; text: string; glow: string }> = {
-  critical: { bg: 'rgba(239,68,68,0.08)',   border: 'rgba(239,68,68,0.35)',   text: 'text-red-600 dark:text-red-400',    glow: 'none' },
-  high:     { bg: 'rgba(249,115,22,0.08)',  border: 'rgba(249,115,22,0.35)',  text: 'text-orange-600 dark:text-orange-400', glow: 'none' },
-  medium:   { bg: 'rgba(245,158,11,0.08)',  border: 'rgba(245,158,11,0.35)',  text: 'text-amber-600 dark:text-amber-400',  glow: 'none' },
-  low:      { bg: 'rgba(59,130,246,0.08)',  border: 'rgba(59,130,246,0.35)',  text: 'text-blue-600 dark:text-blue-400',   glow: 'none' },
-  info:     { bg: 'rgba(107,114,128,0.08)', border: 'rgba(107,114,128,0.35)', text: 'text-gray-600 dark:text-zinc-400 dark:text-gray-400',   glow: 'none' },
+  critical: { bg: 'rgba(239,68,68,0.08)', border: 'rgba(239,68,68,0.35)', text: 'text-red-600 dark:text-red-400', glow: 'none' },
+  high: { bg: 'rgba(249,115,22,0.08)', border: 'rgba(249,115,22,0.35)', text: 'text-orange-600 dark:text-orange-400', glow: 'none' },
+  medium: { bg: 'rgba(245,158,11,0.08)', border: 'rgba(245,158,11,0.35)', text: 'text-amber-600 dark:text-amber-400', glow: 'none' },
+  low: { bg: 'rgba(59,130,246,0.08)', border: 'rgba(59,130,246,0.35)', text: 'text-blue-600 dark:text-blue-400', glow: 'none' },
+  info: { bg: 'rgba(107,114,128,0.08)', border: 'rgba(107,114,128,0.35)', text: 'text-gray-600 dark:text-zinc-400 dark:text-gray-400', glow: 'none' },
 };
 
 export function OriginInvestigationPage({ onNavigate }: { onNavigate?: (route: string) => void }) {
@@ -195,8 +195,8 @@ export function OriginInvestigationPage({ onNavigate }: { onNavigate?: (route: s
     buildMarkers().catch(() => setGeoLoading(false));
 
     return () => { cancelled = true; };
-  // Re-run whenever the originating IP changes (not just case_id)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Re-run whenever the originating IP changes (not just case_id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentResult?.case_id, originIp]);
 
   const [vaultSaved, setVaultSaved] = useState(false);
@@ -270,8 +270,8 @@ export function OriginInvestigationPage({ onNavigate }: { onNavigate?: (route: s
                         rawLevel === 'low'
                           ? 'linear-gradient(135deg, #0ea5e9, #0284c7)'
                           : rawLevel === 'medium'
-                          ? 'linear-gradient(135deg, #f59e0b, #d97706)'
-                          : 'linear-gradient(135deg, #ef4444, #dc2626)',
+                            ? 'linear-gradient(135deg, #f59e0b, #d97706)'
+                            : 'linear-gradient(135deg, #ef4444, #dc2626)',
                     }}
                   >
                     {currentResult.alert_level?.toUpperCase() || 'CRITICAL'}
@@ -484,27 +484,27 @@ function OriginConfidenceEngine({ result }: { result: EmailAnalysisResult | null
 
   const signals = result
     ? [
-        {
-          signal: 'Earliest Received Hop Isolation',
-          weight: 35,
-          detail: `Originating sender IP ${result.origin?.sending_ip || result.threat_intel?.sending_ip || '185.220.101.47'} isolated from earliest 'Received: from' line at chain bottom (geolocated to ${geo.city}, ${geo.country}; internal loopbacks filtered).`,
-        },
-        {
-          signal: 'Autonomous System Number (ASN)',
-          weight: 25,
-          detail: `${result.origin?.asn || geo.asn || 'AS200651'} (${result.origin?.hosting || geo.hosting || 'Infrastructure'}) registered to hosting entity.`,
-        },
-        {
-          signal: 'Mail Relay Hop Trace Correlation',
-          weight: 25,
-          detail: `Reconstructed ${result.origin?.relay_hops?.length || 1} relay hop(s) in Received header timeline.`,
-        },
-        {
-          signal: 'Sender Policy Alignment (SPF/DKIM/DMARC)',
-          weight: 15,
-          detail: `Authentication verdict: SPF=${result.threat_intel?.spf || 'FAIL'}, DKIM=${result.threat_intel?.dkim || 'FAIL'}, DMARC=${result.threat_intel?.dmarc || 'FAIL'}.`,
-        },
-      ]
+      {
+        signal: 'Earliest Received Hop Isolation',
+        weight: 35,
+        detail: `Originating sender IP ${result.origin?.sending_ip || result.threat_intel?.sending_ip || '185.220.101.47'} isolated from earliest 'Received: from' line at chain bottom (geolocated to ${geo.city}, ${geo.country}; internal loopbacks filtered).`,
+      },
+      {
+        signal: 'Autonomous System Number (ASN)',
+        weight: 25,
+        detail: `${result.origin?.asn || geo.asn || 'AS200651'} (${result.origin?.hosting || geo.hosting || 'Infrastructure'}) registered to hosting entity.`,
+      },
+      {
+        signal: 'Mail Relay Hop Trace Correlation',
+        weight: 25,
+        detail: `Reconstructed ${result.origin?.relay_hops?.length || 1} relay hop(s) in Received header timeline.`,
+      },
+      {
+        signal: 'Sender Policy Alignment (SPF/DKIM/DMARC)',
+        weight: 15,
+        detail: `Authentication verdict: SPF=${result.threat_intel?.spf || 'FAIL'}, DKIM=${result.threat_intel?.dkim || 'FAIL'}, DMARC=${result.threat_intel?.dmarc || 'FAIL'}.`,
+      },
+    ]
     : ORIGIN_CONFIDENCE.signals;
 
   return (
@@ -634,8 +634,8 @@ export function AttackGraphPage({ onNavigate }: { onNavigate?: (route: string) =
                         rawLevel === 'low'
                           ? 'linear-gradient(135deg, #0ea5e9, #0284c7)'
                           : rawLevel === 'medium'
-                          ? 'linear-gradient(135deg, #f59e0b, #d97706)'
-                          : 'linear-gradient(135deg, #ef4444, #dc2626)',
+                            ? 'linear-gradient(135deg, #f59e0b, #d97706)'
+                            : 'linear-gradient(135deg, #ef4444, #dc2626)',
                     }}
                   >
                     {currentResult.alert_level?.toUpperCase() || 'CRITICAL'}

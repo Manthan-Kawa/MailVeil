@@ -490,11 +490,11 @@ function IdleView({
                 onClick={() => fileInputRef.current?.click()}
                 className={`relative rounded-2xl flex-1 min-h-[220px] p-6 text-center cursor-pointer transition-all duration-300 border border-dashed flex flex-col items-center justify-center ${
                   dragOver
-                    ? 'bg-blue-500/10 border-blue-500'
+                    ? 'bg-blue-500/10 border-blue-500 ring-2 ring-blue-500/20'
                     : 'bg-white dark:bg-[#121316] border-gray-300 dark:border-zinc-800 hover:border-blue-400 dark:hover:border-zinc-700'
                 }`}
               >
-                <div className="w-12 h-12 bg-gray-100 dark:bg-[#1b1c21] border border-gray-200 dark:border-zinc-700/60 rounded-2xl flex items-center justify-center mb-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500/15 to-indigo-500/15 border border-blue-500/25 rounded-2xl flex items-center justify-center mb-3">
                   <Upload className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 </div>
                 <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-1">
@@ -505,11 +505,11 @@ function IdleView({
                 </p>
               </div>
             ) : (
-              <div className="relative rounded-2xl flex-1 min-h-[220px] p-5 border border-emerald-500/30 bg-emerald-500/5 dark:bg-[#121316] dark:border-emerald-500/30 flex flex-col justify-between">
+              <div className="relative rounded-2xl flex-1 min-h-[220px] p-5 border border-emerald-500/40 bg-gradient-to-br from-emerald-500/15 via-emerald-500/5 to-transparent dark:from-emerald-950/40 dark:via-emerald-900/15 dark:to-[#121316] shadow-lg shadow-emerald-950/20 flex flex-col justify-between overflow-hidden">
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] font-bold font-mono tracking-wider text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800/60">
-                      <CheckCircle2 className="w-3.5 h-3.5" />
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-[11px] font-black font-mono tracking-wider text-white bg-emerald-500 shadow-md shadow-emerald-500/35 border border-emerald-400/40 select-none">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-white stroke-[2.5]" />
                       FILE LOADED
                     </span>
                     <button
@@ -518,7 +518,7 @@ function IdleView({
                         e.stopPropagation();
                         onRemoveUploadedFile();
                       }}
-                      className="p-1 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors cursor-pointer"
+                      className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-red-500 dark:hover:bg-red-500 transition-all cursor-pointer shadow-sm"
                       title="Remove uploaded file"
                     >
                       <X className="w-4 h-4" />
@@ -526,28 +526,29 @@ function IdleView({
                   </div>
 
                   <div className="flex items-start gap-3 mt-2">
-                    <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0 text-blue-600 dark:text-blue-400">
-                      <FileText className="w-5 h-5" />
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-md shadow-blue-500/30 flex items-center justify-center shrink-0">
+                      <FileText className="w-5 h-5 text-white" />
                     </div>
                     <div className="min-w-0 flex-1">
                       <h4 className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white truncate" title={uploadedFile.name}>
                         {uploadedFile.name}
                       </h4>
-                      <p className="text-xs text-gray-500 dark:text-zinc-400 font-mono mt-0.5">
-                        File Size: <span className="font-semibold text-gray-800 dark:text-zinc-200">{formatFileSize(uploadedFile.size)}</span>
+                      <p className="text-xs text-gray-600 dark:text-zinc-400 font-mono mt-0.5">
+                        File Size: <span className="font-bold text-emerald-600 dark:text-emerald-400">{formatFileSize(uploadedFile.size)}</span>
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-gray-200 dark:border-zinc-800/80 flex items-center justify-between">
-                  <span className="text-[11px] text-gray-500 dark:text-zinc-500 font-mono">
+                <div className="pt-3 border-t border-emerald-500/20 dark:border-emerald-500/20 flex items-center justify-between">
+                  <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-600 dark:text-emerald-400 font-mono">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-sm shadow-emerald-500" />
                     Ready to analyze
                   </span>
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="text-[11px] font-bold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+                    className="text-[11px] font-bold text-blue-600 dark:text-blue-400 hover:text-blue-500 hover:underline cursor-pointer transition-colors"
                   >
                     Change file
                   </button>

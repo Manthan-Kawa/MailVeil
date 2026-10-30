@@ -239,7 +239,7 @@ export function OriginInvestigationPage({ onNavigate }: { onNavigate?: (route: s
                 Geographic infrastructure triangulation, network session routing &amp; origin relay telemetry
               </p>
             </div>
-            <div className="hidden sm:flex items-center gap-2 shrink-0 self-start sm:self-center">
+            <div className="flex items-center gap-2 shrink-0 self-start sm:self-center">
               <div className="flex items-center gap-2 px-3 py-1 rounded-full border border-purple-500/30 bg-purple-950/40 text-purple-300">
                 <span className="w-1.5 h-1.5 rounded-full bg-purple-400 shrink-0 animate-pulse" />
                 <span className="text-[11px] font-bold text-purple-300 font-mono tracking-wider">LIVE ORIGIN ACTIVE</span>
@@ -601,7 +601,7 @@ export function AttackGraphPage({ onNavigate }: { onNavigate?: (route: string) =
                 Interactive entity correlation network — click any node to inspect details
               </p>
             </div>
-            <div className="hidden sm:flex items-center gap-2 shrink-0 self-start sm:self-center">
+            <div className="flex items-center gap-2 shrink-0 self-start sm:self-center">
               <div
                 className="flex items-center gap-2 px-3 py-1 rounded-full border border-purple-500/30 bg-purple-950/40 text-purple-300"
               >

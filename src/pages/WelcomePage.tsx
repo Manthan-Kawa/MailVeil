@@ -315,13 +315,35 @@ function AuthModal({ initialMode = 'login', onClose, onSuccess, onGoogleSignIn, 
           >
             <Mail className="w-4 h-4 text-gray-500 shrink-0" />
             <input
-              type="email"
+              type="text"
+              inputMode="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email address"
-              className="flex-1 bg-transparent text-sm text-white placeholder-gray-600 focus:outline-none"
+              placeholder="Email address (e.g. demo@analyst, demo@user)"
+              className="flex-1 bg-transparent text-sm text-white placeholder-gray-500 focus:outline-none"
             />
           </div>
+
+          {/* Quick Demo Fill for Testing */}
+          {tab === 'login' && (
+            <div className="flex items-center gap-1.5 px-1 py-0.5 text-[11px] flex-wrap">
+              <span className="font-mono text-[10px] uppercase text-gray-500">Quick Test:</span>
+              <button
+                type="button"
+                onClick={() => { setEmail('demo@analyst'); setPassword('12345678'); }}
+                className="px-2 py-0.5 rounded-md bg-blue-500/15 hover:bg-blue-500/25 text-blue-400 border border-blue-500/30 font-mono text-[10px] transition-colors"
+              >
+                demo@analyst (12345678)
+              </button>
+              <button
+                type="button"
+                onClick={() => { setEmail('demo@user'); setPassword('12345678'); }}
+                className="px-2 py-0.5 rounded-md bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 border border-emerald-500/30 font-mono text-[10px] transition-colors"
+              >
+                demo@user (12345678)
+              </button>
+            </div>
+          )}
 
           {/* Password */}
           <div
@@ -387,11 +409,7 @@ function AuthModal({ initialMode = 'login', onClose, onSuccess, onGoogleSignIn, 
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-3.5 rounded-2xl text-white font-bold text-sm mt-1 hover:opacity-90 active:opacity-80 transition-opacity disabled:opacity-60 flex items-center justify-center gap-2 cursor-pointer"
-            style={{
-              background: 'linear-gradient(135deg, #06b6d4 0%, #6366f1 50%, #8b5cf6 100%)',
-              boxShadow: '0 4px 24px rgba(99,102,241,0.4)',
-            }}
+            className="w-full py-3.5 rounded-2xl text-white font-bold text-sm mt-1 bg-blue-600 hover:bg-blue-500 active:opacity-80 transition-all disabled:opacity-60 flex items-center justify-center gap-2 cursor-pointer shadow-sm"
           >
             {isSubmitting ? (
               <span>{tab === 'login' ? 'Signing in...' : 'Checking account...'}</span>
@@ -594,7 +612,7 @@ export function WelcomePage({ onNavigate }: WelcomePageProps) {
   }
 
   return (
-    <div className="relative w-screen h-screen bg-black overflow-hidden">
+    <div className="relative w-full h-screen bg-black overflow-hidden">
 
       {/* ══ LAYER 0 — Spline cinematic background (camera fully locked) ══ */}
       <div
@@ -681,11 +699,7 @@ export function WelcomePage({ onNavigate }: WelcomePageProps) {
             <button
               id="analyze-email-btn"
               onClick={handleAnalyzeEmailClick}
-              className="glow-btn group relative flex items-center gap-2 text-white font-semibold text-sm px-7 sm:px-8 py-3.5 sm:py-4 rounded-full transition-all duration-200 hover:scale-105 active:scale-100"
-              style={{
-                background: 'linear-gradient(135deg, rgba(10,10,20,0.95) 0%, rgba(5,5,14,0.98) 100%)',
-                boxShadow: '0 0 32px rgba(96,165,250,0.08)',
-              }}
+              className="group relative flex items-center gap-2 text-white font-semibold text-sm px-7 sm:px-8 py-3.5 sm:py-4 rounded-full transition-all duration-200 hover:scale-105 active:scale-100 bg-zinc-900 border border-zinc-700/80 shadow-sm"
             >
               <Mail className="w-4 h-4 text-blue-300" />
               <span>Analyze Email</span>

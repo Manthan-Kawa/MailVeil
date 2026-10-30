@@ -15,6 +15,11 @@ import {
   MailSearch,
   Sparkles,
   ChevronDown,
+  Lock,
+  Key,
+  ShieldOff,
+  Clock,
+  AlertOctagon,
   type LucideIcon,
 } from 'lucide-react';
 import {
@@ -59,8 +64,7 @@ function SlideIn({
       style={{
         opacity: vis ? 1 : 0,
         transform: vis ? 'none' : from,
-        transition: 'opacity .5s cubic-bezier(.22,1,.36,1), transform .5s cubic-bezier(.22,1,.36,1)',
-      }}
+        transition: 'opacity .5s cubic-bezier(.22,1,.36,1), transform .5s cubic-bezier(.22,1,.36,1)' }}
     >
       {children}
     </div>
@@ -68,12 +72,12 @@ function SlideIn({
 }
 
 /* ─── Severity config ─── */
-const SEVERITY_STYLES: Record<Severity, { border: string; bg: string; text: string; dot: string; glow: string }> = {
-  critical: { border: 'rgba(239,68,68,0.4)', bg: 'rgba(239,68,68,0.1)', text: '#f87171', dot: '#ef4444', glow: 'rgba(239,68,68,0.25)' },
-  high: { border: 'rgba(249,115,22,0.4)', bg: 'rgba(249,115,22,0.1)', text: '#fb923c', dot: '#f97316', glow: 'rgba(249,115,22,0.2)' },
-  medium: { border: 'rgba(245,158,11,0.35)', bg: 'rgba(245,158,11,0.08)', text: '#fbbf24', dot: '#f59e0b', glow: 'rgba(245,158,11,0.15)' },
-  low: { border: 'rgba(59,130,246,0.35)', bg: 'rgba(59,130,246,0.08)', text: '#60a5fa', dot: '#3b82f6', glow: 'rgba(59,130,246,0.15)' },
-  info: { border: 'rgba(156,163,175,0.25)', bg: 'rgba(156,163,175,0.06)', text: '#9ca3af', dot: '#6b7280', glow: 'rgba(156,163,175,0.1)' },
+const SEVERITY_STYLES: Record<Severity, { border: string; bg: string; text: string; dot: string }> = {
+  critical: { border: 'rgba(239,68,68,0.4)', bg: 'rgba(239,68,68,0.1)', text: '#f87171', dot: '#ef4444' },
+  high: { border: 'rgba(249,115,22,0.4)', bg: 'rgba(249,115,22,0.1)', text: '#fb923c', dot: '#f97316' },
+  medium: { border: 'rgba(245,158,11,0.35)', bg: 'rgba(245,158,11,0.08)', text: '#fbbf24', dot: '#f59e0b' },
+  low: { border: 'rgba(59,130,246,0.35)', bg: 'rgba(59,130,246,0.08)', text: '#60a5fa', dot: '#3b82f6' },
+  info: { border: 'rgba(156,163,175,0.25)', bg: 'rgba(156,163,175,0.06)', text: '#9ca3af', dot: '#6b7280' },
 };
 
 const STATUS_CONFIG: Record<AlertStatus, { color: string; bg: string; border: string; label: string; pulse?: string }> = {
@@ -85,13 +89,21 @@ const STATUS_CONFIG: Record<AlertStatus, { color: string; bg: string; border: st
 
 const STATUS_ORDER: AlertStatus[] = ['new', 'acknowledged', 'investigating', 'resolved'];
 
-const ALERT_TYPE_ICONS: Record<AlertType, LucideIcon> = {
+const ALERT_TYPE_ICONS: Record<string, LucideIcon> = {
   'BEC Detection': ShieldAlert,
   'Lookalike Domain': Globe,
   'Authentication Failure': ShieldX,
   'Suspicious URL': Link2,
   'Campaign Correlation': Network,
   'Origin Anomaly': MapPin,
+  'Downgrade Attack': ShieldAlert,
+  'Weak Cipher': Lock,
+  'Expired Certificate': Clock,
+  'Weak Key': Key,
+  'MitM Detected': Network,
+  'STARTTLS Stripping': ShieldOff,
+  'Protocol Violation': AlertOctagon,
+  'Self-Signed Certificate': ShieldX,
 };
 
 
@@ -204,35 +216,34 @@ export function AlertsPage({ onNavigate }: { onNavigate?: (id: string) => void }
     return (
       <div className="space-y-6" style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
         <SlideIn delay={0} direction="down">
-          <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Security Alerts</h2>
-          <p className="text-sm text-slate-600 dark:text-gray-400 mt-0.5">Real-time threat detection feed & SOC alert triage center</p>
+          <h2 className="text-2xl font-black text-gray-900 dark:text-zinc-100 tracking-tight">Security Alerts</h2>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">Real-time threat detection feed & SOC alert triage center</p>
         </SlideIn>
         <SlideIn delay={60} direction="up">
           <div
-            className="rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-6 bg-white dark:bg-[#090b12] border border-slate-200 dark:border-transparent shadow-sm dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+            className="rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-6 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm "
           >
             <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-red-500/10 border border-red-500/25 text-red-600 dark:text-red-400">
               <Bell className="w-8 h-8" />
             </div>
             <div className="max-w-md space-y-2">
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white">No Alerts Yet</h3>
-              <p className="text-xs text-slate-600 dark:text-gray-400 leading-relaxed font-mono">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-zinc-100">No Alerts Yet</h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed font-mono">
                 Alerts are automatically generated from analyzed emails. Analyze an email and it will instantly appear here as a live alert.
               </p>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-3">
               <button
                 onClick={() => onNavigate?.('email-analyzer')}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white transition-all hover:scale-105 cursor-pointer"
-                style={{ background: 'linear-gradient(135deg,#3b82f6,#6366f1)', boxShadow: '0 4px 16px rgba(59,130,246,0.3)' }}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 font-mono transition-all hover:scale-105 active:scale-95 cursor-pointer"
               >
                 <MailSearch className="w-4 h-4" /> Go to Email Analyzer
               </button>
               <button
                 onClick={loadDemoCase}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-slate-700 hover:text-black dark:text-purple-200 dark:hover:text-purple-100 bg-slate-100 hover:bg-slate-200 dark:bg-purple-900/30 hover:dark:bg-purple-900/50 border border-slate-200 dark:border-purple-500/45 hover:dark:border-purple-400/60 transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-zinc-700 dark:text-zinc-300 hover:text-black dark:hover:text-white bg-gray-100 hover:bg-gray-200 dark:bg-zinc-800/80 dark:hover:bg-zinc-700/80 border border-gray-300 dark:border-zinc-700/60 transition-all font-mono cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
               >
-                <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400" /> Load Sample Alert
+                <Sparkles className="w-4 h-4 text-purple-400" /> Load Sample Alert
               </button>
             </div>
           </div>
@@ -248,8 +259,8 @@ export function AlertsPage({ onNavigate }: { onNavigate?: (id: string) => void }
       <SlideIn delay={0} direction="down">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Security Alerts</h2>
-            <p className="text-sm text-slate-600 dark:text-gray-400 mt-0.5">
+            <h2 className="text-2xl font-black text-gray-900 dark:text-zinc-100 tracking-tight">Security Alerts</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
               Synced from {analyzedReports.length} analyzed email{analyzedReports.length !== 1 ? 's' : ''}
             </p>
           </div>
@@ -274,10 +285,10 @@ export function AlertsPage({ onNavigate }: { onNavigate?: (id: string) => void }
             return (
               <div
                 key={st}
-                className="rounded-2xl p-4 bg-white dark:bg-[#090b12] border border-slate-200 dark:border-white/10 shadow-sm cursor-default select-none"
+                className="rounded-2xl p-4 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm cursor-default select-none"
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-[11px] text-slate-500 dark:text-gray-500 font-mono uppercase tracking-wider font-semibold">{cfg.label}</span>
+                  <span className="text-[11px] text-gray-500 dark:text-gray-500 font-mono uppercase tracking-wider font-semibold">{cfg.label}</span>
                   <span className="w-2 h-2 rounded-full" style={{ background: cfg.color }} />
                 </div>
                 <div className="text-2xl font-black" style={{ color: cfg.color }}>{count}</div>
@@ -289,16 +300,16 @@ export function AlertsPage({ onNavigate }: { onNavigate?: (id: string) => void }
 
       {/* ── Filter Bar ── */}
       <SlideIn delay={120} direction="up">
-        <div className="rounded-2xl p-4 bg-white dark:bg-[#090b12] border border-slate-200 dark:border-transparent shadow-sm">
+        <div className="rounded-2xl p-4 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm">
           <div className="flex flex-col sm:flex-row gap-3">
-            <div className="flex items-center gap-2 flex-1 rounded-xl px-3 py-2.5 bg-slate-100 dark:bg-white border border-slate-200 dark:border-slate-200 shadow-sm">
-              <Search className="w-4 h-4 text-slate-400 dark:text-slate-400 shrink-0" />
+            <div className="flex items-center gap-2 flex-1 rounded-xl px-3 py-2.5 bg-gray-50 dark:bg-white border border-gray-200 dark:border-gray-200 shadow-sm">
+              <Search className="w-4 h-4 text-gray-500 dark:text-gray-500 shrink-0" />
               <input
                 type="text"
                 placeholder="Search by alert ID, type, or source..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="bg-transparent text-sm text-slate-900 dark:text-slate-900 placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none w-full font-mono"
+                className="bg-transparent text-sm text-gray-900 dark:text-gray-900 placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none w-full font-mono"
               />
             </div>
             <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
@@ -307,15 +318,15 @@ export function AlertsPage({ onNavigate }: { onNavigate?: (id: string) => void }
                 <select
                   value={severityFilter}
                   onChange={(e) => setSeverityFilter(e.target.value as any)}
-                  className="w-full sm:w-auto appearance-none px-2.5 sm:px-3.5 py-1.5 sm:py-2.5 pr-6 sm:pr-8 rounded-xl text-[11px] sm:text-xs font-mono font-medium sm:font-semibold text-slate-800 dark:text-gray-200 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-500/40 cursor-pointer transition-all shrink-0"
+                  className="w-full sm:w-auto appearance-none px-2.5 sm:px-3.5 py-1.5 sm:py-2.5 pr-6 sm:pr-8 rounded-xl text-[11px] sm:text-xs font-mono font-medium sm:font-semibold text-gray-900 dark:text-gray-200 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-zinc-800/50 hover:border-gray-200 dark:hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-500/40 cursor-pointer transition-all shrink-0"
                 >
-                  <option value="all" className="bg-white dark:bg-[#0b0e17] text-slate-800 dark:text-gray-300">All Severity</option>
-                  <option value="critical" className="bg-white dark:bg-[#0b0e17] text-red-500 dark:text-red-400">Critical</option>
-                  <option value="high" className="bg-white dark:bg-[#0b0e17] text-orange-500 dark:text-orange-400">High</option>
-                  <option value="medium" className="bg-white dark:bg-[#0b0e17] text-amber-500 dark:text-amber-400">Medium</option>
-                  <option value="low" className="bg-white dark:bg-[#0b0e17] text-green-500 dark:text-green-400">Low</option>
+                  <option value="all" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-zinc-100">All Severity</option>
+                  <option value="critical" className="bg-white dark:bg-zinc-800 text-red-500 dark:text-red-400">Critical</option>
+                  <option value="high" className="bg-white dark:bg-zinc-800 text-orange-500 dark:text-orange-400">High</option>
+                  <option value="medium" className="bg-white dark:bg-zinc-800 text-amber-500 dark:text-amber-400">Medium</option>
+                  <option value="low" className="bg-white dark:bg-zinc-800 text-green-500 dark:text-green-400">Low</option>
                 </select>
-                <ChevronDown className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-500 dark:text-gray-400 absolute right-2 sm:right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <ChevronDown className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-500 dark:text-gray-400 absolute right-2 sm:right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
 
               {/* Status Dropdown */}
@@ -323,15 +334,15 @@ export function AlertsPage({ onNavigate }: { onNavigate?: (id: string) => void }
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value as any)}
-                  className="w-full sm:w-auto appearance-none px-2.5 sm:px-3.5 py-1.5 sm:py-2.5 pr-6 sm:pr-8 rounded-xl text-[11px] sm:text-xs font-mono font-medium sm:font-semibold text-slate-800 dark:text-gray-200 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-500/40 cursor-pointer transition-all shrink-0"
+                  className="w-full sm:w-auto appearance-none px-2.5 sm:px-3.5 py-1.5 sm:py-2.5 pr-6 sm:pr-8 rounded-xl text-[11px] sm:text-xs font-mono font-medium sm:font-semibold text-gray-900 dark:text-gray-200 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-zinc-800/50 hover:border-gray-200 dark:hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-500/40 cursor-pointer transition-all shrink-0"
                 >
-                  <option value="all" className="bg-white dark:bg-[#0b0e17] text-slate-800 dark:text-gray-300">All Status</option>
-                  <option value="new" className="bg-white dark:bg-[#0b0e17] text-red-500 dark:text-red-400">New</option>
-                  <option value="acknowledged" className="bg-white dark:bg-[#0b0e17] text-amber-500 dark:text-amber-400">Acknowledged</option>
-                  <option value="investigating" className="bg-white dark:bg-[#0b0e17] text-blue-500 dark:text-blue-400">Investigating</option>
-                  <option value="resolved" className="bg-white dark:bg-[#0b0e17] text-green-500 dark:text-green-400">Resolved</option>
+                  <option value="all" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-zinc-100">All Status</option>
+                  <option value="new" className="bg-white dark:bg-zinc-800 text-red-500 dark:text-red-400">New</option>
+                  <option value="acknowledged" className="bg-white dark:bg-zinc-800 text-amber-500 dark:text-amber-400">Acknowledged</option>
+                  <option value="investigating" className="bg-white dark:bg-zinc-800 text-blue-500 dark:text-blue-400">Investigating</option>
+                  <option value="resolved" className="bg-white dark:bg-zinc-800 text-green-500 dark:text-green-400">Resolved</option>
                 </select>
-                <ChevronDown className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-500 dark:text-gray-400 absolute right-2 sm:right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <ChevronDown className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-500 dark:text-gray-400 absolute right-2 sm:right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
             </div>
           </div>
@@ -341,8 +352,8 @@ export function AlertsPage({ onNavigate }: { onNavigate?: (id: string) => void }
       {/* ── Table + Inspector ── */}
       <SlideIn delay={180} direction="up">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-          <div className="lg:col-span-2 rounded-2xl overflow-hidden bg-white dark:bg-[#090b12] border border-slate-200 dark:border-transparent shadow-sm dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]">
-            <div className="grid grid-cols-12 gap-2 px-3.5 sm:px-5 py-3 text-[10px] font-mono font-bold text-slate-500 dark:text-gray-500 uppercase tracking-wider border-b border-slate-200 dark:border-transparent bg-slate-50/70 dark:bg-white/[0.02]">
+          <div className="lg:col-span-2 rounded-2xl overflow-hidden bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm ">
+            <div className="grid grid-cols-12 gap-2 px-3.5 sm:px-5 py-3 text-[10px] font-mono font-bold text-gray-500 dark:text-gray-500 uppercase tracking-wider border-b border-gray-200 dark:border-zinc-800/50 bg-white/70 dark:bg-zinc-900/50">
               <div className="col-span-4">Alert ID</div>
               <div className="col-span-3 hidden md:block">Type</div>
               <div className="col-span-4 md:col-span-2">Severity</div>
@@ -350,20 +361,20 @@ export function AlertsPage({ onNavigate }: { onNavigate?: (id: string) => void }
             </div>
             <div className="divide-y divide-slate-100 dark:divide-white/5">
               {filtered.map((a) => {
-                const TypeIcon = ALERT_TYPE_ICONS[a.type];
+                const TypeIcon = ALERT_TYPE_ICONS[a.type] || ShieldAlert;
                 const isSel = selected?.id === a.id;
                 return (
-                  <div key={a.id} onClick={() => setSelected(a)} className={`grid grid-cols-12 gap-2 px-3.5 sm:px-5 py-3.5 cursor-pointer transition-all items-center ${isSel ? 'bg-slate-100 dark:bg-white/[0.06]' : 'hover:bg-slate-50 dark:hover:bg-white/[0.03]'}`}>
+                  <div key={a.id} onClick={() => setSelected(a)} className={`grid grid-cols-12 gap-2 px-3.5 sm:px-5 py-3.5 cursor-pointer transition-all items-center ${isSel ? 'bg-gray-50 dark:bg-zinc-900/50' : 'hover:bg-white dark:hover:bg-zinc-700/50'}`}>
                     <div className="col-span-4 flex items-center gap-1.5 sm:gap-2">
-                      <Crosshair className={`w-3 h-3 ${isSel ? 'text-red-500 dark:text-red-400 opacity-100' : 'text-slate-400 dark:text-gray-600 opacity-0'} transition-opacity shrink-0`} />
-                      <TypeIcon className="w-3.5 h-3.5 text-slate-500 dark:text-gray-500 shrink-0" />
+                      <Crosshair className={`w-3 h-3 ${isSel ? 'text-red-500 dark:text-red-400 opacity-100' : 'text-gray-500 dark:text-gray-600 opacity-0'} transition-opacity shrink-0`} />
+                      <TypeIcon className="w-3.5 h-3.5 text-gray-500 dark:text-gray-500 shrink-0" />
                       <span className="text-xs font-mono font-bold text-cyan-600 dark:text-cyan-400 truncate">{a.id}</span>
                     </div>
-                    <div className="col-span-3 hidden md:flex items-center"><span className="text-xs text-slate-800 dark:text-gray-300 truncate">{a.type}</span></div>
+                    <div className="col-span-3 hidden md:flex items-center"><span className="text-xs text-gray-900 dark:text-zinc-100 truncate">{a.type}</span></div>
                     <div className="col-span-4 md:col-span-2 flex items-center"><SeverityPill severity={a.severity} /></div>
                     <div className="col-span-4 md:col-span-3 flex items-center justify-end md:justify-between">
                       <StatusPill status={a.status} />
-                      <ChevronRight className="w-3.5 h-3.5 text-slate-400 dark:text-gray-600 shrink-0 hidden md:block" />
+                      <ChevronRight className="w-3.5 h-3.5 text-gray-500 dark:text-gray-600 shrink-0 hidden md:block" />
                     </div>
                   </div>
                 );
@@ -371,8 +382,8 @@ export function AlertsPage({ onNavigate }: { onNavigate?: (id: string) => void }
             </div>
             {filtered.length === 0 && (
               <div className="text-center py-16">
-                <Search className="w-8 h-8 text-slate-300 dark:text-gray-700 mx-auto mb-3" />
-                <p className="text-sm text-slate-500 dark:text-gray-600 font-mono">No alerts match your search</p>
+                <Search className="w-8 h-8 text-gray-200 dark:text-gray-700 mx-auto mb-3" />
+                <p className="text-sm text-gray-500 dark:text-gray-600 font-mono">No alerts match your search</p>
               </div>
             )}
           </div>
@@ -380,12 +391,12 @@ export function AlertsPage({ onNavigate }: { onNavigate?: (id: string) => void }
             {selected ? (
               <AlertDetail alert={selected} onStatusChange={changeStatus} />
             ) : (
-              <div className="rounded-2xl p-6 flex flex-col items-center justify-center text-center h-full min-h-[360px] bg-white dark:bg-[#090b12] border border-slate-200 dark:border-transparent shadow-sm">
+              <div className="rounded-2xl p-6 flex flex-col items-center justify-center text-center h-full min-h-[360px] bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm">
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-3 bg-red-500/10 border border-red-500/20 text-red-500 dark:text-red-400">
                   <Bell className="w-6 h-6 text-red-500 dark:text-red-400" />
                 </div>
-                <h4 className="text-xs font-bold text-slate-900 dark:text-white mb-1">Alert Triage Inspector</h4>
-                <p className="text-xs text-slate-500 dark:text-gray-500 font-mono max-w-[200px]">Select an alert from the table to inspect telemetry, observed facts, and AI inference.</p>
+                <h4 className="text-xs font-bold text-gray-900 dark:text-zinc-100 mb-1">Alert Triage Inspector</h4>
+                <p className="text-xs text-gray-500 dark:text-gray-500 font-mono max-w-[200px]">Select an alert from the table to inspect telemetry, observed facts, and AI inference.</p>
               </div>
             )}
           </div>
@@ -400,23 +411,23 @@ export function AlertsPage({ onNavigate }: { onNavigate?: (id: string) => void }
 ══════════════════════════════════════════════════ */
 function AlertDetail({ alert, onStatusChange }: { alert: SecurityAlert; onStatusChange: (id: string, status: AlertStatus) => void }) {
   const sev = SEVERITY_STYLES[alert.severity];
-  const TypeIcon = ALERT_TYPE_ICONS[alert.type];
+  const TypeIcon = ALERT_TYPE_ICONS[alert.type] || ShieldAlert;
 
   return (
-    <div className="rounded-2xl p-5 space-y-4 bg-white dark:bg-[#090b12] shadow-sm" style={{ border: `1px solid ${sev.border}` }}>
+    <div className="rounded-2xl p-5 space-y-4 bg-white dark:bg-zinc-800 shadow-sm" style={{ border: `1px solid ${sev.border}` }}>
       <div>
         <div className="flex items-center gap-2 flex-wrap mb-2">
           <TypeIcon className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
           <span className="text-xs font-mono font-bold text-cyan-600 dark:text-cyan-400">{alert.id}</span>
           <SeverityPill severity={alert.severity} />
         </div>
-        <h3 className="text-base font-bold text-slate-900 dark:text-white">{alert.type}</h3>
-        <p className="text-xs text-slate-500 dark:text-gray-400 font-mono mt-1">{alert.source} — <span className="text-slate-400 dark:text-gray-500">{alert.detected}</span></p>
-        {alert.relatedCase && <p className="text-[10px] text-slate-500 dark:text-gray-600 font-mono mt-0.5">Case: <span className="text-purple-600 dark:text-purple-400 font-bold">{alert.relatedCase}</span></p>}
+        <h3 className="text-base font-bold text-gray-900 dark:text-zinc-100">{alert.type}</h3>
+        <p className="text-xs text-gray-500 dark:text-gray-400 font-mono mt-1">{alert.source} — <span className="text-gray-500 dark:text-gray-500">{alert.detected}</span></p>
+        {alert.relatedCase && <p className="text-[10px] text-gray-500 dark:text-gray-600 font-mono mt-0.5">Case: <span className="text-purple-600 dark:text-purple-400 font-bold">{alert.relatedCase}</span></p>}
       </div>
 
-      <div className="rounded-xl p-3 bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.06]">
-        <p className="text-[10px] text-slate-500 dark:text-gray-500 font-mono uppercase tracking-wider mb-2 font-semibold">Status Control</p>
+      <div className="rounded-xl p-3 bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50">
+        <p className="text-[10px] text-gray-500 dark:text-gray-500 font-mono uppercase tracking-wider mb-2 font-semibold">Status Control</p>
         <div className="grid grid-cols-2 gap-1.5">
           {STATUS_ORDER.map((s) => {
             const cfg = STATUS_CONFIG[s];
@@ -432,20 +443,20 @@ function AlertDetail({ alert, onStatusChange }: { alert: SecurityAlert; onStatus
         </div>
       </div>
 
-      <div className="rounded-xl p-3 bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.05]">
-        <span className="text-[10px] text-slate-500 dark:text-gray-500 font-mono uppercase tracking-wider block mb-1 font-semibold">Alert Summary</span>
-        <p className="text-xs text-slate-800 dark:text-gray-300 leading-relaxed font-mono">{alert.summary}</p>
+      <div className="rounded-xl p-3 bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50">
+        <span className="text-[10px] text-gray-500 dark:text-gray-500 font-mono uppercase tracking-wider block mb-1 font-semibold">Alert Summary</span>
+        <p className="text-xs text-gray-900 dark:text-zinc-100 leading-relaxed font-mono">{alert.summary}</p>
       </div>
 
       <div>
-        <h4 className="text-[10px] text-slate-500 dark:text-gray-500 font-mono uppercase tracking-widest mb-2 flex items-center gap-1.5 font-semibold">
+        <h4 className="text-[10px] text-gray-500 dark:text-gray-500 font-mono uppercase tracking-widest mb-2 flex items-center gap-1.5 font-semibold">
           <AlertTriangle className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" /> Observed Facts
         </h4>
         <div className="space-y-1.5">
           {alert.observedFacts.map((f, i) => (
-            <div key={i} className="flex items-start gap-2 rounded-xl p-2.5 bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/[0.04]">
+            <div key={i} className="flex items-start gap-2 rounded-xl p-2.5 bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50">
               <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 shrink-0 mt-1.5" />
-              <span className="text-xs font-mono text-slate-700 dark:text-gray-300 leading-relaxed">{f}</span>
+              <span className="text-xs font-mono text-gray-900 dark:text-zinc-100 leading-relaxed">{f}</span>
             </div>
           ))}
         </div>
@@ -455,15 +466,15 @@ function AlertDetail({ alert, onStatusChange }: { alert: SecurityAlert; onStatus
         <h4 className="text-[10px] font-mono font-bold text-purple-700 dark:text-purple-300 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
           <Brain className="w-3.5 h-3.5" /> AI Threat Inference
         </h4>
-        <p className="text-xs text-slate-800 dark:text-gray-300 leading-relaxed">{alert.aiInference}</p>
+        <p className="text-xs text-gray-900 dark:text-zinc-100 leading-relaxed">{alert.aiInference}</p>
       </div>
 
       {alert.relatedIndicators.length > 0 && (
         <div>
-          <h4 className="text-[10px] text-slate-500 dark:text-gray-500 font-mono uppercase tracking-widest mb-2 font-semibold">Related Indicators</h4>
+          <h4 className="text-[10px] text-gray-500 dark:text-gray-500 font-mono uppercase tracking-widest mb-2 font-semibold">Related Indicators</h4>
           <div className="flex flex-wrap gap-1.5">
             {alert.relatedIndicators.map((ind) => (
-              <span key={ind} className="px-2.5 py-1 rounded-xl text-xs font-mono text-cyan-700 dark:text-cyan-300 bg-cyan-50 dark:bg-white/[0.03] border border-cyan-200 dark:border-white/[0.06]">{ind}</span>
+              <span key={ind} className="px-2.5 py-1 rounded-xl text-xs font-mono text-cyan-700 dark:text-cyan-300 bg-cyan-50 dark:bg-zinc-900/50 border border-cyan-200 dark:border-zinc-800/50">{ind}</span>
             ))}
           </div>
         </div>
@@ -471,7 +482,7 @@ function AlertDetail({ alert, onStatusChange }: { alert: SecurityAlert; onStatus
 
       <div className="rounded-xl p-3.5 bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-500/25">
         <h4 className="text-[10px] font-mono font-bold text-red-600 dark:text-red-400 uppercase tracking-wider mb-1">Recommended Analyst Action</h4>
-        <p className="text-xs text-slate-800 dark:text-gray-300 leading-relaxed">{alert.recommendedAction}</p>
+        <p className="text-xs text-gray-900 dark:text-zinc-100 leading-relaxed">{alert.recommendedAction}</p>
       </div>
     </div>
   );

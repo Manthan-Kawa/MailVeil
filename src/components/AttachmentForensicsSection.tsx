@@ -204,8 +204,8 @@ export function AttachmentForensicsSection({
     setIsZippingAll(true);
     try {
       const zipName = email?.subject
-        ? `Mailveil_${email.subject.replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 30)}_Attachments.zip`
-        : `Mailveil_Email_Attachments_${Date.now()}.zip`;
+        ? `Sentinel-X_${email.subject.replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 30)}_Attachments.zip`
+        : `Sentinel-X_Email_Attachments_${Date.now()}.zip`;
 
       await downloadZipBundle(items, zipName);
     } catch (err: any) {
@@ -221,7 +221,7 @@ export function AttachmentForensicsSection({
     if (imageItems.length === 0) return;
     setIsZippingImages(true);
     try {
-      const zipName = `Mailveil_Images_Bundle_${Date.now()}.zip`;
+      const zipName = `Sentinel-X_Images_Bundle_${Date.now()}.zip`;
       await downloadZipBundle(imageItems, zipName);
     } catch (err: any) {
       console.error('ZIP Images failed:', err);
@@ -242,8 +242,8 @@ export function AttachmentForensicsSection({
             ? 'bg-red-500/20 text-red-300 border-red-500/40'
             : isSusp
             ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
-            : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-        }`}
+            : 'text-gray-900 dark:text-zinc-100'
+    }`}
       >
         Verdict: {verdict}
       </span>
@@ -259,24 +259,23 @@ export function AttachmentForensicsSection({
     return (
       <div
         key={item.id}
-        className="p-5 rounded-2xl bg-white dark:bg-[#11121b] border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none space-y-5 transition-all hover:border-slate-300 dark:hover:border-white/20"
+        className="p-5 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm dark:shadow-none space-y-5 transition-all hover:border-gray-200 dark:hover:border-white/20"
       >
         {/* Header info */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-white/10 pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-gray-200 dark:border-zinc-800/50 pb-4">
           <div className="flex items-center gap-3 min-w-0">
             <div
               className="p-3 rounded-xl shrink-0 flex items-center justify-center border"
               style={{
                 backgroundColor: config.badgeBg,
                 borderColor: config.badgeBorder,
-                color: config.color,
-              }}
+                color: config.color }}
             >
               <IconComponent className="w-5 h-5" />
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white truncate max-w-md" title={item.filename}>
+                <h3 className="text-sm font-bold text-gray-900 dark:text-zinc-100 truncate max-w-md" title={item.filename}>
                   {item.filename}
                 </h3>
                 {/* Desktop: badge beside filename */}
@@ -285,16 +284,15 @@ export function AttachmentForensicsSection({
                   style={{
                     backgroundColor: config.badgeBg,
                     borderColor: config.badgeBorder,
-                    color: config.color,
-                  }}
+                    color: config.color }}
                 >
                   {config.label}
                 </span>
               </div>
-              <div className="text-xs text-slate-600 dark:text-gray-400 flex items-center gap-2 flex-wrap mt-1">
-                <span className="font-mono text-slate-800 dark:text-gray-300 font-semibold">{item.filetype}</span>
+              <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-2 flex-wrap mt-1">
+                <span className="font-mono text-gray-900 dark:text-zinc-100 font-semibold">{item.filetype}</span>
                 <span>·</span>
-                <span className="text-slate-700 dark:text-gray-400">{item.filesize}</span>
+                <span className="text-gray-900 dark:text-gray-400">{item.filesize}</span>
                 <span>·</span>
                 <span className="text-cyan-700 dark:text-cyan-300 font-bold">
                   Entropy: {item.entropyScore} ({item.entropyRating})
@@ -303,15 +301,14 @@ export function AttachmentForensicsSection({
             </div>
           </div>
 
-          <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0 flex-wrap w-full sm:w-auto pt-2 sm:pt-0 border-t border-slate-200/60 dark:border-white/5 sm:border-t-0">
+          <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0 flex-wrap w-full sm:w-auto pt-2 sm:pt-0 border-t border-gray-200/60 dark:border-zinc-800/50 sm:border-t-0">
             {/* Mobile: badge on the same line as download button and verdict */}
             <span
               className="sm:hidden inline-flex text-[10px] font-semibold px-2 py-0.5 rounded border whitespace-nowrap shrink-0"
               style={{
                 backgroundColor: config.badgeBg,
                 borderColor: config.badgeBorder,
-                color: config.color,
-              }}
+                color: config.color }}
             >
               {config.label}
             </span>
@@ -340,14 +337,14 @@ export function AttachmentForensicsSection({
 
         {/* Hashes Row */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-          <div className="p-3 rounded-xl bg-slate-100 dark:bg-black/40 border border-slate-200 dark:border-white/5 flex items-center justify-between gap-2 shadow-sm">
+          <div className="p-3 rounded-xl bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/50 flex items-center justify-between gap-2 shadow-sm">
             <div className="truncate">
-              <span className="text-slate-700 dark:text-gray-400 font-semibold">SHA-256: </span>
+              <span className="text-gray-900 dark:text-gray-400 font-semibold">SHA-256: </span>
               <span className="font-mono text-black dark:text-gray-200 select-all font-bold">{item.sha256}</span>
             </div>
             <button
               onClick={() => handleCopy(item.sha256, `sha-${item.id}`)}
-              className="p-1.5 rounded-lg bg-slate-200/80 hover:bg-slate-300 text-slate-700 hover:text-black dark:bg-white/10 dark:hover:bg-white/20 dark:text-gray-300 shrink-0 cursor-pointer transition-colors"
+              className="p-1.5 rounded-lg bg-gray-200/80 hover:bg-slate-300 text-gray-900 hover:text-black dark:bg-white/10 dark:hover:bg-white/20 dark:text-zinc-100 shrink-0 cursor-pointer transition-colors"
               title="Copy SHA-256"
             >
               {copiedKey === `sha-${item.id}` ? (
@@ -358,14 +355,14 @@ export function AttachmentForensicsSection({
             </button>
           </div>
 
-          <div className="p-3 rounded-xl bg-slate-100 dark:bg-black/40 border border-slate-200 dark:border-white/5 flex items-center justify-between gap-2 shadow-sm">
+          <div className="p-3 rounded-xl bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/50 flex items-center justify-between gap-2 shadow-sm">
             <div className="truncate">
-              <span className="text-slate-700 dark:text-gray-400 font-semibold">MD5: </span>
+              <span className="text-gray-900 dark:text-gray-400 font-semibold">MD5: </span>
               <span className="font-mono text-black dark:text-gray-200 select-all font-bold">{item.md5}</span>
             </div>
             <button
               onClick={() => handleCopy(item.md5, `md5-${item.id}`)}
-              className="p-1.5 rounded-lg bg-slate-200/80 hover:bg-slate-300 text-slate-700 hover:text-black dark:bg-white/10 dark:hover:bg-white/20 dark:text-gray-300 shrink-0 cursor-pointer transition-colors"
+              className="p-1.5 rounded-lg bg-gray-200/80 hover:bg-slate-300 text-gray-900 hover:text-black dark:bg-white/10 dark:hover:bg-white/20 dark:text-zinc-100 shrink-0 cursor-pointer transition-colors"
               title="Copy MD5"
             >
               {copiedKey === `md5-${item.id}` ? (
@@ -381,24 +378,24 @@ export function AttachmentForensicsSection({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* Object Tag Inspection */}
           <div className="space-y-2.5">
-            <div className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-2">
+            <div className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-zinc-100 flex items-center gap-2">
               <AlertOctagon className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
               <span>Format &amp; File Object Inspection</span>
             </div>
             <div className="space-y-2">
               {(!item.tagsDetected || item.tagsDetected.length === 0) ? (
-                <div className="p-3 rounded-xl bg-slate-100 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 text-slate-700 dark:text-gray-400 text-xs shadow-sm font-medium">
+                <div className="p-3 rounded-xl bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 text-gray-900 dark:text-gray-400 text-xs shadow-sm font-medium">
                   Clean structural container — zero anomalous script hooks or executable triggers detected.
                 </div>
               ) : (
                 item.tagsDetected.map((tag, i) => (
                   <div
                     key={i}
-                    className="p-3 rounded-xl bg-slate-100 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 flex items-start justify-between gap-3 text-xs shadow-sm"
+                    className="p-3 rounded-xl bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 flex items-start justify-between gap-3 text-xs shadow-sm"
                   >
                     <div>
                       <div className="font-mono font-bold text-cyan-700 dark:text-cyan-300">{tag.tag}</div>
-                      <div className="text-black dark:text-gray-300 text-[11px] mt-0.5 font-medium">{tag.description}</div>
+                      <div className="text-black dark:text-zinc-100 text-[11px] mt-0.5 font-medium">{tag.description}</div>
                     </div>
                     <span
                       className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded shrink-0 ${
@@ -408,8 +405,8 @@ export function AttachmentForensicsSection({
                           ? 'bg-orange-500/20 text-orange-700 dark:text-orange-400 border border-orange-500/30'
                           : tag.risk === 'medium'
                           ? 'bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30'
-                          : 'bg-blue-500/20 text-blue-700 dark:text-blue-300 border border-blue-500/30'
-                      }`}
+                          : 'bg-green-500/20 text-green-700 dark:text-green-400 border border-green-500/30'
+                    }`}
                     >
                       {tag.risk}
                     </span>
@@ -421,21 +418,21 @@ export function AttachmentForensicsSection({
 
           {/* Sandbox Runtime Behavior */}
           <div className="space-y-2.5">
-            <div className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-2">
+            <div className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-zinc-100 flex items-center gap-2">
               <Terminal className="w-4 h-4 text-purple-600 dark:text-purple-400" />
               <span>Sandbox Status: {item.sandboxAnalysis?.status || 'Verified Benign'}</span>
             </div>
-            <div className="p-3.5 rounded-xl bg-slate-100 dark:bg-black/40 border border-slate-200 dark:border-white/5 space-y-2.5 text-xs shadow-sm">
-              <div className="text-[11px] text-slate-700 dark:text-gray-400 font-semibold">Observed Runtime Behavior:</div>
-              <ul className="space-y-1.5 text-[11px] text-black dark:text-gray-300 list-disc pl-4 font-medium">
+            <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/50 space-y-2.5 text-xs shadow-sm">
+              <div className="text-[11px] text-gray-900 dark:text-gray-400 font-semibold">Observed Runtime Behavior:</div>
+              <ul className="space-y-1.5 text-[11px] text-black dark:text-zinc-100 list-disc pl-4 font-medium">
                 {(item.sandboxAnalysis?.runtimeBehavior || ['No abnormal child processes or registry mutations observed.']).map((act, i) => (
                   <li key={i}>{act}</li>
                 ))}
               </ul>
 
               {item.sandboxAnalysis?.outboundConnections && item.sandboxAnalysis.outboundConnections.length > 0 && (
-                <div className="pt-2 border-t border-slate-200 dark:border-white/5">
-                  <div className="text-[10px] text-slate-700 dark:text-gray-400 font-semibold">Outbound Network Beacons:</div>
+                <div className="pt-2 border-t border-gray-200 dark:border-zinc-800/50">
+                  <div className="text-[10px] text-gray-900 dark:text-gray-400 font-semibold">Outbound Network Beacons:</div>
                   <div className="space-y-1 mt-1">
                     {item.sandboxAnalysis.outboundConnections.map((conn, i) => (
                       <div key={i} className="text-[11px] font-mono text-red-700 dark:text-red-400 font-bold truncate">
@@ -458,7 +455,7 @@ export function AttachmentForensicsSection({
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <FileText className="w-4 h-4 text-cyan-600 dark:text-cyan-400 shrink-0" />
-          <h2 className="text-sm font-bold uppercase tracking-wider text-slate-800 dark:text-gray-300">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-gray-900 dark:text-zinc-100">
             {sectionPrefix} {sectionTitle}
           </h2>
           {hasAttachments && (
@@ -471,12 +468,12 @@ export function AttachmentForensicsSection({
 
       {/* Empty State */}
       {!hasAttachments ? (
-        <div className="p-8 rounded-2xl bg-white dark:bg-[#11121b] border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none text-center space-y-3">
+        <div className="p-8 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm dark:shadow-none text-center space-y-3">
           <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto">
             <CheckCircle2 className="w-6 h-6" />
           </div>
-          <h3 className="text-base font-bold text-slate-900 dark:text-white">No File Attachments Detected</h3>
-          <p className="text-xs text-slate-600 dark:text-gray-400 max-w-md mx-auto leading-relaxed">
+          <h3 className="text-base font-bold text-gray-900 dark:text-zinc-100">No File Attachments Detected</h3>
+          <p className="text-xs text-gray-500 dark:text-gray-400 max-w-md mx-auto leading-relaxed">
             This email payload contains only plain text / HTML message content without attached files, executable macros, compressed archives, or embedded payload carriers.
           </p>
         </div>
@@ -500,11 +497,11 @@ export function AttachmentForensicsSection({
            List names vertically one below the other (1 by 1).
            Top header provides "Download All as ZIP" action.
         ══════════════════════════════════════════════════════════════════════ */
-        <div className="p-5 rounded-2xl bg-white dark:bg-[#11121b] border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none space-y-5">
+        <div className="p-5 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm dark:shadow-none space-y-5">
           {/* Top Banner with ZIP download action */}
           <div className="p-4 rounded-xl bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-950/40 dark:via-indigo-950/30 dark:to-purple-950/40 border border-blue-200 dark:border-blue-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
             <div className="space-y-0.5">
-              <div className="flex items-center gap-2 text-xs font-bold text-slate-900 dark:text-white">
+              <div className="flex items-center gap-2 text-xs font-bold text-gray-900 dark:text-zinc-100">
                 <Layers className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                 <span>
                   {hasMultipleImages && items.every((i) => i.category === 'image')
@@ -512,7 +509,7 @@ export function AttachmentForensicsSection({
                     : `Multiple Attachments Detected (${items.length} Files)`}
                 </span>
               </div>
-              <p className="text-[11px] text-slate-700 dark:text-gray-300 font-medium">
+              <p className="text-[11px] text-gray-900 dark:text-zinc-100 font-medium">
                 All files have been parsed, indexed, and bundled into a compressed ZIP archive for single-click forensic extraction.
               </p>
             </div>
@@ -533,7 +530,7 @@ export function AttachmentForensicsSection({
                 <button
                   onClick={handleDownloadAllZip}
                   disabled={isZippingAll}
-                  className="h-9 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs font-bold flex items-center gap-2 transition-transform duration-150 ease-out active:scale-95 cursor-pointer shadow-lg shadow-blue-950/60"
+                  className="h-9 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs font-bold flex items-center gap-2 transition-transform duration-150 ease-out active:scale-95 cursor-pointer shadow-lg "
                 >
                   <Archive className="w-4 h-4" />
                   <span>{isZippingAll ? 'Bundling ZIP...' : 'Download All as ZIP'}</span>
@@ -544,7 +541,7 @@ export function AttachmentForensicsSection({
 
           {/* Vertical List View (1 by 1) */}
           <div className="space-y-2.5">
-            <div className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-400 px-1">
+            <div className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 px-1">
               Attachment Manifest (1 by 1 Inspection)
             </div>
 
@@ -558,13 +555,13 @@ export function AttachmentForensicsSection({
               return (
                 <div
                   key={item.id}
-                  className="rounded-xl border border-slate-200 dark:border-transparent bg-slate-50 dark:bg-black/30 hover:border-slate-300 dark:hover:border-white/20 transition-all overflow-hidden shadow-sm"
+                  className="rounded-xl border border-gray-200 dark:border-zinc-800/50 bg-white dark:bg-black/30 hover:border-gray-200 dark:hover:border-white/20 transition-all overflow-hidden shadow-sm"
                 >
                   {/* Row Header */}
                   <div className="p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
                     <div className="flex items-center gap-3 min-w-0 flex-1">
                       {/* Index number */}
-                      <span className="w-5 text-[11px] font-mono font-bold text-slate-500 dark:text-gray-500 shrink-0 text-center">
+                      <span className="w-5 text-[11px] font-mono font-bold text-gray-500 dark:text-gray-500 shrink-0 text-center">
                         {index + 1}.
                       </span>
 
@@ -574,8 +571,7 @@ export function AttachmentForensicsSection({
                         style={{
                           backgroundColor: config.badgeBg,
                           borderColor: config.badgeBorder,
-                          color: config.color,
-                        }}
+                          color: config.color }}
                       >
                         <IconComponent className="w-4 h-4" />
                       </div>
@@ -583,7 +579,7 @@ export function AttachmentForensicsSection({
                       {/* Filename & details */}
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-bold text-slate-900 dark:text-white truncate max-w-sm" title={item.filename}>
+                          <span className="font-bold text-gray-900 dark:text-zinc-100 truncate max-w-sm" title={item.filename}>
                             {item.filename}
                           </span>
                           {/* Desktop: badge beside filename */}
@@ -592,32 +588,30 @@ export function AttachmentForensicsSection({
                             style={{
                               backgroundColor: config.badgeBg,
                               borderColor: config.badgeBorder,
-                              color: config.color,
-                            }}
+                              color: config.color }}
                           >
                             {config.label}
                           </span>
                         </div>
-                        <div className="text-[11px] text-slate-600 dark:text-gray-400 flex items-center gap-2 mt-0.5 font-mono">
-                          <span className="text-slate-800 dark:text-gray-300">{item.filetype}</span>
+                        <div className="text-[11px] text-gray-500 dark:text-gray-400 flex items-center gap-2 mt-0.5 font-mono">
+                          <span className="text-gray-900 dark:text-zinc-100">{item.filetype}</span>
                           <span>·</span>
                           <span>{item.filesize}</span>
                           <span>·</span>
-                          <span className="text-slate-800 dark:text-gray-300">Entropy: {item.entropyScore}</span>
+                          <span className="text-gray-900 dark:text-zinc-100">Entropy: {item.entropyScore}</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Actions & Verdict */}
-                    <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0 flex-wrap w-full sm:w-auto pt-2 sm:pt-0 border-t border-slate-200/60 dark:border-white/5 sm:border-t-0">
+                    <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0 flex-wrap w-full sm:w-auto pt-2 sm:pt-0 border-t border-gray-200/60 dark:border-zinc-800/50 sm:border-t-0">
                       {/* Mobile: badge on the same line as download button */}
                       <span
                         className="sm:hidden inline-flex text-[10px] font-semibold px-2 py-0.5 rounded border whitespace-nowrap shrink-0"
                         style={{
                           backgroundColor: config.badgeBg,
                           borderColor: config.badgeBorder,
-                          color: config.color,
-                        }}
+                          color: config.color }}
                       >
                         {config.label}
                       </span>
@@ -626,7 +620,7 @@ export function AttachmentForensicsSection({
                         {/* SHA-256 copy shortcut */}
                         <button
                           onClick={() => handleCopy(item.sha256, `list-sha-${item.id}`)}
-                          className="p-1.5 rounded-lg bg-slate-200/80 hover:bg-slate-300 text-slate-700 hover:text-black dark:bg-white/5 dark:hover:bg-white/10 dark:text-gray-400 dark:hover:text-white transition-colors text-[11px] font-mono flex items-center gap-1 cursor-pointer"
+                          className="p-1.5 rounded-lg bg-gray-200/80 hover:bg-slate-300 text-gray-900 hover:text-black dark:bg-white/5 dark:hover:bg-white/10 dark:text-gray-400 dark:hover:text-white transition-colors text-[11px] font-mono flex items-center gap-1 cursor-pointer"
                           title={`Copy SHA-256: ${item.sha256}`}
                         >
                           {copiedKey === `list-sha-${item.id}` ? (
@@ -661,7 +655,7 @@ export function AttachmentForensicsSection({
                       {/* Expand / Collapse Details toggle */}
                       <button
                         onClick={() => setExpandedItemId(isExpanded ? null : item.id)}
-                        className="p-1.5 rounded-lg bg-slate-200/80 hover:bg-slate-300 text-slate-700 hover:text-black dark:bg-white/5 dark:hover:bg-white/10 dark:text-gray-300 dark:hover:text-white transition-colors cursor-pointer"
+                        className="p-1.5 rounded-lg bg-gray-200/80 hover:bg-slate-300 text-gray-900 hover:text-black dark:bg-white/5 dark:hover:bg-white/10 dark:text-zinc-100 dark:hover:text-white transition-colors cursor-pointer"
                         title={isExpanded ? 'Hide Forensic Details' : 'Expand Forensic Details'}
                       >
                         {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -671,29 +665,29 @@ export function AttachmentForensicsSection({
 
                   {/* Expandable Forensic Breakdown */}
                   {isExpanded && (
-                    <div className="p-4 border-t border-slate-200 dark:border-white/10 bg-slate-100/70 dark:bg-black/40 space-y-4 animate-fade-in text-xs">
+                    <div className="p-4 border-t border-gray-200 dark:border-zinc-800/50 bg-gray-50/70 dark:bg-black/40 space-y-4 animate-fade-in text-xs">
                       {/* Full hashes */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-[11px] font-mono">
-                        <div className="p-2.5 rounded-lg bg-slate-100 dark:bg-black/50 border border-slate-200 dark:border-white/5 flex items-center justify-between gap-2 shadow-sm">
+                        <div className="p-2.5 rounded-lg bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-zinc-800/50 flex items-center justify-between gap-2 shadow-sm">
                           <span className="truncate">
-                            <span className="text-slate-700 dark:text-gray-400 font-semibold">SHA-256: </span>
+                            <span className="text-gray-900 dark:text-gray-400 font-semibold">SHA-256: </span>
                             <span className="text-black dark:text-gray-200 font-bold select-all">{item.sha256}</span>
                           </span>
                           <button
                             onClick={() => handleCopy(item.sha256, `exp-sha-${item.id}`)}
-                            className="p-1 rounded bg-slate-200/80 hover:bg-slate-300 text-slate-700 hover:text-black dark:bg-white/10 dark:hover:bg-white/20 dark:text-gray-300 shrink-0 cursor-pointer"
+                            className="p-1 rounded bg-gray-200/80 hover:bg-slate-300 text-gray-900 hover:text-black dark:bg-white/10 dark:hover:bg-white/20 dark:text-zinc-100 shrink-0 cursor-pointer"
                           >
                             {copiedKey === `exp-sha-${item.id}` ? <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-3 h-3" />}
                           </button>
                         </div>
-                        <div className="p-2.5 rounded-lg bg-slate-100 dark:bg-black/50 border border-slate-200 dark:border-white/5 flex items-center justify-between gap-2 shadow-sm">
+                        <div className="p-2.5 rounded-lg bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-zinc-800/50 flex items-center justify-between gap-2 shadow-sm">
                           <span className="truncate">
-                            <span className="text-slate-700 dark:text-gray-400 font-semibold">MD5: </span>
+                            <span className="text-gray-900 dark:text-gray-400 font-semibold">MD5: </span>
                             <span className="text-black dark:text-gray-200 font-bold select-all">{item.md5}</span>
                           </span>
                           <button
                             onClick={() => handleCopy(item.md5, `exp-md5-${item.id}`)}
-                            className="p-1 rounded bg-slate-200/80 hover:bg-slate-300 text-slate-700 hover:text-black dark:bg-white/10 dark:hover:bg-white/20 dark:text-gray-300 shrink-0 cursor-pointer"
+                            className="p-1 rounded bg-gray-200/80 hover:bg-slate-300 text-gray-900 hover:text-black dark:bg-white/10 dark:hover:bg-white/20 dark:text-zinc-100 shrink-0 cursor-pointer"
                           >
                             {copiedKey === `exp-md5-${item.id}` ? <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-3 h-3" />}
                           </button>
@@ -702,17 +696,17 @@ export function AttachmentForensicsSection({
 
                       {/* Structural Tags & Sandbox Behavior */}
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-                        <div className="p-3 rounded-lg bg-slate-100 dark:bg-black/50 border border-slate-200 dark:border-white/5 space-y-1.5 shadow-sm">
+                        <div className="p-3 rounded-lg bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-zinc-800/50 space-y-1.5 shadow-sm">
                           <div className="font-semibold text-cyan-700 dark:text-cyan-300 flex items-center gap-1.5">
                             <AlertOctagon className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
                             File Object &amp; Format Tags ({item.tagsDetected?.length || 0})
                           </div>
                           <div className="space-y-1">
                             {(!item.tagsDetected || item.tagsDetected.length === 0) ? (
-                              <p className="text-slate-700 dark:text-gray-500 text-[11px] font-medium">Clean structure without executable anomalies.</p>
+                              <p className="text-gray-900 dark:text-gray-500 text-[11px] font-medium">Clean structure without executable anomalies.</p>
                             ) : (
                               item.tagsDetected.map((t, i) => (
-                                <div key={i} className="text-[11px] text-slate-800 dark:text-gray-300 flex items-center justify-between gap-2 font-medium">
+                                <div key={i} className="text-[11px] text-gray-900 dark:text-zinc-100 flex items-center justify-between gap-2 font-medium">
                                   <span className="font-mono text-cyan-700 dark:text-cyan-200 font-bold">{t.tag}</span>
                                   <span className="text-black dark:text-gray-400 truncate">{t.description}</span>
                                 </div>
@@ -721,15 +715,15 @@ export function AttachmentForensicsSection({
                           </div>
                         </div>
 
-                        <div className="p-3 rounded-lg bg-slate-100 dark:bg-black/50 border border-slate-200 dark:border-white/5 space-y-1.5 shadow-sm">
+                        <div className="p-3 rounded-lg bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-zinc-800/50 space-y-1.5 shadow-sm">
                           <div className="font-semibold text-purple-700 dark:text-purple-300 flex items-center gap-1.5">
                             <Terminal className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
                             Sandbox Runtime Profile
                           </div>
-                          <div className="text-[11px] text-slate-700 dark:text-gray-400 font-mono font-medium">
+                          <div className="text-[11px] text-gray-900 dark:text-gray-400 font-mono font-medium">
                             Status: <span className="text-black dark:text-gray-200 font-bold">{item.sandboxAnalysis?.status || 'Verified Benign'}</span>
                           </div>
-                          <ul className="space-y-1 text-[11px] text-black dark:text-gray-300 list-disc pl-4 font-medium">
+                          <ul className="space-y-1 text-[11px] text-black dark:text-zinc-100 list-disc pl-4 font-medium">
                             {(item.sandboxAnalysis?.runtimeBehavior || []).slice(0, 2).map((act, i) => (
                               <li key={i}>{act}</li>
                             ))}
@@ -744,8 +738,8 @@ export function AttachmentForensicsSection({
           </div>
 
           {/* Bottom summary bar */}
-          <div className="pt-2 flex items-center justify-between gap-3 border-t border-slate-200 dark:border-white/10">
-            <span className="text-xs text-slate-600 dark:text-gray-400">
+          <div className="pt-2 flex items-center justify-between gap-3 border-t border-gray-200 dark:border-zinc-800/50">
+            <span className="text-xs text-gray-500 dark:text-gray-400">
               Total {items.length} attachments available for single or compressed extraction.
             </span>
           </div>

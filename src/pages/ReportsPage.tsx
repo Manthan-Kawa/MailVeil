@@ -27,7 +27,6 @@ import {
   Globe,
   MapPin,
   Link2,
-  Network,
   Lock,
   XCircle,
   Info,
@@ -40,6 +39,7 @@ import {
   Share2,
   Terminal,
   Copy,
+  FileSearch,
   type LucideIcon,
 } from 'lucide-react';
 import {
@@ -97,8 +97,7 @@ function SlideIn({
       style={{
         opacity: vis ? 1 : 0,
         transform: vis ? 'none' : from,
-        transition: 'opacity .5s cubic-bezier(.22,1,.36,1), transform .5s cubic-bezier(.22,1,.36,1)',
-      }}
+        transition: 'opacity .5s cubic-bezier(.22,1,.36,1), transform .5s cubic-bezier(.22,1,.36,1)' }}
     >
       {children}
     </div>
@@ -173,7 +172,7 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `Mailveil_${reportData.caseId}_${reportType}_report.txt`;
+    a.download = `SENTINEL-X_${reportData.caseId}_${reportType}_report.txt`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -184,7 +183,7 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
     if (!reportData) return;
     const printWindow = window.open('', '_blank', 'width=1100,height=950');
     if (!printWindow) {
-      alert('Please allow popups for Mailveil to generate and print the PDF report.');
+      alert('Please allow popups for Sentinel-X to generate and print the PDF report.');
       return;
     }
 
@@ -202,17 +201,17 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-1.5 sm:px-0">
           <div className="flex-1 min-w-0 -ml-1 sm:ml-0">
             <div className="flex items-center gap-2.5 sm:gap-3 flex-nowrap w-full">
-              <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight whitespace-nowrap">
+              <h2 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-zinc-100 tracking-tight whitespace-nowrap">
                 Reports &amp; Export
               </h2>
               {currentResult && (
-                <span className="px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-mono font-bold uppercase tracking-wider bg-purple-500/15 border border-purple-500/30 text-purple-700 dark:text-purple-300 inline-flex items-center gap-1.5 whitespace-nowrap shrink-0 shadow-[0_0_10px_rgba(168,85,247,0.15)] ml-auto">
+                <span className="px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-mono font-bold uppercase tracking-wider bg-purple-500/15 border border-purple-500/30 text-purple-700 dark:text-purple-300 inline-flex items-center gap-1.5 whitespace-nowrap shrink-0  ml-auto">
                   <span className="w-1.5 h-1.5 rounded-full bg-purple-500 dark:bg-purple-400 animate-pulse" />
                   Synced with Analyzer
                 </span>
               )}
             </div>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-gray-400 mt-1 leading-relaxed">
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">
               Complete forensic analysis, threat intelligence, and interactive attack graphs.
             </p>
           </div>
@@ -223,8 +222,7 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
               className="flex items-center justify-center gap-1.5 px-3.5 py-2 sm:py-1.5 rounded-xl text-xs font-bold text-white transition-all hover:scale-105 active:scale-95 shadow-md cursor-pointer w-full sm:w-auto"
               style={{
                 background: 'linear-gradient(135deg, #3b82f6, #6366f1)',
-                border: '1px solid rgba(99,102,241,0.4)',
-              }}
+                border: '1px solid rgba(99,102,241,0.4)' }}
             >
               <MailSearch className="w-3.5 h-3.5" />
               Analyze New Email
@@ -233,11 +231,11 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
         </div>
       </SlideIn>
 
-      {/* ── If no emails have been analyzed yet ── */}
+      {/* ── If no PCAPs have been analyzed yet ── */}
       {analyzedReports.length === 0 ? (
         <SlideIn delay={60} direction="up">
           <div
-            className="rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-6 bg-white dark:bg-[#090b12] border border-slate-200 dark:border-transparent shadow-sm dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+            className="rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-6 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm "
           >
             <div
               className="w-16 h-16 rounded-2xl flex items-center justify-center bg-blue-500/10 border border-blue-500/25 text-blue-600 dark:text-blue-400"
@@ -246,29 +244,25 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
             </div>
 
             <div className="max-w-md space-y-2">
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">No Analyzed Emails in Session</h3>
-              <p className="text-xs text-slate-600 dark:text-gray-400 leading-relaxed font-mono">
-                Upload or paste an email in the Email Analyzer. Once analyzed, reports with map location and attack graphs will automatically sync here.
+              <h3 className="text-lg font-bold text-gray-900 dark:text-zinc-100 tracking-tight">No Analyzed Email Reports</h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed font-mono">
+                Upload or analyze an email (.eml) in the Email Analyzer. Once analyzed, cryptographic posture reports, map locations, and attack graphs will automatically sync here.
               </p>
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-3">
               <button
                 onClick={() => onNavigate?.('email-analyzer')}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white transition-all hover:scale-105 shadow-lg cursor-pointer"
-                style={{
-                  background: 'linear-gradient(135deg, #3b82f6, #6366f1)',
-                  boxShadow: '0 4px 16px rgba(59,130,246,0.3)',
-                }}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 font-mono transition-all hover:scale-105 active:scale-95 cursor-pointer"
               >
                 <MailSearch className="w-4 h-4" />
                 Go to Email Analyzer
               </button>
               <button
                 onClick={loadDemoCase}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-slate-700 hover:text-black dark:text-purple-200 dark:hover:text-purple-100 bg-slate-100 hover:bg-slate-200 dark:bg-purple-900/30 hover:dark:bg-purple-900/50 border border-slate-200 dark:border-purple-500/45 hover:dark:border-purple-400/60 transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-zinc-700 dark:text-zinc-300 hover:text-black dark:hover:text-white bg-gray-100 hover:bg-gray-200 dark:bg-zinc-800/80 dark:hover:bg-zinc-700/80 border border-gray-300 dark:border-zinc-700/60 transition-all font-mono cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
               >
-                <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                <Sparkles className="w-4 h-4 text-purple-400" />
                 Load Sample BEC Report
               </button>
             </div>
@@ -279,11 +273,11 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
           {/* ── Case Selector Bar ── */}
           <SlideIn delay={30} direction="up">
             <div
-              className="rounded-2xl p-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3 bg-white dark:bg-[#0b0e17] border border-slate-200 dark:border-transparent shadow-sm"
+              className="rounded-2xl p-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm"
             >
               <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 sm:gap-3 flex-1 min-w-0 w-full">
                 <div className="flex items-center justify-between sm:justify-start gap-2 shrink-0">
-                  <span className="text-xs font-mono font-bold text-slate-700 dark:text-gray-400 flex items-center gap-1.5">
+                  <span className="text-xs font-mono font-bold text-gray-900 dark:text-gray-400 flex items-center gap-1.5">
                     <Shield className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
                     ACTIVE CASE:
                   </span>
@@ -294,8 +288,8 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
                           ? 'text-red-600 dark:text-red-400 bg-red-500/10 border border-red-500/25'
                           : currentResult.threat_score >= 50
                             ? 'text-orange-600 dark:text-orange-400 bg-orange-500/10 border border-orange-500/25'
-                            : 'text-green-600 dark:text-green-400 bg-green-500/10 border border-green-500/25'
-                        }`}
+                              : 'text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700'
+                      }`}
                     >
                       {currentResult.alert_level.toUpperCase()} ({currentResult.threat_score}/100)
                     </span>
@@ -311,7 +305,7 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
                       placeholder={
                         currentResult
                           ? `${currentResult.case_id} — ${decodeMimeHeader(currentResult.headers.find((h) => h.key.toLowerCase() === 'subject')?.value || currentResult.verdict)}`
-                          : 'Search case ID, subject, IOC...'
+                          : 'Search by Case ID, Subject, or Actor...'
                       }
                       value={caseSearch}
                       onFocus={() => setSearchFocused(true)}
@@ -328,11 +322,11 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
                           setSearchFocused(false);
                         }
                       }}
-                      className={`w-full rounded-xl pl-8 pr-8 py-1.5 text-xs font-mono text-black dark:text-black font-semibold bg-slate-100 dark:bg-white border border-slate-200 dark:border-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500/40 focus:border-purple-500/40 transition-all truncate cursor-text shadow-sm ${
+                      className={`w-full rounded-xl pl-8 pr-8 py-1.5 text-xs font-mono text-black dark:text-black font-semibold bg-gray-50 dark:bg-white border border-gray-200 dark:border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500/40 focus:border-purple-500/40 transition-all truncate cursor-text shadow-sm ${
                         currentResult && !searchFocused
                           ? 'placeholder:text-black dark:placeholder:text-black placeholder:font-bold placeholder:opacity-100 dark:placeholder:opacity-100'
-                          : 'placeholder:text-slate-500 dark:placeholder:text-slate-500 placeholder:font-medium placeholder:opacity-90 dark:placeholder:opacity-90'
-                      }`}
+                          : 'placeholder:text-gray-400 dark:placeholder:text-gray-500'
+                    }`}
                     />
                     {caseSearch ? (
                       <button
@@ -340,14 +334,14 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
                           setCaseSearch('');
                           setSearchFocused(false);
                         }}
-                        className="absolute right-2.5 p-0.5 text-slate-700 hover:text-black dark:text-slate-700 dark:hover:text-black transition-colors cursor-pointer"
+                        className="absolute right-2.5 p-0.5 text-gray-900 hover:text-black dark:text-gray-900 dark:hover:text-black transition-colors cursor-pointer"
                       >
                         <X className="w-3 h-3" />
                       </button>
                     ) : (
                       <button
                         onClick={() => setSearchFocused(!searchFocused)}
-                        className="absolute right-2.5 p-0.5 text-slate-700 hover:text-black dark:text-slate-700 dark:hover:text-black transition-colors cursor-pointer"
+                        className="absolute right-2.5 p-0.5 text-gray-900 hover:text-black dark:text-gray-900 dark:hover:text-black transition-colors cursor-pointer"
                       >
                         <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${searchFocused ? 'rotate-180' : ''}`} />
                       </button>
@@ -357,12 +351,10 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
                   {/* Suggestions Dropdown */}
                   {searchFocused && (
                     <div
-                      className="absolute left-0 right-0 w-full mt-2 rounded-2xl p-2.5 z-50 shadow-2xl border backdrop-blur-xl animate-in fade-in zoom-in-95 duration-150 bg-white dark:bg-[#0a0d16] border-slate-200 dark:border-purple-500/35"
-                      style={{
-                        boxShadow: '0 12px 40px rgba(0, 0, 0, 0.25)',
-                      }}
+                      className="absolute left-0 right-0 w-full mt-2 rounded-2xl p-2.5 z-50 shadow-2xl border backdrop-blur-xl animate-in fade-in zoom-in-95 duration-150 bg-white dark:bg-zinc-800 border-gray-200 dark:border-purple-500/35"
+                      
                     >
-                      <div className="flex items-center justify-between px-2.5 py-1.5 border-b border-slate-200 dark:border-white/10 text-[10px] font-mono font-bold text-slate-600 dark:text-gray-400 uppercase tracking-wider">
+                      <div className="flex items-center justify-between px-2.5 py-1.5 border-b border-gray-200 dark:border-zinc-800/50 text-[10px] font-mono font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                         <span className="flex items-center gap-1.5">
                           <Search className="w-3 h-3 text-purple-600 dark:text-purple-400" />
                           Analyzed Cases ({matchingCases.length})
@@ -399,8 +391,8 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
                                 }}
                                 className={`flex items-center justify-between gap-2 p-2.5 rounded-xl cursor-pointer transition-all ${isSelected
                                     ? 'bg-purple-100 dark:bg-purple-500/25 border border-purple-300 dark:border-purple-500/40 text-purple-950 dark:text-white'
-                                    : 'hover:bg-slate-100 dark:hover:bg-white/10 text-slate-700 dark:text-gray-300 border border-transparent'
-                                  }`}
+                                    : 'hover:bg-purple-50 dark:hover:bg-purple-500/10 border border-transparent text-gray-900 dark:text-zinc-100'
+    }`}
                               >
                                 <div className="min-w-0 flex-1 flex flex-col gap-1">
                                   <div className="flex items-center justify-between gap-2">
@@ -413,12 +405,12 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
                                     </span>
                                   </div>
 
-                                  <p className="text-[11px] text-slate-800 dark:text-gray-200 truncate font-sans font-semibold" title={cleanSubj}>
+                                  <p className="text-[11px] text-gray-900 dark:text-gray-200 truncate font-sans font-semibold" title={cleanSubj}>
                                     {cleanSubj}
                                   </p>
 
                                   {cleanFrom && (
-                                    <p className="text-[10px] text-slate-600 dark:text-gray-400 font-mono truncate">
+                                    <p className="text-[10px] text-gray-500 dark:text-gray-400 font-mono truncate">
                                       From: {cleanFrom}
                                     </p>
                                   )}
@@ -429,7 +421,7 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
                                     e.stopPropagation();
                                     deleteCase(c.case_id);
                                   }}
-                                  className="p-1 text-slate-400 hover:text-red-600 dark:text-gray-500 dark:hover:text-red-400 transition-colors ml-1 shrink-0"
+                                  className="p-1 text-gray-500 hover:text-red-600 dark:text-gray-500 dark:hover:text-red-400 transition-colors ml-1 shrink-0"
                                   title="Remove case"
                                 >
                                   <Trash2 className="w-3.5 h-3.5" />
@@ -454,8 +446,8 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
                         ? 'text-red-400 bg-red-500/10 border border-red-500/25'
                         : currentResult.threat_score >= 50
                           ? 'text-orange-400 bg-orange-500/10 border border-orange-500/25'
-                          : 'text-green-400 bg-green-500/10 border border-green-500/25'
-                      }`}
+                          : 'text-gray-900 dark:text-zinc-100'
+    }`}
                   >
                     {currentResult.alert_level.toUpperCase()} ({currentResult.threat_score}/100)
                   </span>
@@ -468,39 +460,39 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
           {reportData && (
             <SlideIn delay={60} direction="up">
               <div
-                className="rounded-2xl p-5 bg-white dark:bg-[#090b12] border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+                className="rounded-2xl p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm "
               >
-                <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 pb-4 border-b border-slate-200 dark:border-white/10">
+                <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 pb-4 border-b border-gray-200 dark:border-zinc-800/50">
                   <div className="min-w-0 flex-1">
-                    <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <h3 className="text-base font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
                       <FileText className="w-4 h-4 text-cyan-600 dark:text-cyan-400 shrink-0" />
                       <span>SOC Forensic Intelligence Dossier</span>
                     </h3>
-                    <p className="text-xs text-slate-500 dark:text-gray-400 mt-1 font-mono break-words leading-relaxed">
-                      {reportData.caseId} — <span className="text-slate-900 dark:text-white font-semibold">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 font-mono break-words leading-relaxed">
+                      {reportData.caseId} — <span className="text-gray-900 dark:text-zinc-100 font-semibold">
                         {decodeMimeHeader(currentResult?.headers.find((h) => h.key.toLowerCase() === 'subject')?.value || reportData.caseTitle.replace(/^[^:]+:\s*/, ''))}
                       </span>
                     </p>
                   </div>
 
                   {/* Threat Score & Verdict Badge (1st Image Element) */}
-                  <div className="flex items-center justify-between sm:justify-start gap-3 px-4 py-2 rounded-2xl bg-slate-50 dark:bg-black/60 border border-slate-200 dark:border-white/10 shrink-0 shadow-sm dark:shadow-lg w-full md:w-auto">
+                  <div className="flex items-center justify-between sm:justify-start gap-3 px-4 py-2 rounded-2xl bg-white dark:bg-black/60 border border-gray-200 dark:border-zinc-800/50 shrink-0 shadow-sm dark:shadow-lg w-full md:w-auto">
                     <div className="text-left sm:text-right">
                       <div
                         className={`text-xl font-bold font-mono leading-tight ${(currentResult?.threat_score ?? reportData.riskScore) >= 75 || currentResult?.alert_level === 'critical'
                             ? 'text-red-600 dark:text-red-400'
                             : (currentResult?.threat_score ?? reportData.riskScore) >= 40
                               ? 'text-amber-600 dark:text-amber-400'
-                              : 'text-emerald-600 dark:text-emerald-400'
-                          }`}
+                              : 'text-green-600 dark:text-green-400'
+    }`}
                       >
                         {currentResult?.threat_score ?? reportData.riskScore}/100
                       </div>
-                      <div className="text-[9px] uppercase tracking-widest text-slate-500 dark:text-gray-400 font-mono mt-0.5">
+                      <div className="text-[9px] uppercase tracking-widest text-gray-500 dark:text-gray-400 font-mono mt-0.5">
                         THREAT SCORE
                       </div>
                     </div>
-                    <div className="w-px h-8 bg-slate-200 dark:bg-white/15" />
+                    <div className="w-px h-8 bg-gray-200 dark:bg-white/15" />
                     <div className="flex items-center gap-2 pl-0.5">
                       {((currentResult?.threat_score ?? reportData.riskScore) >= 75 || currentResult?.alert_level === 'critical') ? (
                         <>
@@ -538,8 +530,7 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
                     style={{
                       background: 'linear-gradient(135deg, #7c3aed 0%, #9333ea 50%, #6366f1 100%)',
                       border: '1px solid rgba(192,132,252,0.6)',
-                      boxShadow: '0 4px 20px rgba(147,51,234,0.4)',
-                    }}
+                      boxShadow: 'none' }}
                     title="Generate complete formatted PDF report with email forensics, headers, threat intel, map location, and attack graph"
                   >
                     <Printer className="w-4 h-4 text-purple-200" />
@@ -552,8 +543,7 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
                     className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white transition-transform duration-150 ease-out active:scale-95 shadow-md w-full sm:w-auto cursor-pointer"
                     style={{
                       background: 'linear-gradient(135deg, #0284c7, #2563eb)',
-                      border: '1px solid rgba(56,189,248,0.5)',
-                    }}
+                      border: '1px solid rgba(56,189,248,0.5)' }}
                   >
                     <Download className="w-3.5 h-3.5" />
                     <span>Export Raw Text</span>
@@ -562,7 +552,7 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
                   {/* Toggle Preview Button */}
                   <button
                     onClick={() => setShowPreview(!showPreview)}
-                    className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-slate-700 dark:text-gray-300 bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 transition-transform duration-150 ease-out active:scale-95 w-full sm:w-auto cursor-pointer"
+                    className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-gray-900 dark:text-zinc-100 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 transition-transform duration-150 ease-out active:scale-95 w-full sm:w-auto cursor-pointer"
                   >
                     <Eye className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
                     <span>{showPreview ? 'Hide Report Preview' : 'Show Report Preview'}</span>
@@ -846,7 +836,7 @@ function FullReportPreview({
       verdict: threatLevel,
       sha256: isMalicious
         ? 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
-        : '7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069',
+        : isSuspicious ? '8b1a9953c4611296a827abf8c47804d7e4367c30a51cc2c8bc59e31d86d649ab' : '315f5bdb76d078c43b8ac0064e4a0164612b1fce77c869345bfc94c75894edd3',
       md5: isMalicious ? '44d88612fea8a8f36de82e1278abb02f' : '9e107d9d372bb6826bd81d3542a419d6',
       tagsDetected: isMalicious
         ? [
@@ -889,12 +879,12 @@ function FullReportPreview({
   const emailSender = decodeMimeHeader(result?.headers.find((h) => h.key.toLowerCase() === 'from')?.value || 'security-update@corporate-portal.com');
 
   return (
-    <div className="rounded-2xl p-6 space-y-6 bg-white dark:bg-[#090b12] border border-slate-200 dark:border-cyan-500/20 shadow-sm dark:shadow-2xl">
+    <div className="rounded-2xl p-6 space-y-6 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-cyan-500/20 shadow-sm dark:shadow-2xl">
       {/* ── Quick Navigation Tabs (Deep Forensics format) ─────────────────── */}
-      <div className="relative isolate flex items-center gap-2 overflow-x-auto overflow-y-hidden pb-4 mb-3 scrollbar-none border-b border-slate-200 dark:border-white/10 touch-scroll touch-pan-x overscroll-x-contain">
+      <div className="relative isolate flex items-center gap-2 overflow-x-auto overflow-y-hidden pb-4 mb-3 scrollbar-none border-b border-gray-200 dark:border-zinc-800/50 touch-scroll touch-pan-x overscroll-x-contain">
         {/* Smooth sliding indicator pill */}
         <div
-          className="absolute z-0 pointer-events-none rounded-xl bg-cyan-500/15 dark:bg-cyan-500/20 border border-cyan-400/50 dark:border-cyan-500/40 shadow-sm shadow-cyan-900/10"
+          className="absolute z-0 pointer-events-none rounded-xl bg-cyan-500/15 dark:bg-cyan-500/20 border border-cyan-400/50 dark:border-cyan-500/40 shadow-sm "
           style={{
             transform: `translate3d(${reportIndicatorStyle.left}px, ${reportIndicatorStyle.top}px, 0)`,
             width: reportIndicatorStyle.width,
@@ -903,17 +893,15 @@ function FullReportPreview({
             transition: 'transform 300ms cubic-bezier(0.25, 1, 0.5, 1), width 300ms cubic-bezier(0.25, 1, 0.5, 1), height 300ms cubic-bezier(0.25, 1, 0.5, 1), opacity 150ms ease',
             left: 0,
             top: 0,
-            zIndex: 0,
-          }}
+            zIndex: 0 }}
         />
         {[
           { id: 'all', label: 'Complete Forensic Report', icon: Shield },
-          { id: 'synthesis', label: 'AI Synthesis', icon: Sparkles },
-          { id: 'headers', label: 'Header Forensics', icon: FileCode },
-          { id: 'threat-intel', label: 'Threat Intelligence', icon: Globe },
-          { id: 'origin', label: 'Origin GeoIP', icon: MapPin },
+          { id: 'synthesis', label: 'Email Analyzer', icon: MailSearch },
+          { id: 'headers', label: 'Crypto Forensics', icon: FileSearch },
+          { id: 'threat-intel', label: 'Certificate Vault', icon: ShieldCheck },
+          { id: 'origin', label: 'Session Mapping', icon: MapPin },
           { id: 'attack-graph', label: 'Attack Graph', icon: Share2 },
-          { id: 'attachments', label: 'Attachment & Payload', icon: FileText },
         ].map((tab) => {
           const Icon = tab.icon;
           const active = activeTab === tab.id;
@@ -925,10 +913,10 @@ function FullReportPreview({
               style={{ zIndex: 10 }}
               className={`relative z-10 flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-colors duration-200 cursor-pointer ${active
                   ? 'text-cyan-950 dark:text-cyan-200 font-bold'
-                  : 'text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white'
-                }`}
+                  : 'text-gray-600 dark:text-zinc-400 font-medium hover:bg-gray-100/80 dark:hover:bg-zinc-800/80'
+              }`}
             >
-              <Icon className={`w-3.5 h-3.5 ${active ? 'text-cyan-700 dark:text-cyan-300' : 'text-slate-500 dark:text-gray-400'}`} />
+              <Icon className={`w-3.5 h-3.5 ${active ? 'text-cyan-700 dark:text-cyan-300' : 'text-gray-500 dark:text-gray-400'}`} />
               {tab.label}
             </button>
           );
@@ -936,44 +924,44 @@ function FullReportPreview({
       </div>
 
       {/* ══════════════════════════════════════════════════════════════════════
-          SECTION 1: AI SYNTHESIS & RISK NARRATIVE
+          SECTION 1: EMAIL FORENSICS & AI SYNTHESIS
       ══════════════════════════════════════════════════════════════════════ */}
       {(activeTab === 'all' || activeTab === 'synthesis') && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-700 dark:text-gray-300 flex items-center gap-2">
+            <h2 className="text-sm font-bold uppercase tracking-wider text-gray-900 dark:text-zinc-100 flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
-              1. Final AI Synthesis & Plain-Language Risk Narrative
+              1. Email Forensics &amp; Threat AI Synthesis
             </h2>
-            <span className="text-xs text-slate-500 dark:text-gray-400 font-mono">
+            <span className="text-xs text-gray-500 dark:text-gray-400 font-mono">
               Confidence: <span className="text-cyan-600 dark:text-cyan-400 font-bold">{result?.confidence ?? 95}%</span>
             </span>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Executive Summary & Narrative */}
-            <div className="lg:col-span-2 p-5 rounded-2xl bg-white dark:bg-[#11121b] border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none space-y-4">
+            <div className="lg:col-span-2 p-5 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm dark:shadow-none space-y-4">
               <div>
                 <div className="text-[11px] text-cyan-600 dark:text-cyan-400 uppercase tracking-wider font-semibold mb-1">
                   Executive AI Summary
                 </div>
                 <div className="flex items-center gap-2 flex-wrap mb-2">
-                  <span className="text-sm font-bold text-slate-900 dark:text-white truncate max-w-lg">
+                  <span className="text-sm font-bold text-gray-900 dark:text-zinc-100 truncate max-w-lg">
                     {emailSubject}
                   </span>
-                  <span className="text-xs text-slate-500 dark:text-gray-400 font-mono">({emailSender})</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 font-mono">({emailSender})</span>
                 </div>
-                <p className="text-sm text-slate-700 dark:text-gray-200 leading-relaxed font-sans font-medium">
+                <p className="text-sm text-gray-900 dark:text-gray-200 leading-relaxed font-sans font-medium">
                   {result?.summary || data.threatSummary}
                 </p>
               </div>
 
-              <div className="p-4 rounded-xl bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/5 space-y-2">
+              <div className="p-4 rounded-xl bg-white dark:bg-black/40 border border-gray-200 dark:border-zinc-800/50 space-y-2">
                 <div className="text-xs font-bold text-purple-700 dark:text-purple-300 flex items-center gap-1.5">
                   <Eye className="w-4 h-4" />
                   Plain-Language Risk Explanation
                 </div>
-                <p className="text-xs text-slate-600 dark:text-gray-300 leading-relaxed">
+                <p className="text-xs text-gray-500 dark:text-zinc-100 leading-relaxed">
                   {result?.summary
                     ? `This incident involves an engineered campaign crafted to impersonate trusted infrastructure. Cryptographic signatures were failed or deliberately omitted to bypass standard mail authentication filters, routing through bulletproof ingress relays to deliver suspicious attachments and deceptive URLs.`
                     : data.threatSummary}
@@ -981,7 +969,7 @@ function FullReportPreview({
               </div>
 
               {/* Key Forensic Findings */}
-              <div className="space-y-2 pt-2 border-t border-slate-200 dark:border-white/5">
+              <div className="space-y-2 pt-2 border-t border-gray-200 dark:border-zinc-800/50">
                 <div className="text-[11px] text-cyan-600 dark:text-cyan-400 uppercase tracking-wider font-semibold">
                   Key Forensic Findings
                 </div>
@@ -989,7 +977,7 @@ function FullReportPreview({
                   {data.keyFindings.map((f, i) => (
                     <div
                       key={i}
-                      className="flex items-start gap-2.5 p-2.5 rounded-xl text-xs text-slate-700 dark:text-gray-300 bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5"
+                      className="flex items-start gap-2.5 p-2.5 rounded-xl text-xs text-gray-900 dark:text-zinc-100 bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
                     >
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400 shrink-0 mt-0.5" />
                       <span>{f}</span>
@@ -1000,8 +988,8 @@ function FullReportPreview({
             </div>
 
             {/* Mitigation Checklist */}
-            <div className="p-5 rounded-2xl bg-white dark:bg-[#11121b] border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none space-y-3">
-              <div className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+            <div className="p-5 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm dark:shadow-none space-y-3">
+              <div className="text-xs font-bold text-gray-900 dark:text-zinc-100 uppercase tracking-wider flex items-center gap-2">
                 <Shield className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
                 SOC Incident Mitigation Checklist
               </div>
@@ -1009,10 +997,10 @@ function FullReportPreview({
                 {mitigationChecklist.map((item, idx) => (
                   <div
                     key={idx}
-                    className="p-3 rounded-xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/5 space-y-1"
+                    className="p-3 rounded-xl bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 space-y-1"
                   >
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                      <span className="text-xs font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-1.5">
                         <CheckCircle2 className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400 shrink-0" />
                         {item.action}
                       </span>
@@ -1021,13 +1009,13 @@ function FullReportPreview({
                             ? 'bg-red-500/20 text-red-700 dark:text-red-300 border border-red-500/30'
                             : item.urgency === 'recommended'
                               ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30'
-                              : 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30'
-                          }`}
+                              : 'bg-green-500/20 text-green-700 dark:text-green-300 border border-green-500/30'
+                        }`}
                       >
                         {item.urgency}
                       </span>
                     </div>
-                    <p className="text-[11px] text-slate-500 dark:text-gray-400 pl-5">{item.reason}</p>
+                    <p className="text-[11px] text-gray-500 dark:text-gray-400 pl-5">{item.reason}</p>
                   </div>
                 ))}
               </div>
@@ -1037,13 +1025,13 @@ function FullReportPreview({
       )}
 
       {/* ══════════════════════════════════════════════════════════════════════
-          SECTION 2: HEADER FORENSICS & HOP RELAYS
+          SECTION 2: CRYPTO FORENSICS & HANDSHAKE INTEGRITY
       ══════════════════════════════════════════════════════════════════════ */}
       {(activeTab === 'all' || activeTab === 'headers') && (
         <div className="space-y-4">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-slate-700 dark:text-gray-300 flex items-center gap-2">
-            <FileCode className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
-            2. Header Forensics & Hop-by-Hop Authentication
+          <h2 className="text-sm font-bold uppercase tracking-wider text-gray-900 dark:text-zinc-100 flex items-center gap-2">
+            <FileSearch className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
+            2. Crypto Forensics &amp; Protocol Handshake Integrity
           </h2>
 
           {/* Authentication Cards */}
@@ -1072,8 +1060,8 @@ function FullReportPreview({
             ].map((auth, i) => {
               const pass = auth.val === 'PASS' || auth.val === 'ALIGNED';
               return (
-                <div key={i} className="p-4 rounded-2xl bg-white dark:bg-[#11121b] border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none space-y-1.5">
-                  <div className="text-xs text-slate-500 dark:text-gray-400">{auth.title}</div>
+                <div key={i} className="p-4 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm dark:shadow-none space-y-1.5">
+                  <div className="text-xs text-gray-500 dark:text-gray-400">{auth.title}</div>
                   <div className="flex items-center gap-2">
                     {pass ? (
                       <CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
@@ -1087,26 +1075,26 @@ function FullReportPreview({
                       {auth.val}
                     </span>
                   </div>
-                  <div className="text-[11px] text-slate-500 dark:text-gray-400 line-clamp-2">{auth.detail}</div>
+                  <div className="text-[11px] text-gray-500 dark:text-gray-400 line-clamp-2">{auth.detail}</div>
                 </div>
               );
             })}
           </div>
 
           {/* Hop-by-Hop Relay Route Table */}
-          <div className="p-5 rounded-2xl bg-white dark:bg-[#11121b] border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none space-y-3">
+          <div className="p-5 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm dark:shadow-none space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-2">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-zinc-100 flex items-center gap-2">
                 <Server className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                 SMTP Relay Route Hop Breakdown
               </h3>
-              <span className="text-[11px] text-slate-500 dark:text-gray-500 font-mono">{relayHops.length} Network Hops Traced</span>
+              <span className="text-[11px] text-gray-500 dark:text-gray-500 font-mono">{relayHops.length} Network Hops Traced</span>
             </div>
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-slate-200 dark:border-white/10 text-slate-500 dark:text-gray-400 uppercase text-[10px]">
+                  <tr className="border-b border-gray-200 dark:border-zinc-800/50 text-gray-500 dark:text-gray-400 uppercase text-[10px]">
                     <th className="py-2.5 px-3">Hop</th>
                     <th className="py-2.5 px-3">Server IP & Reverse DNS</th>
                     <th className="py-2.5 px-3">Location</th>
@@ -1116,14 +1104,14 @@ function FullReportPreview({
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-white/5">
                   {relayHops.map((hop) => (
-                    <tr key={hop.hop} className="hover:bg-slate-50 dark:hover:bg-white/[0.02]">
+                    <tr key={hop.hop} className="hover:bg-white dark:hover:bg-zinc-700/50">
                       <td className="py-3 px-3 font-bold text-cyan-600 dark:text-cyan-400">#{hop.hop}</td>
                       <td className="py-3 px-3">
-                        <div className="font-mono text-slate-900 dark:text-white font-semibold">{hop.ip}</div>
-                        <div className="text-[11px] text-slate-500 dark:text-gray-400 font-mono">{hop.reverseDns}</div>
+                        <div className="font-mono text-gray-900 dark:text-zinc-100 font-semibold">{hop.ip}</div>
+                        <div className="text-[11px] text-gray-500 dark:text-gray-400 font-mono">{hop.reverseDns}</div>
                       </td>
-                      <td className="py-3 px-3 text-slate-700 dark:text-gray-300 font-sans">{hop.location}</td>
-                      <td className="py-3 px-3 text-slate-500 dark:text-gray-400">{hop.delay}</td>
+                      <td className="py-3 px-3 text-gray-900 dark:text-zinc-100 font-sans">{hop.location}</td>
+                      <td className="py-3 px-3 text-gray-500 dark:text-gray-400">{hop.delay}</td>
                       <td className="py-3 px-3">
                         <span
                           className={`text-[10px] px-2 py-0.5 rounded font-bold uppercase ${hop.status === 'malicious'
@@ -1132,7 +1120,7 @@ function FullReportPreview({
                                 ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30'
                                 : hop.status === 'internal'
                                   ? 'bg-blue-500/20 text-blue-700 dark:text-blue-300 border border-blue-500/30'
-                                  : 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30'
+                                  : 'bg-green-500/20 text-green-700 dark:text-green-300 border border-green-500/30'
                             }`}
                         >
                           {hop.status}
@@ -1147,16 +1135,16 @@ function FullReportPreview({
 
           {/* Captured RFC-822 / SMTP Headers */}
           {result?.headers && result.headers.length > 0 && (
-            <div className="rounded-2xl overflow-hidden border border-slate-200 dark:border-white/10 bg-white dark:bg-[#11121b]">
-              <div className="px-4 py-3 bg-slate-50 dark:bg-white/5 border-b border-slate-200 dark:border-white/10 text-xs font-mono font-bold text-cyan-700 dark:text-cyan-300 uppercase flex items-center justify-between">
+            <div className="rounded-2xl overflow-hidden border border-gray-200 dark:border-zinc-800/50 bg-white dark:bg-zinc-800">
+              <div className="px-4 py-3 bg-white dark:bg-white/5 border-b border-gray-200 dark:border-zinc-800/50 text-xs font-mono font-bold text-cyan-700 dark:text-cyan-300 uppercase flex items-center justify-between">
                 <span>Captured RFC-822 / MIME Email Headers</span>
-                <span className="text-[11px] text-slate-500 dark:text-gray-500">{result.headers.length} headers extracted</span>
+                <span className="text-[11px] text-gray-500 dark:text-gray-500">{result.headers.length} headers extracted</span>
               </div>
               <div className="divide-y divide-slate-100 dark:divide-white/5 max-h-56 overflow-y-auto font-mono text-[11px] p-2">
                 {result.headers.map((h, i) => (
-                  <div key={i} className="px-3 py-2 flex items-start gap-3 hover:bg-slate-50 dark:hover:bg-white/[0.02]">
+                  <div key={i} className="px-3 py-2 flex items-start gap-3 hover:bg-white dark:hover:bg-zinc-700/50">
                     <span className="text-purple-700 dark:text-purple-300 font-bold w-36 shrink-0 truncate">{h.key}:</span>
-                    <span className="text-slate-700 dark:text-gray-300 break-all font-mono select-all">{h.value}</span>
+                    <span className="text-gray-900 dark:text-zinc-100 break-all font-mono select-all">{h.value}</span>
                   </div>
                 ))}
               </div>
@@ -1166,44 +1154,44 @@ function FullReportPreview({
       )}
 
       {/* ══════════════════════════════════════════════════════════════════════
-          SECTION 3: THREAT INTELLIGENCE & REPUTATION
+          SECTION 3: CERTIFICATE VAULT & X.509 TRUST
       ══════════════════════════════════════════════════════════════════════ */}
       {(activeTab === 'all' || activeTab === 'threat-intel') && (
         <div className="space-y-4">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-slate-700 dark:text-gray-300 flex items-center gap-2">
-            <Globe className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
-            3. Threat Intelligence & External Blacklists
+          <h2 className="text-sm font-bold uppercase tracking-wider text-gray-900 dark:text-zinc-100 flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
+            3. Certificate Vault &amp; X.509 Trust Validation
           </h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Reputation Overview */}
-            <div className="p-5 rounded-2xl bg-white dark:bg-[#11121b] border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none space-y-4">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
+            <div className="p-5 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm dark:shadow-none space-y-4">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-zinc-100">
                 Entity Reputation Assessment
               </h3>
 
               <div className="space-y-3">
-                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/5 flex items-center justify-between">
+                <div className="p-3.5 rounded-xl bg-white dark:bg-black/40 border border-gray-200 dark:border-zinc-800/50 flex items-center justify-between">
                   <div>
-                    <div className="text-[11px] text-slate-500 dark:text-gray-400">Sending IP Reputation</div>
-                    <div className="text-xs font-mono font-bold text-slate-900 dark:text-white">{originIp}</div>
+                    <div className="text-[11px] text-gray-500 dark:text-gray-400">Sending IP Reputation</div>
+                    <div className="text-xs font-mono font-bold text-gray-900 dark:text-zinc-100">{originIp}</div>
                   </div>
                   <span
                     className={`text-xs uppercase font-bold px-2.5 py-1 rounded ${isMalicious
                         ? 'bg-red-500/20 text-red-700 dark:text-red-300 border border-red-500/30'
-                        : isSuspicious
-                          ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30'
-                          : 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30'
-                      }`}
+                          : isSuspicious
+                            ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30'
+                            : 'bg-green-500/20 text-green-700 dark:text-green-300 border border-green-500/30'
+                    }`}
                   >
                     {result?.threat_intel.ip_reputation || (isMalicious ? 'malicious' : 'suspicious')}
                   </span>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/5 flex items-center justify-between">
+                <div className="p-3.5 rounded-xl bg-white dark:bg-black/40 border border-gray-200 dark:border-zinc-800/50 flex items-center justify-between">
                   <div>
-                    <div className="text-[11px] text-slate-500 dark:text-gray-400">Sender Domain Age</div>
-                    <div className="text-xs font-semibold text-slate-900 dark:text-white">
+                    <div className="text-[11px] text-gray-500 dark:text-gray-400">Sender Domain Age</div>
+                    <div className="text-xs font-semibold text-gray-900 dark:text-zinc-100">
                       {result?.threat_intel.domain || 'corporate-update.xyz'}
                     </div>
                   </div>
@@ -1211,7 +1199,7 @@ function FullReportPreview({
                     <span className="text-xs font-semibold text-cyan-600 dark:text-cyan-300">
                       {result?.threat_intel.domain_age_days ?? 3} days
                     </span>
-                    <div className="text-[10px] text-slate-500 dark:text-gray-400">
+                    <div className="text-[10px] text-gray-500 dark:text-gray-400">
                       {(result?.threat_intel.domain_age_days ?? 3) < 30 ? 'High Risk (<30d)' : 'Established'}
                     </div>
                   </div>
@@ -1220,12 +1208,12 @@ function FullReportPreview({
 
               {threatClassificationTags.length > 0 && (
                 <div className="space-y-1.5 pt-2">
-                  <div className="text-[11px] text-slate-500 dark:text-gray-400">Threat Classification Tags:</div>
+                  <div className="text-[11px] text-gray-500 dark:text-gray-400">Threat Classification Tags:</div>
                   <div className="flex flex-wrap gap-1.5">
                     {threatClassificationTags.map((tag, i) => (
                       <span
                         key={i}
-                        className="text-[10px] font-medium px-2 py-0.5 rounded bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-gray-200 border border-slate-200 dark:border-white/10"
+                        className="text-[10px] font-medium px-2 py-0.5 rounded bg-gray-50 dark:bg-white/10 text-gray-900 dark:text-gray-200 border border-gray-200 dark:border-zinc-800/50"
                       >
                         {tag}
                       </span>
@@ -1236,12 +1224,12 @@ function FullReportPreview({
             </div>
 
             {/* Blacklists Grid */}
-            <div className="lg:col-span-2 p-5 rounded-2xl bg-white dark:bg-[#11121b] border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none space-y-3">
+            <div className="lg:col-span-2 p-5 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm dark:shadow-none space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-zinc-100">
                   6-Engine Reputation & Blacklist Scanner
                 </h3>
-                <span className="text-[10px] text-slate-500 dark:text-gray-500">Live Feeds Queried</span>
+                <span className="text-[10px] text-gray-500 dark:text-gray-500">Live Feeds Queried</span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -1250,11 +1238,11 @@ function FullReportPreview({
                   return (
                     <div
                       key={i}
-                      className="p-3 rounded-xl bg-slate-50 dark:bg-black/30 border border-slate-200 dark:border-white/5 flex items-start justify-between gap-3"
+                      className="p-3 rounded-xl bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/50 flex items-start justify-between gap-3"
                     >
                       <div className="space-y-0.5">
-                        <div className="text-xs font-bold text-slate-900 dark:text-white">{bl.engine}</div>
-                        <div className="text-[11px] text-slate-500 dark:text-gray-400">{bl.detail}</div>
+                        <div className="text-xs font-bold text-gray-900 dark:text-zinc-100">{bl.engine}</div>
+                        <div className="text-[11px] text-gray-500 dark:text-gray-400">{bl.detail}</div>
                       </div>
                       <span
                         className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded shrink-0 ${isClean
@@ -1262,7 +1250,7 @@ function FullReportPreview({
                             : bl.status === 'warning'
                               ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30'
                               : 'bg-red-500/20 text-red-700 dark:text-red-300 border border-red-500/30'
-                          }`}
+                    }`}
                       >
                         {bl.status}
                       </span>
@@ -1274,24 +1262,24 @@ function FullReportPreview({
           </div>
 
           {/* IOC Badges Row */}
-          <div className="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-[#11121b] border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none space-y-2 overflow-hidden max-w-full">
-            <div className="text-xs font-bold text-slate-700 dark:text-gray-300 uppercase tracking-wider flex flex-wrap items-center justify-between gap-1">
+          <div className="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm dark:shadow-none space-y-2 overflow-hidden max-w-full">
+            <div className="text-xs font-bold text-gray-900 dark:text-zinc-100 uppercase tracking-wider flex flex-wrap items-center justify-between gap-1">
               <span>Captured Indicators of Compromise (IOCs)</span>
-              <span className="text-[10px] text-slate-500 dark:text-gray-500 shrink-0">{data.indicators.length} IOCs cataloged</span>
+              <span className="text-[10px] text-gray-500 dark:text-gray-500 shrink-0">{data.indicators.length} IOCs cataloged</span>
             </div>
             <div className="flex flex-wrap gap-2 pt-1 min-w-0">
               {data.indicators.map((ind, i) => (
                 <div
                   key={`${ind.value}-${i}`}
-                  className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-mono bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white max-w-full min-w-0"
+                  className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-mono bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 text-gray-900 dark:text-zinc-100 max-w-full min-w-0"
                 >
                   <span className="text-cyan-600 dark:text-cyan-400 font-bold shrink-0">{ind.type}:</span>
-                  <span className="text-slate-700 dark:text-gray-300 truncate max-w-[190px] xs:max-w-[240px] sm:max-w-xs md:max-w-md break-all" title={ind.value}>
+                  <span className="text-gray-900 dark:text-zinc-100 truncate max-w-[190px] xs:max-w-[240px] sm:max-w-xs md:max-w-md break-all" title={ind.value}>
                     {ind.value}
                   </span>
                   <button
                     onClick={() => handleCopy(ind.value, `ioc-${i}`)}
-                    className="ml-auto p-1 hover:bg-slate-200 dark:hover:bg-white/10 rounded text-slate-400 hover:text-slate-700 dark:text-gray-400 dark:hover:text-white transition-colors cursor-pointer shrink-0"
+                    className="ml-auto p-1 hover:bg-gray-200 dark:hover:bg-white/10 rounded text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors cursor-pointer shrink-0"
                     title="Copy IOC"
                   >
                     {copiedText === `ioc-${i}` ? (
@@ -1308,31 +1296,31 @@ function FullReportPreview({
       )}
 
       {/* ══════════════════════════════════════════════════════════════════════
-          SECTION 4: ORIGIN INVESTIGATION & GEOIP MAP
+          SECTION 4: SESSION MAPPING & INFRASTRUCTURE
       ══════════════════════════════════════════════════════════════════════ */}
       {(activeTab === 'all' || activeTab === 'origin') && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-700 dark:text-gray-300 flex items-center gap-2">
+            <h2 className="text-sm font-bold uppercase tracking-wider text-gray-900 dark:text-zinc-100 flex items-center gap-2">
               <MapPin className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
-              4. Origin Investigation & Infrastructure Geolocation
+              4. Session Mapping &amp; Infrastructure Geolocation
             </h2>
-            <span className="text-[11px] font-mono text-slate-500 dark:text-gray-400">
-              Target: <span className="text-slate-900 dark:text-white font-bold">{originCity}, {originCountry}</span> ({originLat.toFixed(4)}, {originLng.toFixed(4)})
+            <span className="text-[11px] font-mono text-gray-500 dark:text-gray-400">
+              Target: <span className="text-gray-900 dark:text-zinc-100 font-bold">{originCity}, {originCountry}</span> ({originLat.toFixed(4)}, {originLng.toFixed(4)})
             </span>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Telemetry info card */}
-            <div className="p-5 rounded-2xl bg-white dark:bg-[#11121b] border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none space-y-4">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
+            <div className="p-5 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm dark:shadow-none space-y-4">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-zinc-100">
                 Physical & Autonomous Origin
               </h3>
 
               <div className="space-y-3 text-xs">
-                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/5">
-                  <div className="text-[10px] text-slate-500 dark:text-gray-400 uppercase font-mono">Originating Location</div>
-                  <div className="font-bold text-slate-900 dark:text-white text-sm mt-0.5">
+                <div className="p-3.5 rounded-xl bg-white dark:bg-black/40 border border-gray-200 dark:border-zinc-800/50">
+                  <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-mono">Originating Location</div>
+                  <div className="font-bold text-gray-900 dark:text-zinc-100 text-sm mt-0.5">
                     {originCity}, {originCountry}
                   </div>
                   <div className="text-[11px] font-mono text-cyan-600 dark:text-cyan-400 mt-1">
@@ -1340,25 +1328,25 @@ function FullReportPreview({
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/5">
-                  <div className="text-[10px] text-slate-500 dark:text-gray-400 uppercase font-mono">Routing Autonomous System</div>
-                  <div className="font-bold text-slate-900 dark:text-white truncate mt-0.5">{originAsn}</div>
+                <div className="p-3.5 rounded-xl bg-white dark:bg-black/40 border border-gray-200 dark:border-zinc-800/50">
+                  <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-mono">Routing Autonomous System</div>
+                  <div className="font-bold text-gray-900 dark:text-zinc-100 truncate mt-0.5">{originAsn}</div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/5">
-                  <div className="text-[10px] text-slate-500 dark:text-gray-400 uppercase font-mono">Hosting Infrastructure</div>
-                  <div className="font-bold text-slate-900 dark:text-white mt-0.5">{originHosting}</div>
+                <div className="p-3.5 rounded-xl bg-white dark:bg-black/40 border border-gray-200 dark:border-zinc-800/50">
+                  <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-mono">Hosting Infrastructure</div>
+                  <div className="font-bold text-gray-900 dark:text-zinc-100 mt-0.5">{originHosting}</div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/5">
-                  <div className="text-[10px] text-slate-500 dark:text-gray-400 uppercase font-mono">Originating IP Address</div>
+                <div className="p-3.5 rounded-xl bg-white dark:bg-black/40 border border-gray-200 dark:border-zinc-800/50">
+                  <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-mono">Originating IP Address</div>
                   <div className="font-mono font-bold text-red-500 dark:text-red-400 mt-0.5">{originIp}</div>
                 </div>
               </div>
             </div>
 
             {/* Dark Cyber Map */}
-            <div className="lg:col-span-2 rounded-2xl border border-slate-200 dark:border-white/10 overflow-hidden bg-[#0a0b10] flex flex-col justify-between">
+            <div className="lg:col-span-2 rounded-2xl border border-gray-200 dark:border-zinc-800/50 overflow-hidden bg-white dark:bg-zinc-800 flex flex-col justify-between">
               <DarkCyberMap
                 markers={liveMarkers}
                 selectedId={liveMarkers[0]?.id}
@@ -1396,14 +1384,14 @@ function FullReportPreview({
       {(activeTab === 'all' || activeTab === 'attack-graph') && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-700 dark:text-gray-300 flex items-center gap-2">
+            <h2 className="text-sm font-bold uppercase tracking-wider text-gray-900 dark:text-zinc-100 flex items-center gap-2">
               <Share2 className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
               5. Interactive Attack Graph Topology (Read-Only)
             </h2>
-            <span className="text-[11px] text-slate-500 dark:text-gray-500 font-mono">Attacker → Relays → Gateway → Target</span>
+            <span className="text-[11px] text-gray-500 dark:text-gray-500 font-mono">Attacker → Relays → Gateway → Target</span>
           </div>
 
-          <div className="lg:rounded-2xl lg:border lg:border-slate-200 dark:lg:border-white/10 lg:bg-white dark:lg:bg-[#0d0e16] lg:overflow-hidden lg:shadow-none dark:lg:shadow-xl">
+          <div className="lg:rounded-2xl lg:border lg:border-gray-200 dark:lg:border-white/10 lg:bg-white dark:lg:bg-white dark:bg-zinc-800 lg:overflow-hidden lg:shadow-none dark:lg:shadow-xl">
             <AttackGraphCanvas
               result={result}
               height={460}
@@ -1414,7 +1402,7 @@ function FullReportPreview({
       )}
 
       {/* ══════════════════════════════════════════════════════════════════════
-          SECTION 6: ATTACHMENT & PAYLOAD FORENSICS
+          SECTION 6: HANDSHAKE PAYLOAD & PACKET FORENSICS
       ══════════════════════════════════════════════════════════════════════ */}
       {(activeTab === 'all' || activeTab === 'attachments') && (
         <AttachmentForensicsSection
@@ -1435,10 +1423,9 @@ function FullReportPreview({
               runtimeBehavior: attachmentData.runtimeBehavior,
               outboundConnections: attachmentData.outboundConnections,
             },
-            allAttachments: result?.attachments,
-          }}
+            allAttachments: result?.attachments }}
           rawAnalysisResult={result}
-          sectionTitle="Attachment Forensics & Embedded Payload Analysis"
+          sectionTitle="Handshake Payload & Packet Stream Forensics"
           sectionPrefix="6."
         />
       )}
@@ -1472,7 +1459,7 @@ function TacticalSvgMap({
     <svg
       viewBox="0 0 700 350"
       className="w-full h-auto max-h-[350px]"
-      style={{ filter: 'drop-shadow(0 0 10px rgba(56,189,248,0.1))' }}
+      
     >
       <defs>
         <linearGradient id="gridGrad" x1="0" y1="0" x2="1" y2="1">
@@ -1584,7 +1571,7 @@ function TacticalSvgMap({
 
       {/* Compass / HUD Overlay */}
       <g transform="translate(20, 20)" fill="#64748b" fontSize="9" fontFamily="'Inter', sans-serif">
-        <text x="0" y="0" fill="#38bdf8" fontWeight="bold">MAILVEIL GLOBAL SOC GEO-LOCATOR</text>
+        <text x="0" y="0" fill="#38bdf8" fontWeight="bold">SENTINEL-X GLOBAL SOC GEO-LOCATOR</text>
         <text x="0" y="14">PROJECTION: CYBER-CYLINDRICAL · WGS84</text>
       </g>
     </svg>
@@ -1604,7 +1591,7 @@ function generateReportText(
 ): string {
   const typeLabel = REPORT_TYPES.find((r) => r.id === type)?.label ?? 'Report';
   let text = `=================================================================\n`;
-  text += `MAILVEIL ${typeLabel.toUpperCase()} — CASE ${data.caseId}\n`;
+  text += `SENTINEL-X ${typeLabel.toUpperCase()} — CASE ${data.caseId}\n`;
   text += `=================================================================\n\n`;
   text += `Generated: ${new Date().toISOString()}\n`;
   text += `Classification: CONFIDENTIAL // SOC INCIDENT DOSSIER\n`;
@@ -1650,7 +1637,7 @@ function generateReportText(
   text += `\n`;
 
   text += `=================================================================\n`;
-  text += `End of Mailveil Forensic Dossier\n`;
+  text += `End of Sentinel-X Forensic Dossier\n`;
   return text;
 }
 
@@ -1719,15 +1706,15 @@ function SentinelAI({ currentResult }: { currentResult: EmailAnalysisResult }) {
 
   return (
     <div
-      className="rounded-2xl p-5 bg-white dark:bg-[#090b12] border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+      className="rounded-2xl p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm "
     >
       <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
         <div>
-          <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <h3 className="text-sm font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
             <Brain className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-            MAILVEIL SOC AI Assistant
+            SENTINEL SOC AI Assistant
           </h3>
-          <p className="text-[11px] text-slate-500 dark:text-gray-500 mt-0.5">
+          <p className="text-[11px] text-gray-500 dark:text-gray-500 mt-0.5">
             Grounded in active case <span className="text-purple-600 dark:text-purple-300 font-mono font-semibold">{currentResult.case_id}</span> ({currentResult.verdict})
           </p>
         </div>
@@ -1735,7 +1722,7 @@ function SentinelAI({ currentResult }: { currentResult: EmailAnalysisResult }) {
           {messages.length > 0 && (
             <button
               onClick={() => setMessages([])}
-              className="text-[10px] font-mono text-slate-600 hover:text-slate-900 dark:text-gray-500 dark:hover:text-gray-300 px-2 py-1 rounded bg-slate-100 dark:bg-white/5 cursor-pointer"
+              className="text-[10px] font-mono text-gray-500 hover:text-gray-900 dark:text-gray-500 dark:hover:text-gray-300 px-2 py-1 rounded bg-gray-50 dark:bg-white/5 cursor-pointer"
             >
               Clear Chat
             </button>
@@ -1751,7 +1738,7 @@ function SentinelAI({ currentResult }: { currentResult: EmailAnalysisResult }) {
 
       {/* Suggested Questions */}
       <div className="mb-4">
-        <p className="text-[10px] text-slate-500 dark:text-gray-500 uppercase tracking-widest font-mono font-bold mb-2">
+        <p className="text-[10px] text-gray-500 dark:text-gray-500 uppercase tracking-widest font-mono font-bold mb-2">
           Suggested Case Telemetry Queries
         </p>
         <div className="flex flex-wrap gap-2">
@@ -1759,7 +1746,7 @@ function SentinelAI({ currentResult }: { currentResult: EmailAnalysisResult }) {
             <button
               key={q.id}
               onClick={() => askQuestion(q.question)}
-              className="px-3 py-1.5 rounded-xl text-xs font-mono text-slate-700 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white bg-slate-50 hover:bg-slate-100 dark:bg-white/[0.03] dark:hover:bg-white/[0.08] border border-slate-200 dark:border-white/[0.06] transition-all hover:scale-[1.02] text-left cursor-pointer"
+              className="px-3 py-1.5 rounded-xl text-xs font-mono text-gray-900 dark:text-zinc-100 hover:text-gray-900 dark:hover:text-white bg-white hover:bg-gray-50 dark:bg-zinc-900/50 dark:hover:bg-zinc-700/50 border border-gray-200 dark:border-zinc-800/50 transition-all hover:scale-[1.02] text-left cursor-pointer"
             >
               {q.question}
             </button>
@@ -1769,15 +1756,15 @@ function SentinelAI({ currentResult }: { currentResult: EmailAnalysisResult }) {
 
       {/* Chat Window */}
       <div
-        className="rounded-xl p-4 max-h-96 overflow-y-auto scrollbar-thin space-y-3 min-h-[160px] bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/[0.06]"
+        className="rounded-xl p-4 max-h-96 overflow-y-auto scrollbar-thin space-y-3 min-h-[160px] bg-white dark:bg-black/40 border border-gray-200 dark:border-zinc-800/50"
       >
         {messages.length === 0 && !thinking && (
           <div className="flex flex-col items-center justify-center text-center py-8">
-            <Brain className="w-8 h-8 text-slate-400 dark:text-gray-700 mb-2" />
-            <p className="text-xs text-slate-700 dark:text-gray-400 font-mono font-semibold">
-              MAILVEIL SOC AI is ready to analyze case {currentResult.case_id}
+            <Brain className="w-8 h-8 text-gray-500 dark:text-gray-700 mb-2" />
+            <p className="text-xs text-gray-900 dark:text-gray-400 font-mono font-semibold">
+              SENTINEL SOC AI is ready to analyze case {currentResult.case_id}
             </p>
-            <p className="text-[11px] text-slate-500 dark:text-gray-600 font-mono mt-1">
+            <p className="text-[11px] text-gray-500 dark:text-gray-600 font-mono mt-1">
               Ask any specific question about headers, threat vectors, IOCs, or remediation
             </p>
           </div>
@@ -1787,12 +1774,12 @@ function SentinelAI({ currentResult }: { currentResult: EmailAnalysisResult }) {
             <div
               className={`max-w-[85%] rounded-xl p-3.5 text-xs leading-relaxed ${msg.role === 'user'
                 ? 'bg-blue-500/10 dark:bg-blue-500/15 border border-blue-500/30 text-blue-900 dark:text-white font-mono'
-                : 'bg-purple-500/10 border border-purple-500/25 text-slate-800 dark:text-gray-300 whitespace-pre-wrap'
-                }`}
+                : 'bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 text-gray-800 dark:text-zinc-300'
+            }`}
             >
               {msg.role === 'ai' && (
                 <div className="flex items-center gap-1.5 mb-2 text-[10px] font-mono font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider">
-                  <Brain className="w-3.5 h-3.5" /> MAILVEIL SOC AI FORENSICS
+                  <Brain className="w-3.5 h-3.5" /> SENTINEL SOC AI FORENSICS
                 </div>
               )}
               {msg.content}
@@ -1818,8 +1805,8 @@ function SentinelAI({ currentResult }: { currentResult: EmailAnalysisResult }) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-          placeholder={`Ask MAILVEIL AI anything about case ${currentResult.case_id}...`}
-          className="w-full rounded-xl pl-3.5 pr-20 sm:pr-24 py-2.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-600 bg-white dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.08] focus:outline-none font-mono transition-all focus:border-purple-500/40 focus:ring-1 focus:ring-purple-500/30"
+          placeholder={`Ask SENTINEL AI anything about case ${currentResult.case_id}...`}
+          className="w-full rounded-xl pl-3.5 pr-20 sm:pr-24 py-2.5 text-xs text-gray-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-gray-600 bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 focus:outline-none font-mono transition-all focus:border-purple-500/40 focus:ring-1 focus:ring-purple-500/30"
         />
         <button
           onClick={handleSend}
@@ -1828,8 +1815,7 @@ function SentinelAI({ currentResult }: { currentResult: EmailAnalysisResult }) {
           style={{
             background: 'linear-gradient(135deg, rgba(168,85,247,0.85), rgba(124,58,237,0.85))',
             border: '1px solid rgba(168,85,247,0.6)',
-            boxShadow: '0 2px 8px rgba(147,51,234,0.25)',
-          }}
+            boxShadow: 'none' }}
         >
           <Send className="w-3.5 h-3.5" />
           <span>Ask</span>

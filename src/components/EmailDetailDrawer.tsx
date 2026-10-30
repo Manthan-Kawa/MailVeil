@@ -252,7 +252,7 @@ export function EmailDetailDrawer({
     if (!email.attachments || email.attachments.length === 0) return;
     setIsZippingAll(true);
     try {
-      await downloadZipBundle(email.attachments, `Mailveil_${email.id}_Attachments.zip`);
+      await downloadZipBundle(email.attachments, `Sentinel-X_${email.id}_Attachments.zip`);
     } catch (err: any) {
       alert(`ZIP bundle creation failed: ${err?.message}`);
     } finally {
@@ -265,7 +265,7 @@ export function EmailDetailDrawer({
     if (images.length === 0) return;
     setIsZippingImages(true);
     try {
-      await downloadZipBundle(images, `Mailveil_${email.id}_Images.zip`);
+      await downloadZipBundle(images, `Sentinel-X_${email.id}_Images.zip`);
     } catch (err: any) {
       alert(`Image ZIP creation failed: ${err?.message}`);
     } finally {
@@ -277,7 +277,7 @@ export function EmailDetailDrawer({
     const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(email, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute('href', dataStr);
-    downloadAnchor.setAttribute('download', `mailveil-email-report-${email.id}.json`);
+    downloadAnchor.setAttribute('download', `sentinel-email-report-${email.id}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
@@ -324,13 +324,13 @@ export function EmailDetailDrawer({
 
       {/* Drawer panel — full height, buttery smooth slide in/out from right */}
       <div
-        className={`relative w-full max-w-2xl bg-white dark:bg-[#0d0e15] border-l border-slate-200 dark:border-white/10 shadow-2xl flex flex-col h-full z-10 text-slate-900 dark:text-white transform transition-transform duration-300 ease-out ${
+        className={`relative w-full max-w-2xl bg-white dark:bg-zinc-800 border-l border-gray-200 dark:border-zinc-800/50 shadow-2xl flex flex-col h-full z-10 text-gray-900 dark:text-zinc-100 transform transition-transform duration-300 ease-out ${
           isVisible ? 'translate-x-0' : 'translate-x-full'
         }`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Drawer Header */}
-        <div className="p-4 sm:p-6 border-b border-slate-200 dark:border-white/10 bg-slate-50/90 dark:bg-[#12131d]/90 flex flex-col gap-3 sm:gap-4">
+        <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-zinc-800/50 bg-white/90 dark:bg-zinc-800/90 flex flex-col gap-3 sm:gap-4">
           <div className="flex items-start justify-between gap-3 sm:gap-4">
             <div className="flex flex-col gap-1.5 flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
@@ -342,7 +342,7 @@ export function EmailDetailDrawer({
                   </span>
                 )}
                 {isAnalyzedBySoc && (
-                  <span className="text-[11px] px-3 py-1 rounded-full bg-purple-500/20 text-purple-800 dark:text-purple-200 border border-purple-500/40 font-semibold inline-flex items-center gap-1.5 leading-none shadow-sm shadow-purple-950/40">
+                  <span className="text-[11px] px-3 py-1 rounded-full bg-purple-500/20 text-purple-800 dark:text-purple-200 border border-purple-500/40 font-semibold inline-flex items-center gap-1.5 leading-none shadow-sm ">
                     <Check className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400 shrink-0 stroke-[2.5]" />
                     <span className="leading-none">Escalation Completed</span>
                   </span>
@@ -353,14 +353,14 @@ export function EmailDetailDrawer({
                   </span>
                 )}
               </div>
-              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-snug break-words mt-1">
+              <h2 className="text-base sm:text-lg font-bold text-gray-900 dark:text-zinc-100 leading-snug break-words mt-1">
                 {decodeMimeHeader(email.subject)}
               </h2>
             </div>
 
             <button
               onClick={onClose}
-              className="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:text-gray-400 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/10 transition-colors shrink-0"
+              className="p-2 rounded-xl text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-white/10 transition-colors shrink-0"
               title="Close Drawer"
             >
               <X className="w-5 h-5" />
@@ -368,11 +368,11 @@ export function EmailDetailDrawer({
           </div>
 
           {/* Sender & Metadata bar */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-600 dark:text-gray-400 bg-slate-100 dark:bg-black/30 p-3 rounded-xl border border-slate-200 dark:border-white/5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-black/30 p-3 rounded-xl border border-gray-200 dark:border-zinc-800/50">
             <div className="flex items-center gap-2 truncate">
               <User className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400 shrink-0" />
               <span className="truncate">
-                <strong className="text-slate-800 dark:text-gray-300">{decodeMimeHeader(email.sender_name || 'Sender')}:</strong> {email.sender}
+                <strong className="text-gray-900 dark:text-zinc-100">{decodeMimeHeader(email.sender_name || 'Sender')}:</strong> {email.sender}
               </span>
             </div>
             <div className="flex items-center gap-2">
@@ -386,7 +386,7 @@ export function EmailDetailDrawer({
             <div className="relative isolate flex items-center gap-2 overflow-x-auto overflow-y-hidden scrollbar-none touch-scroll touch-pan-x overscroll-x-contain py-1 max-w-full select-none">
               {/* Smooth sliding indicator pill */}
               <div
-                className="absolute z-0 pointer-events-none rounded-xl bg-cyan-500/15 dark:bg-cyan-500/20 border border-cyan-400/50 dark:border-cyan-500/40 shadow-sm shadow-cyan-900/10"
+                className="absolute z-0 pointer-events-none rounded-xl bg-cyan-500/15 dark:bg-cyan-500/20 border border-cyan-400/50 dark:border-cyan-500/40 shadow-sm "
                 style={{
                   top: 0,
                   left: 0,
@@ -395,8 +395,7 @@ export function EmailDetailDrawer({
                   height: indicatorStyle.height,
                   opacity: indicatorStyle.opacity,
                   transition: 'transform 300ms cubic-bezier(0.25, 1, 0.5, 1), width 300ms cubic-bezier(0.25, 1, 0.5, 1), height 300ms cubic-bezier(0.25, 1, 0.5, 1), opacity 150ms ease',
-                  zIndex: 0,
-                }}
+                  zIndex: 0 }}
               />
 
               {[
@@ -418,10 +417,10 @@ export function EmailDetailDrawer({
                     className={`relative z-10 flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-colors duration-200 cursor-pointer shrink-0 ${
                       active
                         ? 'text-cyan-950 dark:text-cyan-200 font-bold'
-                        : 'text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white'
+                        : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
                     }`}
                   >
-                    <Icon className={`w-3.5 h-3.5 ${active ? 'text-cyan-700 dark:text-cyan-300' : 'text-slate-500 dark:text-gray-400'}`} />
+                    <Icon className={`w-3.5 h-3.5 ${active ? 'text-cyan-700 dark:text-cyan-300' : 'text-gray-500 dark:text-gray-400'}`} />
                     {tab.label}
                   </button>
                 );
@@ -442,17 +441,17 @@ export function EmailDetailDrawer({
                   <span>SOC Analyst Investigation Completed</span>
                 </div>
                 {linkedTicket?.respondedAt && (
-                  <span className="text-[10px] text-slate-500 dark:text-gray-400 font-mono">
+                  <span className="text-[10px] text-gray-500 dark:text-gray-400 font-mono">
                     {new Date(linkedTicket.respondedAt).toLocaleDateString()}
                   </span>
                 )}
               </div>
               {linkedTicket?.analystComment ? (
-                <p className="text-xs text-slate-800 dark:text-gray-200 bg-white dark:bg-black/40 p-3 rounded-lg border border-purple-200 dark:border-purple-500/20 leading-relaxed shadow-sm dark:shadow-none">
+                <p className="text-xs text-gray-900 dark:text-gray-200 bg-white dark:bg-black/40 p-3 rounded-lg border border-purple-200 dark:border-purple-500/20 leading-relaxed shadow-sm dark:shadow-none">
                   {linkedTicket.analystComment}
                 </p>
               ) : (
-                <p className="text-xs text-slate-700 dark:text-gray-300">
+                <p className="text-xs text-gray-900 dark:text-zinc-100">
                   The SOC analyst has completed investigation and reverted back regarding this incident.
                 </p>
               )}
@@ -480,28 +479,28 @@ export function EmailDetailDrawer({
                     : threatLevel === 'suspicious'
                     ? 'bg-amber-500/10 dark:bg-amber-950/20 border-amber-500/30'
                     : 'bg-emerald-500/10 dark:bg-emerald-950/20 border-emerald-500/30'
-                }`}
+    }`}
               >
                 <div className="space-y-1">
-                  <div className="text-xs uppercase tracking-wider text-slate-500 dark:text-gray-400 flex items-center gap-2 font-medium">
-                    <span>Mailveil Automated Threat Triage</span>
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-gray-300">
+                  <div className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 flex items-center gap-2 font-medium">
+                    <span>Sentinel Automated Threat Triage</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-gray-200 dark:bg-white/10 text-gray-900 dark:text-zinc-100">
                       {analysis?.model_used || 'Gemini Flash'}
                     </span>
                   </div>
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-zinc-100">
                     {threatLevel === 'malicious'
                       ? 'Severe Malicious Threat Identified'
                       : threatLevel === 'suspicious'
                       ? 'Suspicious Anomalies Detected'
                       : 'Authentic & Clean Email'}
                   </h3>
-                  <p className="text-xs text-slate-600 dark:text-gray-300 max-w-md leading-relaxed">
+                  <p className="text-xs text-gray-500 dark:text-zinc-100 max-w-md leading-relaxed">
                     {analysis?.summary || 'Automated evaluation completed by Gemini AI.'}
                   </p>
                 </div>
 
-                <div className="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-100 dark:bg-black/40 border border-slate-200 dark:border-white/5 min-w-[90px]">
+                <div className="flex flex-col items-center justify-center p-3 rounded-xl bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/50 min-w-[90px]">
                   <span
                     className={`text-3xl font-black ${
                       threatLevel === 'malicious'
@@ -509,28 +508,28 @@ export function EmailDetailDrawer({
                         : threatLevel === 'suspicious'
                         ? 'text-amber-500 dark:text-amber-400'
                         : 'text-emerald-500 dark:text-emerald-400'
-                    }`}
+    }`}
                   >
                     {threatScore}
                   </span>
-                  <span className="text-[10px] text-slate-500 dark:text-gray-400 uppercase tracking-wider font-medium">Score / 100</span>
+                  <span className="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wider font-medium">Score / 100</span>
                 </div>
               </div>
 
               {/* Phishing / Spoofing Indicators */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-gray-300 flex items-center gap-2">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-zinc-100 flex items-center gap-2">
                     <AlertOctagon className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
                     Phishing & Spoofing Indicators ({analysis?.indicators.length || 0})
                   </h4>
-                  <span className="text-[11px] text-slate-500 dark:text-gray-500">
+                  <span className="text-[11px] text-gray-500 dark:text-gray-500">
                     Confidence: {analysis?.confidence ?? 90}%
                   </span>
                 </div>
 
                 {(!analysis?.indicators || analysis.indicators.length === 0) ? (
-                  <div className="p-4 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5 text-slate-500 dark:text-gray-400 text-xs text-center">
+                  <div className="p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-zinc-800/50 text-gray-500 dark:text-gray-400 text-xs text-center">
                     No suspicious phishing or spoofing indicators were found in this message.
                   </div>
                 ) : (
@@ -538,7 +537,7 @@ export function EmailDetailDrawer({
                     {analysis.indicators.map((ind, i) => (
                       <div
                         key={i}
-                        className="p-3.5 rounded-xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-transparent hover:border-slate-300 dark:hover:border-white/20 transition-all flex items-start gap-3"
+                        className="p-3.5 rounded-xl bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 hover:border-gray-200 dark:hover:border-white/20 transition-all flex items-start gap-3"
                       >
                         <div
                           className={`mt-0.5 w-2 h-2 rounded-full shrink-0 ${
@@ -549,11 +548,11 @@ export function EmailDetailDrawer({
                               : ind.severity === 'medium'
                               ? 'bg-amber-500 ring-4 ring-amber-500/20'
                               : 'bg-blue-500 ring-4 ring-blue-500/20'
-                          }`}
+    }`}
                         />
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="text-[11px] px-2 py-0.5 rounded bg-slate-200/80 dark:bg-white/10 font-medium text-slate-700 dark:text-gray-300">
+                            <span className="text-[11px] px-2 py-0.5 rounded bg-gray-200/80 dark:bg-white/10 font-medium text-gray-900 dark:text-zinc-100">
                               {ind.category}
                             </span>
                             <span
@@ -564,13 +563,13 @@ export function EmailDetailDrawer({
                                   ? 'text-orange-600 dark:text-orange-400'
                                   : ind.severity === 'medium'
                                   ? 'text-amber-600 dark:text-amber-400'
-                                  : 'text-blue-600 dark:text-blue-400'
-                              }`}
+                                  : 'text-emerald-600 dark:text-emerald-400'
+    }`}
                             >
                               [{ind.severity}]
                             </span>
                           </div>
-                          <p className="text-xs text-slate-700 dark:text-gray-200 leading-relaxed font-sans">
+                          <p className="text-xs text-gray-900 dark:text-gray-200 leading-relaxed font-sans">
                             {ind.finding}
                           </p>
                         </div>
@@ -581,7 +580,7 @@ export function EmailDetailDrawer({
               </div>
 
               {/* Recommended Action Box */}
-              <div className="p-4 rounded-xl bg-slate-100 dark:bg-cyan-950/20 border border-slate-200 dark:border-cyan-500/30 space-y-1.5 shadow-sm">
+              <div className="p-4 rounded-xl bg-gray-50 dark:bg-cyan-950/20 border border-gray-200 dark:border-cyan-500/30 space-y-1.5 shadow-sm">
                 <div className="text-xs font-bold text-cyan-700 dark:text-cyan-300 flex items-center gap-1.5">
                   <Shield className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
                   Recommended User Action
@@ -599,15 +598,15 @@ export function EmailDetailDrawer({
               {/* Extracted Links Section */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-gray-300 flex items-center gap-2">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-zinc-100 flex items-center gap-2">
                     <ExternalLink className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
                     Extracted & Defanged URLs ({email.extracted_urls.length})
                   </h4>
-                  <span className="text-[10px] text-slate-500 dark:text-gray-400">URLs defanged for safe inspection</span>
+                  <span className="text-[10px] text-gray-500 dark:text-gray-400">URLs defanged for safe inspection</span>
                 </div>
 
                 {email.extracted_urls.length === 0 ? (
-                  <div className="p-4 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5 text-slate-500 dark:text-gray-400 text-xs">
+                  <div className="p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-zinc-800/50 text-gray-500 dark:text-gray-400 text-xs">
                     No external hyperlinks detected in this email.
                   </div>
                 ) : (
@@ -617,14 +616,14 @@ export function EmailDetailDrawer({
                       return (
                         <div
                           key={idx}
-                          className="p-3 rounded-xl bg-slate-100 dark:bg-black/40 border border-slate-200 dark:border-white/10 flex items-center justify-between gap-3 text-xs"
+                          className="p-3 rounded-xl bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/50 flex items-center justify-between gap-3 text-xs"
                         >
                           <div className="font-mono text-cyan-700 dark:text-cyan-300 truncate select-all">
                             {defanged}
                           </div>
                           <button
                             onClick={() => handleCopy(rawUrl)}
-                            className="p-1.5 rounded-lg bg-slate-200 hover:bg-slate-300 dark:bg-white/10 dark:hover:bg-white/20 text-slate-700 dark:text-gray-300 transition-colors shrink-0 flex items-center gap-1 text-[11px]"
+                            className="p-1.5 rounded-lg bg-gray-200 hover:bg-slate-300 dark:bg-white/10 dark:hover:bg-white/20 text-gray-900 dark:text-zinc-100 transition-colors shrink-0 flex items-center gap-1 text-[11px]"
                             title="Copy link"
                           >
                             {copiedUrl === rawUrl ? (
@@ -695,7 +694,7 @@ export function EmailDetailDrawer({
                         return (
                           <div
                             key={att.id}
-                            className="p-3 rounded-xl bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 text-xs"
+                            className="p-3 rounded-xl bg-white dark:bg-black/40 border border-gray-200 dark:border-zinc-800/50 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 text-xs"
                           >
                             <div className="flex items-center gap-2.5 min-w-0">
                               <div
@@ -703,14 +702,13 @@ export function EmailDetailDrawer({
                                 style={{
                                   backgroundColor: config.badgeBg,
                                   borderColor: config.badgeBorder,
-                                  color: config.color,
-                                }}
+                                  color: config.color }}
                               >
                                 <FileText className="w-3.5 h-3.5" />
                               </div>
                               <div className="min-w-0 flex-1">
                                 <div className="flex items-center gap-2">
-                                  <div className="font-semibold text-slate-900 dark:text-white truncate max-w-sm" title={att.filename}>
+                                  <div className="font-semibold text-gray-900 dark:text-zinc-100 truncate max-w-sm" title={att.filename}>
                                     {att.filename}
                                   </div>
                                   {/* On desktop: badge is beside the filename */}
@@ -719,28 +717,26 @@ export function EmailDetailDrawer({
                                     style={{
                                       backgroundColor: config.badgeBg,
                                       borderColor: config.badgeBorder,
-                                      color: config.color,
-                                    }}
+                                      color: config.color }}
                                   >
                                     {config.label}
                                   </span>
                                 </div>
-                                <div className="text-[11px] text-slate-500 dark:text-gray-400 mt-0.5">
+                                <div className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">
                                   {att.mimeType} · {att.formattedSize}
                                 </div>
                               </div>
                             </div>
 
                             {/* Actions line: on mobile, badge + download button on the same line */}
-                            <div className="flex items-center justify-between sm:justify-end gap-2 pt-1.5 sm:pt-0 border-t border-slate-200/60 dark:border-white/5 sm:border-t-0 shrink-0">
+                            <div className="flex items-center justify-between sm:justify-end gap-2 pt-1.5 sm:pt-0 border-t border-gray-200/60 dark:border-zinc-800/50 sm:border-t-0 shrink-0">
                               {/* On mobile: badge is on the same line as the download button */}
                               <span
                                 className="sm:hidden inline-flex text-[10px] font-semibold px-2 py-0.5 rounded border whitespace-nowrap shrink-0"
                                 style={{
                                   backgroundColor: config.badgeBg,
                                   borderColor: config.badgeBorder,
-                                  color: config.color,
-                                }}
+                                  color: config.color }}
                               >
                                 {config.label}
                               </span>
@@ -748,7 +744,7 @@ export function EmailDetailDrawer({
                               {!isImageWithMultiple ? (
                                 <button
                                   onClick={() => handleDownloadAttachment(att)}
-                                  className="p-1.5 px-3 rounded-lg bg-slate-200 hover:bg-slate-300 dark:bg-white/10 dark:hover:bg-white/20 text-cyan-700 dark:text-cyan-300 transition-colors shrink-0 flex items-center gap-1.5 text-[11px] font-medium cursor-pointer"
+                                  className="p-1.5 px-3 rounded-lg bg-gray-200 hover:bg-slate-300 dark:bg-white/10 dark:hover:bg-white/20 text-cyan-700 dark:text-cyan-300 transition-colors shrink-0 flex items-center gap-1.5 text-[11px] font-medium cursor-pointer"
                                   title={`Download ${att.filename}`}
                                 >
                                   <Download className="w-3.5 h-3.5" />
@@ -770,11 +766,11 @@ export function EmailDetailDrawer({
 
               {/* Email Body Rendering */}
               <div className="space-y-2">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-gray-300 flex items-center gap-2">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-zinc-100 flex items-center gap-2">
                   <Mail className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                   Email Body Preview
                 </h4>
-                <div className="p-4 rounded-xl bg-slate-50 dark:bg-[#090a0f] border border-slate-200 dark:border-white/10 text-xs text-slate-800 dark:text-gray-200 font-sans leading-relaxed whitespace-pre-wrap selection:bg-cyan-500/30">
+                <div className="p-4 rounded-xl bg-gray-50 dark:bg-zinc-800 border-none border border-gray-200 dark:border-zinc-800/50 text-xs text-gray-900 dark:text-gray-200 font-sans leading-relaxed whitespace-pre-wrap selection:bg-cyan-500/30">
                   {email.body_text}
                 </div>
               </div>
@@ -784,24 +780,24 @@ export function EmailDetailDrawer({
           {/* TAB 3: RFC HEADERS */}
           {activeTab === 'headers' && (
             <div className="space-y-3">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-gray-300 flex items-center gap-2">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-zinc-100 flex items-center gap-2">
                 <FileCode className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
                 Parsed RFC 822 Email Headers
               </h4>
-              <div className="rounded-xl border border-slate-200 dark:border-white/10 overflow-hidden bg-slate-50 dark:bg-[#090a0f]">
+              <div className="rounded-xl border border-gray-200 dark:border-zinc-800/50 overflow-hidden bg-gray-50 dark:bg-zinc-800 border-none">
                 <table className="w-full text-left text-xs font-mono">
                   <tbody>
                     {Object.entries(email.headers).map(([key, val], idx) => (
                       <tr
                         key={key}
-                        className={`border-b border-slate-200 dark:border-white/5 ${
-                          idx % 2 === 0 ? 'bg-slate-100/40 dark:bg-white/[0.01]' : 'bg-slate-100/80 dark:bg-white/[0.03]'
+                        className={`border-b border-gray-200 dark:border-zinc-800/50 ${
+                          idx % 2 === 0 ? 'bg-gray-50/40 dark:bg-zinc-900/50' : 'bg-gray-50/80 dark:bg-zinc-900/50'
                         }`}
                       >
                         <td className="py-2.5 px-3 text-cyan-700 dark:text-cyan-400 font-semibold uppercase tracking-wider w-1/4 select-all">
                           {key}
                         </td>
-                        <td className="py-2.5 px-3 text-slate-800 dark:text-gray-300 break-all select-all">
+                        <td className="py-2.5 px-3 text-gray-900 dark:text-zinc-100 break-all select-all">
                           {val}
                         </td>
                       </tr>
@@ -814,11 +810,11 @@ export function EmailDetailDrawer({
         </div>
 
         {/* Drawer Action Footer */}
-        <div className="px-2.5 py-2.5 sm:px-5 sm:py-3.5 border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#12131d] flex items-center justify-between gap-1 sm:gap-2 flex-nowrap">
+        <div className="px-2.5 py-2.5 sm:px-5 sm:py-3.5 border-t border-gray-200 dark:border-zinc-800/50 bg-white dark:bg-zinc-800 flex items-center justify-between gap-1 sm:gap-2 flex-nowrap">
           <div className="flex items-center gap-1 sm:gap-2 shrink-0">
             <button
               onClick={handleExportJson}
-              className="px-2 py-1.5 sm:px-3 sm:py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-700 dark:text-gray-300 text-[11px] sm:text-xs font-medium border border-slate-200 dark:border-white/10 flex items-center gap-1 sm:gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="px-2 py-1.5 sm:px-3 sm:py-2 rounded-xl bg-gray-50 hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 text-gray-900 dark:text-zinc-100 text-[11px] sm:text-xs font-medium border border-gray-200 dark:border-zinc-800/50 flex items-center gap-1 sm:gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             >
               <Download className="w-3.5 h-3.5 shrink-0" />
               <span>Export JSON</span>
@@ -826,7 +822,7 @@ export function EmailDetailDrawer({
             {!analysis?.is_reviewed && (
               <button
                 onClick={() => markAsReviewed(email.id)}
-                className="px-2 py-1.5 sm:px-3 sm:py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-700 dark:text-gray-300 text-[11px] sm:text-xs font-medium border border-slate-200 dark:border-white/10 flex items-center gap-1 sm:gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                className="px-2 py-1.5 sm:px-3 sm:py-2 rounded-xl bg-gray-50 hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 text-gray-900 dark:text-zinc-100 text-[11px] sm:text-xs font-medium border border-gray-200 dark:border-zinc-800/50 flex items-center gap-1 sm:gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
               >
                 <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                 <span>Mark Safe</span>
@@ -842,14 +838,14 @@ export function EmailDetailDrawer({
                   <span className="leading-none">SOC Escalated</span>
                 </div>
               ) : isAnalyzedBySoc ? (
-                <div className="px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full bg-[#181326] border border-purple-500/40 text-purple-200 text-[11px] sm:text-xs font-semibold inline-flex items-center gap-1 sm:gap-2 leading-none shadow-sm shadow-purple-950/50 whitespace-nowrap shrink-0">
+                <div className="px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white dark:bg-zinc-800 border border-purple-500/40 text-purple-200 text-[11px] sm:text-xs font-semibold inline-flex items-center gap-1 sm:gap-2 leading-none shadow-sm  whitespace-nowrap shrink-0">
                   <Check className="w-3.5 h-3.5 text-purple-400 shrink-0 stroke-[2.5]" />
                   <span className="leading-none">Escalation Completed</span>
                 </div>
               ) : (
                 <button
                   onClick={() => setEscalateModalOpen(true)}
-                  className="px-2 sm:px-4 py-1.5 sm:py-2 rounded-xl text-white text-[11px] sm:text-xs font-semibold flex items-center gap-1 sm:gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 shadow-md shadow-purple-900/30 transition-all active:scale-95 whitespace-nowrap shrink-0 cursor-pointer"
+                  className="px-2 sm:px-4 py-1.5 sm:py-2 rounded-xl text-white text-[11px] sm:text-xs font-semibold flex items-center gap-1 sm:gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 shadow-md  transition-all active:scale-95 whitespace-nowrap shrink-0 cursor-pointer"
                 >
                   <Send className="w-3.5 h-3.5 shrink-0" />
                   <span><span className="hidden min-[400px]:inline">Escalate to </span>SOC</span>
@@ -859,7 +855,7 @@ export function EmailDetailDrawer({
 
             <button
               onClick={handleDeepForensics}
-              className="px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-white text-[11px] sm:text-xs font-semibold flex items-center gap-1 sm:gap-1.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 shadow-md shadow-cyan-900/30 transition-all active:scale-95 whitespace-nowrap shrink-0 cursor-pointer"
+              className="px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-white text-[11px] sm:text-xs font-semibold flex items-center gap-1 sm:gap-1.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 shadow-md  transition-all active:scale-95 whitespace-nowrap shrink-0 cursor-pointer"
             >
               <Eye className="w-3.5 h-3.5 shrink-0" />
               <span>Deep Forensics</span>
@@ -872,31 +868,31 @@ export function EmailDetailDrawer({
       {/* Escalate Confirmation Modal */}
       {escalateModalOpen && (
         <div className="fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-4 bg-black/70 backdrop-blur-md overflow-y-auto">
-          <div className="w-full max-w-md bg-white dark:bg-[#13141f] border border-slate-200 dark:border-white/15 rounded-2xl p-4 sm:p-6 shadow-2xl space-y-4 text-slate-900 dark:text-white animate-scale-in max-h-[92vh] overflow-y-auto scrollbar-thin">
+          <div className="w-full max-w-md bg-white dark:bg-zinc-800 border border-gray-200 dark:border-white/15 rounded-2xl p-4 sm:p-6 shadow-2xl space-y-4 text-gray-900 dark:text-zinc-100 animate-scale-in max-h-[92vh] overflow-y-auto scrollbar-thin">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
                 <div className="p-2 rounded-xl bg-purple-500/20 text-purple-700 dark:text-purple-400 border border-purple-500/30">
                   <Send className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-slate-900 dark:text-white">Escalate Email to SOC</h3>
-                  <p className="text-xs text-slate-500 dark:text-gray-400">Security Operations Center Incident Dispatch</p>
+                  <h3 className="text-sm font-bold text-gray-900 dark:text-zinc-100">Escalate Email to SOC</h3>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Security Operations Center Incident Dispatch</p>
                 </div>
               </div>
               <button
                 onClick={() => setEscalateModalOpen(false)}
-                className="text-slate-400 hover:text-slate-700 dark:text-gray-400 dark:hover:text-white"
+                className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <p className="text-xs text-slate-600 dark:text-gray-300 leading-relaxed">
+            <p className="text-xs text-gray-500 dark:text-zinc-100 leading-relaxed">
               This email and its full headers, MIME body, and Gemini threat evaluation will be dispatched directly into the SOC Analyst queue as an urgent case ticket.
             </p>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-700 dark:text-gray-300">
+              <label className="text-xs font-semibold text-gray-900 dark:text-zinc-100">
                 Additional Comments / Context for SOC (optional):
               </label>
               <textarea
@@ -904,7 +900,7 @@ export function EmailDetailDrawer({
                 onChange={(e) => setEscalateNote(e.target.value)}
                 placeholder="e.g., I received this email right after an IT announcement. Links look suspicious."
                 rows={3}
-                className="w-full rounded-xl bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 p-3 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors resize-none"
+                className="w-full rounded-xl bg-white dark:bg-black/40 border border-gray-200 dark:border-zinc-800/50 p-3 text-xs text-gray-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors resize-none"
               />
             </div>
 
@@ -912,7 +908,7 @@ export function EmailDetailDrawer({
               <button
                 type="button"
                 onClick={() => setEscalateModalOpen(false)}
-                className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-700 dark:text-gray-300 text-xs font-medium transition-colors"
+                className="px-4 py-2 rounded-xl bg-gray-50 hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 text-gray-900 dark:text-zinc-100 text-xs font-medium transition-colors"
               >
                 Cancel
               </button>
@@ -920,7 +916,7 @@ export function EmailDetailDrawer({
                 type="button"
                 disabled={isEscalating}
                 onClick={handleEscalate}
-                className="px-5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-purple-900/40 transition-all disabled:opacity-50"
+                className="px-5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg  transition-all disabled:opacity-50"
               >
                 {isEscalating ? 'Submitting...' : 'Confirm Escalation'}
               </button>

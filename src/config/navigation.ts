@@ -36,8 +36,6 @@ export const NAV_ITEMS: NavItem[] = [
   { id: 'origin-investigation',label: 'Origin Investigation',icon: MapPin,         roles: ['analyst'] },
   { id: 'attack-graph',        label: 'Attack Graph',       icon: Share2,          roles: ['analyst'] },
   { id: 'reports',             label: 'Reports',            icon: FileText,        roles: ['analyst'] },
-  { id: 'campaigns',           label: 'Campaigns',          icon: Network,         roles: ['analyst'] },
-  { id: 'alerts',              label: 'Alerts',             icon: Bell,            roles: ['analyst'] },
   { id: 'user-requests',       label: 'User Requests',      icon: Inbox,           roles: ['analyst'] },
 
   // ── Standard user ─────────────────────────────────────────────────────────

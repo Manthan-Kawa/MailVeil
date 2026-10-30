@@ -49,6 +49,10 @@ export function isHashedPassword(val?: string): boolean {
 }
 
 export const INITIAL_USERS_DB: StoredAccount[] = [
+  { email: 'demo@analyst', password: '12345678', method: 'email', originalProvider: 'email' },
+  { email: 'demo@analyst.com', password: '12345678', method: 'email', originalProvider: 'email' },
+  { email: 'demo@user', password: '12345678', method: 'email', originalProvider: 'email' },
+  { email: 'demo@user.com', password: '12345678', method: 'email', originalProvider: 'email' },
   { email: 'sentinelx.analyst@gmail.com', password: 'password', method: 'email', originalProvider: 'email' },
   { email: 'analyst@gmail.com', password: 'password', method: 'email', originalProvider: 'email' },
   { email: 'demouser1@gmail.com', password: 'password', method: 'email', originalProvider: 'email' },
@@ -244,6 +248,13 @@ export class AuthAccountService {
       if (!stored) return false;
       return stored === candidatePassword || stored === candidateHash;
     };
+
+    if (
+      (clean === 'demo@user' || clean === 'demo@user.com' || clean === 'demo@analyst' || clean === 'demo@analyst.com') &&
+      (candidatePassword === '12345678' || candidatePassword === 'password')
+    ) {
+      return true;
+    }
 
     if (checkMatch(account.password)) return true;
 

@@ -175,7 +175,6 @@ function LedgerWorkflow() {
                         background: 'rgba(34,211,238,0.1)',
                         borderColor: 'rgba(34,211,238,0.25)',
                         color: '#22d3ee',
-                        boxShadow: '0 0 10px rgba(34,211,238,0.15)',
                       }}
                     >
                       <Icon className="w-4 h-4" />
@@ -322,11 +321,7 @@ export function EvidenceVaultPage({ onNavigate }: { onNavigate?: (route: string)
 
             <button
               onClick={() => setShowIngestModal(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-white transition-all font-mono"
-              style={{
-                background: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)',
-                boxShadow: '0 0 12px rgba(14,165,233,0.3)',
-              }}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 transition-all font-mono shadow-sm"
             >
               <Upload className="w-3 h-3" />
               <span>Add Evidence</span>

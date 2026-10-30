@@ -446,7 +446,6 @@ function CaseDetail({ caseData, onBack }: { caseData: InvestigationCase; onBack:
           style={{
             background: `linear-gradient(145deg, #090b12 0%, #0c0f1a 100%)`,
             border: `1px solid ${sev.border}`,
-            boxShadow: `0 0 30px ${sev.glow}`,
           }}
         >
           <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
@@ -540,8 +539,7 @@ function CaseDetail({ caseData, onBack }: { caseData: InvestigationCase; onBack:
                   <div key={i} className="flex items-start gap-3">
                     <div className="relative mt-1.5 shrink-0">
                       <span
-                        className="w-2 h-2 rounded-full block"
-                        style={{ background: '#a855f7', boxShadow: '0 0 6px rgba(168,85,247,0.5)' }}
+                        className="w-2 h-2 rounded-full block bg-purple-500"
                       />
                     </div>
                     <div>
@@ -586,14 +584,12 @@ function CaseDetail({ caseData, onBack }: { caseData: InvestigationCase; onBack:
                                 background: 'rgba(239,68,68,0.2)',
                                 borderColor: '#ef4444',
                                 color: '#f87171',
-                                boxShadow: '0 0 12px rgba(239,68,68,0.4)',
                               }
                             : i === caseData.timeline.length - 1
                             ? {
                                 background: 'rgba(34,197,94,0.2)',
                                 borderColor: '#22c55e',
                                 color: '#4ade80',
-                                boxShadow: '0 0 12px rgba(34,197,94,0.4)',
                               }
                             : {
                                 background: 'rgba(255,255,255,0.05)',

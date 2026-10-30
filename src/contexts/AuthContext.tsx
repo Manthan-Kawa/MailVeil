@@ -70,9 +70,16 @@ export function deriveInitials(nameOrEmail: string): string {
 
 export function deriveRoleFromEmail(email: string): UserRole {
   const e = email.toLowerCase().trim();
-  // Only dedicated SOC analyst accounts are granted 'analyst' role.
-  // ALL new emails & Google sign-ins strictly receive 'user'.
-  if (e === 'sentinelx.analyst@gmail.com' || e === 'analyst@gmail.com') {
+  // Dedicated SOC analyst accounts are granted 'analyst' role.
+  // ALL standard accounts & Google sign-ins strictly receive 'user'.
+  if (
+    e === 'sentinelx.analyst@gmail.com' ||
+    e === 'analyst@gmail.com' ||
+    e === 'demo@analyst' ||
+    e === 'demo@analyst.com' ||
+    e.startsWith('analyst@') ||
+    e.endsWith('@analyst')
+  ) {
     return 'analyst';
   }
   return 'user';

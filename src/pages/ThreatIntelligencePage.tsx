@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import {
   Server,
   Globe,
+  Globe2,
   Link2,
   Network,
   Search,
@@ -16,8 +17,10 @@ import {
   Link,
   Archive,
   Check,
+  Mail,
   type LucideIcon,
 } from 'lucide-react';
+import { motion } from 'framer-motion';
 import {
   IP_INTEL,
   DOMAIN_INTEL,
@@ -56,7 +59,7 @@ const LEVEL_COLORS: Record<string, { bg: string; border: string; text: string; g
   high:     { bg: 'rgba(249,115,22,0.08)',  border: 'rgba(249,115,22,0.35)',  text: 'text-orange-600 dark:text-orange-400', glow: 'none' },
   medium:   { bg: 'rgba(245,158,11,0.08)',  border: 'rgba(245,158,11,0.35)',  text: 'text-amber-600 dark:text-amber-400',  glow: 'none' },
   low:      { bg: 'rgba(59,130,246,0.08)',  border: 'rgba(59,130,246,0.35)',  text: 'text-blue-600 dark:text-blue-400',   glow: 'none' },
-  info:     { bg: 'rgba(107,114,128,0.08)', border: 'rgba(107,114,128,0.35)', text: 'text-slate-600 dark:text-gray-400',   glow: 'none' },
+  info:     { bg: 'rgba(107,114,128,0.08)', border: 'rgba(107,114,128,0.35)', text: 'text-gray-600 dark:text-zinc-400 dark:text-gray-400',   glow: 'none' },
 };
 
 /* ─── Slide-in entrance wrapper ─── */
@@ -79,37 +82,6 @@ export function ThreatIntelligencePage({ onNavigate }: { onNavigate?: (route: st
   const { snapshotThreatIntel } = useEvidence();
   const [vaultSaved, setVaultSaved] = useState(false);
   const [isSavingToVault, setIsSavingToVault] = useState(false);
-
-  const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-  const [indicatorStyle, setIndicatorStyle] = useState<{
-    left: number;
-    top: number;
-    width: number;
-    height: number;
-    opacity: number;
-  }>({ left: 0, top: 0, width: 0, height: 0, opacity: 0 });
-
-  useLayoutEffect(() => {
-    const updateIndicator = () => {
-      const currentTabEl = tabRefs.current[tab];
-      if (currentTabEl) {
-        setIndicatorStyle({
-          left: currentTabEl.offsetLeft,
-          top: currentTabEl.offsetTop,
-          width: currentTabEl.offsetWidth,
-          height: currentTabEl.offsetHeight,
-          opacity: 1,
-        });
-      }
-    };
-    updateIndicator();
-    const rafId = requestAnimationFrame(updateIndicator);
-    window.addEventListener('resize', updateIndicator);
-    return () => {
-      cancelAnimationFrame(rafId);
-      window.removeEventListener('resize', updateIndicator);
-    };
-  }, [tab]);
 
   const hasLive = Boolean(currentResult && (currentResult.case_id || currentResult.verdict));
   const rawLevel = (currentResult?.alert_level || 'info').toLowerCase();
@@ -152,53 +124,34 @@ export function ThreatIntelligencePage({ onNavigate }: { onNavigate?: (route: st
 
       {/* ── Page Header ── */}
       <SlideIn delay={0} direction="down">
-        <div className="space-y-3">
-          <div className="flex items-start gap-2.5 sm:gap-3">
-            {onNavigate && (
-              <button
-                onClick={() => onNavigate('header-forensics')}
-                className="mt-0.5 w-8 h-8 rounded-xl flex items-center justify-center text-blue-400 hover:text-blue-300 transition-all hover:scale-105 active:scale-95 cursor-pointer shrink-0"
-                style={{
-                  background: 'rgba(59, 130, 246, 0.05)',
-                  border: '1px solid rgba(59, 130, 246, 0.45)',
-                  boxShadow: '0 0 10px rgba(59, 130, 246, 0.15)',
-                }}
-                title="Back to Header Forensics"
-              >
-                <ArrowLeft className="w-4 h-4" />
-              </button>
-            )}
-            <div className="min-w-0 flex-1">
-              <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight leading-snug">Threat Intelligence</h2>
-              <p className="text-xs sm:text-sm text-slate-600 dark:text-gray-400 mt-0.5 leading-relaxed">
-                Correlated infrastructure threat intelligence, WHOIS, DNS records &amp; homoglyph analysis
-              </p>
-            </div>
+        <div className="space-y-2">
+          <div className="flex items-center gap-3 flex-wrap">
+            <h2 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-zinc-100 tracking-tight leading-snug">Threat Intelligence</h2>
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-purple-950/50 text-purple-300 border border-purple-500/40">
+              INFRASTRUCTURE &amp; REPUTATION
+            </span>
           </div>
+          <p className="text-xs sm:text-sm text-gray-700 dark:text-zinc-300 mt-1 leading-relaxed">
+            Correlated infrastructure threat intelligence, WHOIS, DNS records &amp; homoglyph analysis
+          </p>
 
           {/* ── Synced Analysis Banner ── */}
           {hasLive && currentResult && (
             <div
-              className="rounded-2xl p-3.5 sm:p-4 overflow-hidden max-w-full"
-              style={{
-                background: lc.bg,
-                border: `1px solid ${lc.border}`,
-                boxShadow: lc.glow,
-              }}
+              className="rounded-2xl p-3.5 sm:p-4 overflow-hidden max-w-full bg-white dark:bg-zinc-800 border border-gray-200 dark:border-white/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
             >
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3">
                 <div className="flex items-center gap-2 min-w-0 flex-1">
                   <div
-                    className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
-                    style={{ background: lc.border, opacity: 0.9 }}
+                    className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 bg-blue-600 text-white"
                   >
-                    <Link className="w-3.5 h-3.5 text-white" />
+                    <Link className="w-3.5 h-3.5" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-[10px] font-mono uppercase tracking-widest text-slate-500 dark:text-gray-400 font-bold leading-none mb-0.5">Synced from Email Analysis</p>
-                    <p className="text-xs font-bold text-slate-900 dark:text-white font-mono truncate block" title={`${currentResult.case_id || 'ANALYSIS-ACTIVE'}${subjectHeader ? ` — ${subjectHeader}` : ''}`}>
+                    <p className="text-[10px] font-mono uppercase tracking-widest text-gray-500 dark:text-zinc-300 font-bold leading-none mb-0.5">Synced from Email Analysis</p>
+                    <p className="text-xs font-bold text-gray-900 dark:text-zinc-100 font-mono truncate block" title={`${currentResult.case_id || 'ANALYSIS-ACTIVE'}${subjectHeader ? ` — ${subjectHeader}` : ''}`}>
                       <span>{currentResult.case_id || 'ANALYSIS-ACTIVE'}</span>
-                      {subjectHeader && <span className="text-slate-600 dark:text-gray-300 font-normal"> — {subjectHeader}</span>}
+                      {subjectHeader && <span className="text-gray-600 dark:text-zinc-300 font-normal"> — {subjectHeader}</span>}
                     </p>
                   </div>
                 </div>
@@ -224,8 +177,8 @@ export function ThreatIntelligencePage({ onNavigate }: { onNavigate?: (route: st
               </div>
 
               {/* Auth badges */}
-              <div className="flex items-center gap-1.5 sm:gap-2 mt-2.5 pt-2.5 border-t border-slate-200 dark:border-white/5 flex-wrap min-w-0">
-                <span className="text-[10px] text-slate-500 dark:text-gray-400 font-mono uppercase mr-1 shrink-0">Auth:</span>
+              <div className="flex items-center gap-1.5 sm:gap-2 mt-2.5 pt-2.5 border-t border-gray-200 dark:border-zinc-800/50 flex-wrap min-w-0">
+                <span className="text-[10px] text-gray-500 dark:text-zinc-300 font-mono uppercase mr-1 shrink-0">Auth:</span>
                 {(['spf', 'dkim', 'dmarc'] as const).map((k) => {
                   const val = currentResult.threat_intel?.[k] || 'UNKNOWN';
                   const isPass = val === 'PASS';
@@ -251,17 +204,13 @@ export function ThreatIntelligencePage({ onNavigate }: { onNavigate?: (route: st
       {!currentResult ? (
         <SlideIn delay={60} direction="up">
           <div
-            className="rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-6 bg-white dark:bg-[#090b12] border border-slate-200 dark:border-transparent shadow-sm dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+            className="rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-6 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-white/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
           >
-            <div
-              className="w-16 h-16 rounded-2xl flex items-center justify-center bg-blue-500/10 border border-blue-500/25 text-blue-600 dark:text-blue-400"
-            >
-              <Server className="w-8 h-8" />
-            </div>
+            <Globe2 className="w-12 h-12 text-blue-500 dark:text-blue-400" />
 
             <div className="max-w-md space-y-2">
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">No Threat Intelligence in Session</h3>
-              <p className="text-xs text-slate-600 dark:text-gray-400 leading-relaxed font-mono">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white tracking-tight">No Threat Intelligence Analyzed</h3>
+              <p className="text-xs text-gray-700 dark:text-zinc-300 leading-relaxed font-mono">
                 Upload or paste an email in Email Analyzer to extract indicators of compromise (IOCs), WHOIS domain records, IP reputation scores, and homoglyph attack vectors.
               </p>
             </div>
@@ -269,21 +218,17 @@ export function ThreatIntelligencePage({ onNavigate }: { onNavigate?: (route: st
             <div className="flex flex-wrap items-center justify-center gap-3">
               <button
                 onClick={() => onNavigate?.('email-analyzer')}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white transition-all hover:scale-105 shadow-lg font-mono cursor-pointer"
-                style={{
-                  background: 'linear-gradient(135deg, #3b82f6, #6366f1)',
-                  boxShadow: '0 4px 16px rgba(59,130,246,0.3)',
-                }}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 font-mono transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-sm"
               >
-                <Server className="w-4 h-4" />
+                <Mail className="w-4 h-4" />
                 Go to Email Analyzer
               </button>
               <button
                 onClick={loadDemoCase}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-slate-700 hover:text-black dark:text-purple-200 dark:hover:text-purple-100 bg-slate-100 hover:bg-slate-200 dark:bg-purple-900/30 hover:dark:bg-purple-900/50 border border-slate-200 dark:border-purple-500/45 hover:dark:border-purple-400/60 transition-all font-mono cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-zinc-300 hover:text-white bg-zinc-800/80 hover:bg-zinc-700/80 dark:bg-[#18181b] dark:hover:bg-zinc-800 border border-zinc-700/50 dark:border-zinc-800 font-mono transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
               >
-                <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-                Load Sample Demo Email
+                <Sparkles className="w-4 h-4 text-purple-400" />
+                Load Sample Demo Session
               </button>
             </div>
           </div>
@@ -293,42 +238,37 @@ export function ThreatIntelligencePage({ onNavigate }: { onNavigate?: (route: st
           {/* ── Interactive Tabbed Container ── */}
           <SlideIn delay={100} direction="up">
             <div
-              className="rounded-2xl overflow-hidden bg-white dark:bg-[#090b12] border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+              className="rounded-2xl overflow-hidden bg-white dark:bg-zinc-800 border border-gray-200 dark:border-white/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
             >
               {/* Tabs header with smooth sliding indicator pill */}
-              <div className="relative isolate flex items-center gap-1 border-b border-slate-200 dark:border-white/10 p-1.5 sm:p-2 overflow-x-auto scrollbar-none touch-scroll">
-                {/* Smooth sliding indicator pill */}
-                <div
-                  className="absolute z-0 pointer-events-none rounded-xl bg-purple-500/15 dark:bg-purple-500/20 border border-purple-400/50 dark:border-purple-500/40 shadow-sm"
-                  style={{
-                    transform: `translate3d(${indicatorStyle.left}px, ${indicatorStyle.top}px, 0)`,
-                    width: indicatorStyle.width,
-                    height: indicatorStyle.height,
-                    opacity: indicatorStyle.opacity,
-                    transition: 'transform 300ms cubic-bezier(0.25, 1, 0.5, 1), width 300ms cubic-bezier(0.25, 1, 0.5, 1), height 300ms cubic-bezier(0.25, 1, 0.5, 1), opacity 150ms ease',
-                    left: 0,
-                    top: 0,
-                    zIndex: 0,
-                  }}
-                />
-
+              <div className="relative isolate flex items-center gap-1 border-b border-gray-200 dark:border-zinc-800/50 p-1.5 sm:p-2 overflow-x-auto scrollbar-none touch-scroll">
                 {TABS.map((t) => {
                   const Icon = t.icon;
                   const isActive = tab === t.id;
                   return (
                     <button
                       key={t.id}
-                      ref={(el) => { tabRefs.current[t.id] = el; }}
+                      type="button"
                       onClick={() => setTab(t.id)}
-                      style={{ zIndex: 10 }}
-                      className={`relative z-10 shrink-0 flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs font-bold transition-colors duration-200 whitespace-nowrap cursor-pointer ${
+                      className={`relative z-10 shrink-0 flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs font-bold transition-colors duration-200 whitespace-nowrap cursor-pointer select-none ${
                         isActive
-                          ? 'text-purple-700 dark:text-purple-300'
-                          : 'text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-gray-200'
+                          ? 'text-white font-bold'
+                          : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100/60 dark:hover:bg-zinc-800/40'
                       }`}
                     >
-                      <Icon className={`w-4 h-4 transition-colors duration-200 ${isActive ? 'text-purple-600 dark:text-purple-400' : 'text-slate-400 dark:text-gray-500'}`} />
-                      {t.label}
+                      {isActive && (
+                        <motion.div
+                          layoutId="activeThreatIntelTab"
+                          className="absolute inset-0 rounded-xl bg-blue-600"
+                          transition={{
+                            type: 'spring',
+                            stiffness: 450,
+                            damping: 32,
+                          }}
+                        />
+                      )}
+                      <Icon className={`relative z-10 w-4 h-4 transition-colors duration-200 ${isActive ? 'text-white' : 'text-gray-400 dark:text-zinc-400'}`} />
+                      <span className="relative z-10">{t.label}</span>
                     </button>
                   );
                 })}
@@ -359,10 +299,10 @@ export function ThreatIntelligencePage({ onNavigate }: { onNavigate?: (route: st
 
 function InfoRow({ label, value, mono = true }: { label: string; value: string; mono?: boolean }) {
   return (
-    <div className="flex items-center justify-between gap-3 py-2.5 border-b border-slate-200/60 dark:border-white/5 last:border-0">
-      <span className="text-xs text-slate-500 dark:text-gray-400 font-medium">{label}</span>
+    <div className="flex items-center justify-between gap-3 py-2.5 border-b border-gray-200/60 dark:border-zinc-800/50 last:border-0">
+      <span className="text-xs text-gray-500 dark:text-zinc-300 font-medium">{label}</span>
       <div className="flex items-center gap-1.5 min-w-0">
-        <span className={`text-xs text-slate-900 dark:text-white ${mono ? 'font-mono' : ''} text-right break-all font-semibold`}>{value}</span>
+        <span className={`text-xs text-gray-900 dark:text-white ${mono ? 'font-mono' : ''} text-right break-all font-semibold`}>{value}</span>
         {mono && <CopyButton value={value} />}
       </div>
     </div>
@@ -388,7 +328,7 @@ function ReputationBadge({ reputation, score }: { reputation: string; score: num
         <Icon className="w-3.5 h-3.5" />
         {reputation}
       </span>
-      <span className="text-xs text-slate-500 dark:text-gray-400 font-mono font-semibold">Score: {score}/100</span>
+      <span className="text-xs text-gray-500 dark:text-zinc-300 font-mono font-semibold">Score: {score}/100</span>
     </div>
   );
 }
@@ -418,13 +358,13 @@ function IPTab({ result }: { result: EmailAnalysisResult | null }) {
             <Server className="w-5 h-5 text-red-500 dark:text-red-400" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-slate-900 dark:text-white font-mono">{ip}</h3>
+            <h3 className="text-base font-bold text-gray-900 dark:text-white font-mono">{ip}</h3>
             <ReputationBadge reputation={reputation} score={reputationScore} />
           </div>
         </div>
 
         <div
-          className="rounded-xl p-4 bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.06]"
+          className="rounded-xl p-4 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
         >
           <InfoRow label="IP Address" value={ip} />
           <InfoRow label="ASN" value={asn} />
@@ -436,9 +376,9 @@ function IPTab({ result }: { result: EmailAnalysisResult | null }) {
         </div>
 
         <div
-          className="rounded-xl p-4 bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.06]"
+          className="rounded-xl p-4 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
         >
-          <h4 className="text-[10px] font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-3 font-mono">
+          <h4 className="text-[10px] font-bold text-gray-500 dark:text-zinc-300 uppercase tracking-widest mb-3 font-mono">
             Blocklist Appearances
           </h4>
           <div className="flex flex-wrap gap-2">
@@ -455,9 +395,9 @@ function IPTab({ result }: { result: EmailAnalysisResult | null }) {
       </div>
 
       <div
-        className="rounded-xl p-4 h-full bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.06]"
+        className="rounded-xl p-4 h-full bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
       >
-        <h4 className="text-[10px] font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-3 font-mono">
+        <h4 className="text-[10px] font-bold text-gray-500 dark:text-zinc-300 uppercase tracking-widest mb-3 font-mono">
           Related Indicators
         </h4>
         <div className="space-y-2">
@@ -472,10 +412,10 @@ function IPTab({ result }: { result: EmailAnalysisResult | null }) {
           ).map((ind) => (
             <div
               key={ind}
-              className="flex items-center gap-2 rounded-lg p-2.5 transition-colors bg-white dark:bg-black/40 border border-slate-200 dark:border-white/5"
+              className="flex items-center gap-2 rounded-lg p-2.5 transition-colors bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
             >
-              <ChevronRight className="w-3.5 h-3.5 text-slate-400 dark:text-gray-500 shrink-0" />
-              <span className="text-xs text-slate-900 dark:text-white font-mono break-all flex-1">{ind}</span>
+              <ChevronRight className="w-3.5 h-3.5 text-gray-400 dark:text-zinc-400 shrink-0" />
+              <span className="text-xs text-gray-900 dark:text-white font-mono break-all flex-1">{ind}</span>
               <CopyButton value={ind} />
             </div>
           ))}
@@ -503,14 +443,14 @@ function DomainTab({ result }: { result: EmailAnalysisResult | null }) {
           <Globe className="w-5 h-5 text-red-400" />
         </div>
         <div>
-          <h3 className="text-base font-bold text-slate-900 dark:text-white font-mono">{domain}</h3>
+          <h3 className="text-base font-bold text-gray-900 dark:text-white font-mono">{domain}</h3>
           <ReputationBadge reputation={result ? (result.threat_score >= 70 ? 'malicious' : 'suspicious') : DOMAIN_INTEL.reputation} score={result ? result.threat_score : 15} />
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div
-          className="rounded-xl p-4 bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.06]"
+          className="rounded-xl p-4 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
         >
           <InfoRow label="Domain" value={domain} />
           <InfoRow label="Registration Age" value={regAge} mono={false} />
@@ -521,20 +461,20 @@ function DomainTab({ result }: { result: EmailAnalysisResult | null }) {
         </div>
 
         <div
-          className="rounded-xl p-4 bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.06]"
+          className="rounded-xl p-4 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
         >
-          <h4 className="text-[10px] font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-3 font-mono">
+          <h4 className="text-[10px] font-bold text-gray-500 dark:text-zinc-300 uppercase tracking-widest mb-3 font-mono">
             DNS Records
           </h4>
           <div className="space-y-2">
             {DOMAIN_INTEL.dns.map((d) => (
               <div
                 key={d.type}
-                className="rounded-lg p-2.5 bg-white dark:bg-black/40 border border-slate-200 dark:border-white/5"
+                className="rounded-lg p-2.5 bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
               >
                 <span className="text-xs text-cyan-600 dark:text-cyan-400 font-mono font-bold">{d.type}</span>
                 <div className="flex items-center gap-1.5 mt-1">
-                  <span className="text-xs text-slate-900 dark:text-white font-mono break-all flex-1">{d.value}</span>
+                  <span className="text-xs text-gray-900 dark:text-white font-mono break-all flex-1">{d.value}</span>
                   <CopyButton value={d.value} />
                 </div>
               </div>
@@ -545,20 +485,20 @@ function DomainTab({ result }: { result: EmailAnalysisResult | null }) {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div
-          className="rounded-xl p-4 space-y-4 bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.06]"
+          className="rounded-xl p-4 space-y-4 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
         >
           <div>
-            <h4 className="text-[10px] font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-3 font-mono">
+            <h4 className="text-[10px] font-bold text-gray-500 dark:text-zinc-300 uppercase tracking-widest mb-3 font-mono">
               Nameservers
             </h4>
             <div className="space-y-2">
               {DOMAIN_INTEL.nameservers.map((ns) => (
                 <div
                   key={ns}
-                  className="flex items-center gap-2 rounded-lg p-2.5 bg-white dark:bg-black/40 border border-slate-200 dark:border-white/5"
+                  className="flex items-center gap-2 rounded-lg p-2.5 bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
                 >
-                  <Server className="w-3.5 h-3.5 text-slate-400 dark:text-gray-500 shrink-0" />
-                  <span className="text-xs text-slate-900 dark:text-white font-mono break-all flex-1">{ns}</span>
+                  <Server className="w-3.5 h-3.5 text-gray-400 dark:text-zinc-400 shrink-0" />
+                  <span className="text-xs text-gray-900 dark:text-white font-mono break-all flex-1">{ns}</span>
                   <CopyButton value={ns} />
                 </div>
               ))}
@@ -566,7 +506,7 @@ function DomainTab({ result }: { result: EmailAnalysisResult | null }) {
           </div>
 
           <div>
-            <h4 className="text-[10px] font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-3 font-mono">
+            <h4 className="text-[10px] font-bold text-gray-500 dark:text-zinc-300 uppercase tracking-widest mb-3 font-mono">
               Related Domains
             </h4>
             <div className="flex flex-wrap gap-2">
@@ -621,43 +561,41 @@ function LookalikeAnalysis({ result }: { result: EmailAnalysisResult | null }) {
 
   return (
     <div
-      className="rounded-xl p-4 bg-white dark:bg-transparent shadow-sm dark:shadow-none"
+      className="rounded-xl p-4 bg-white dark:bg-zinc-800 shadow-sm border border-red-500/30"
       style={{
         background: 'linear-gradient(135deg, rgba(239,68,68,0.06) 0%, rgba(220,38,38,0.02) 100%)',
-        border: '1px solid rgba(239,68,68,0.3)',
       }}
     >
-      <h4 className="text-xs font-bold text-slate-900 dark:text-white mb-1 flex items-center gap-2">
+      <h4 className="text-xs font-bold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
         <AlertTriangle className="w-4 h-4 text-red-500 dark:text-red-400" />
         Lookalike Domain Analysis
       </h4>
-      <p className="text-[11px] text-slate-500 dark:text-gray-400 mb-4">Homoglyph and typosquat detection</p>
+      <p className="text-[11px] text-gray-500 dark:text-zinc-300 mb-4">Homoglyph and typosquat detection</p>
 
       <div
-        className="rounded-lg p-3 mb-4 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/6"
+        className="rounded-lg p-3 mb-4 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-white/6"
       >
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <span className="text-[10px] text-slate-500 dark:text-gray-400 uppercase font-mono">Expected Target</span>
-            <p className="text-xs text-slate-900 dark:text-white font-mono font-bold mt-0.5">{expectedDomain}</p>
+            <span className="text-[10px] text-gray-500 dark:text-zinc-300 uppercase font-mono">Expected Target</span>
+            <p className="text-xs text-gray-900 dark:text-white font-mono font-bold mt-0.5">{expectedDomain}</p>
           </div>
           <div>
-            <span className="text-[10px] text-slate-500 dark:text-gray-400 uppercase font-mono">Observed Sender Domain</span>
+            <span className="text-[10px] text-gray-500 dark:text-zinc-300 uppercase font-mono">Observed Sender Domain</span>
             <p className="text-xs text-red-600 dark:text-red-400 font-mono font-bold mt-0.5">{observedDomain}</p>
           </div>
         </div>
-        <div className="mt-3 pt-3 border-t border-slate-200 dark:border-white/5">
+        <div className="mt-3 pt-3 border-t border-gray-200 dark:border-zinc-800/50">
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-xs text-slate-600 dark:text-gray-400">Similarity / Confidence</span>
+            <span className="text-xs text-gray-600 dark:text-zinc-300">Similarity / Confidence</span>
             <span className="text-base font-black text-red-600 dark:text-red-400 font-mono">{similarity}%</span>
           </div>
-          <div className="w-full h-2 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
+          <div className="w-full h-2 bg-slate-200 dark:bg-zinc-800 rounded-full overflow-hidden">
             <div
               className="h-full rounded-full"
               style={{
                 width: `${similarity}%`,
                 background: 'linear-gradient(90deg, #ef4444, #f97316)',
-                boxShadow: '0 0 8px rgba(239,68,68,0.6)',
               }}
             />
           </div>
@@ -668,13 +606,13 @@ function LookalikeAnalysis({ result }: { result: EmailAnalysisResult | null }) {
         {characteristics.map((c) => (
           <div
             key={c.trait}
-            className="rounded-lg p-2.5 bg-white dark:bg-black/30 border border-slate-200 dark:border-white/4"
+            className="rounded-lg p-2.5 bg-white dark:bg-black/30 border border-gray-200 dark:border-white/4"
           >
             <div className="flex items-start justify-between gap-2 mb-1">
-              <span className="text-xs text-slate-900 dark:text-white font-semibold">{c.trait}</span>
+              <span className="text-xs text-gray-900 dark:text-white font-semibold">{c.trait}</span>
               <span className={SEVERITY_BADGE[c.severity] || 'badge-high'}>{c.severity}</span>
             </div>
-            <p className="text-[11px] text-slate-600 dark:text-gray-400 leading-relaxed">{c.detail}</p>
+            <p className="text-[11px] text-gray-600 dark:text-zinc-300 leading-relaxed">{c.detail}</p>
           </div>
         ))}
       </div>
@@ -703,13 +641,13 @@ function URLTab({ result }: { result: EmailAnalysisResult | null }) {
             <Link2 className="w-5 h-5 text-red-500 dark:text-red-400" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-slate-900 dark:text-white font-mono break-all">{url}</h3>
+            <h3 className="text-base font-bold text-gray-900 dark:text-white font-mono break-all">{url}</h3>
             <ReputationBadge reputation={result ? (score >= 70 ? 'malicious' : 'suspicious') : URL_INTEL.reputation} score={score} />
           </div>
         </div>
 
         <div
-          className="rounded-xl p-4 bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.06]"
+          className="rounded-xl p-4 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
         >
           <InfoRow label="Full URL" value={url} />
           <InfoRow label="Domain" value={domain} />
@@ -719,9 +657,9 @@ function URLTab({ result }: { result: EmailAnalysisResult | null }) {
         </div>
 
         <div
-          className="rounded-xl p-4 bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.06]"
+          className="rounded-xl p-4 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
         >
-          <h4 className="text-[10px] font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-3 font-mono">
+          <h4 className="text-[10px] font-bold text-gray-500 dark:text-zinc-300 uppercase tracking-widest mb-3 font-mono">
             Payload URL / Redirect Chain
           </h4>
           <div className="space-y-2">
@@ -730,8 +668,8 @@ function URLTab({ result }: { result: EmailAnalysisResult | null }) {
               : URL_INTEL.redirectChain
             ).map((u, i) => (
               <div key={i} className="flex items-center gap-2">
-                <span className="text-xs text-slate-400 dark:text-gray-500 font-mono w-5 shrink-0">{i + 1}.</span>
-                <span className="text-xs text-slate-900 dark:text-white font-mono break-all flex-1">{u}</span>
+                <span className="text-xs text-gray-400 dark:text-zinc-400 font-mono w-5 shrink-0">{i + 1}.</span>
+                <span className="text-xs text-gray-900 dark:text-white font-mono break-all flex-1">{u}</span>
                 <CopyButton value={u} />
               </div>
             ))}
@@ -739,9 +677,9 @@ function URLTab({ result }: { result: EmailAnalysisResult | null }) {
         </div>
 
         <div
-          className="rounded-xl p-4 bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.06]"
+          className="rounded-xl p-4 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
         >
-          <h4 className="text-[10px] font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-3 font-mono">
+          <h4 className="text-[10px] font-bold text-gray-500 dark:text-zinc-300 uppercase tracking-widest mb-3 font-mono">
             Detection Signals
           </h4>
           <div className="space-y-2">
@@ -751,7 +689,7 @@ function URLTab({ result }: { result: EmailAnalysisResult | null }) {
             ).map((sig, i) => (
               <div key={i} className="flex items-start gap-2">
                 <XCircle className="w-4 h-4 text-red-500 dark:text-red-400 shrink-0 mt-0.5" />
-                <span className="text-xs text-slate-700 dark:text-gray-300">{sig}</span>
+                <span className="text-xs text-gray-700 dark:text-zinc-200">{sig}</span>
               </div>
             ))}
           </div>
@@ -759,9 +697,9 @@ function URLTab({ result }: { result: EmailAnalysisResult | null }) {
       </div>
 
       <div
-        className="rounded-xl p-6 flex flex-col items-center justify-center h-full bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.06]"
+        className="rounded-xl p-6 flex flex-col items-center justify-center h-full bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
       >
-        <h4 className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider mb-4 font-mono">
+        <h4 className="text-xs font-bold text-gray-500 dark:text-zinc-300 uppercase tracking-wider mb-4 font-mono">
           URL Risk Score
         </h4>
         <AnimatedCircleGauge score={URL_INTEL.riskScore} label="CRITICAL" />
@@ -839,36 +777,46 @@ function IndicatorsTab({ result }: { result: EmailAnalysisResult | null }) {
     <div className="space-y-5">
       <div className="flex flex-col sm:flex-row gap-3">
         <div
-          className="flex items-center gap-2 rounded-xl px-3 py-2 flex-1 bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.08]"
+          className="flex items-center gap-2 rounded-xl px-3 py-2 flex-1 bg-gray-100 dark:bg-zinc-800/50 border border-gray-200 dark:border-white/[0.08]"
         >
-          <Search className="w-4 h-4 text-slate-400 dark:text-gray-500" />
+          <Search className="w-4 h-4 text-gray-400 dark:text-zinc-400" />
           <input
             type="text"
             placeholder="Search indicators..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="bg-transparent text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none w-full"
+            className="bg-transparent text-xs text-gray-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 focus:outline-none w-full"
           />
         </div>
-        <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-thin">
-          {types.map((t) => (
-            <button
-              key={t}
-              onClick={() => setTypeFilter(t)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 shrink-0 cursor-pointer ${
-                typeFilter === t
-                  ? 'text-purple-700 dark:text-purple-300'
-                  : 'text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white'
-              }`}
-              style={
-                typeFilter === t
-                  ? { background: 'rgba(139,92,246,0.15)', border: '1px solid rgba(139,92,246,0.35)' }
-                  : { background: 'rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.08)' }
-              }
-            >
-              {t === 'all' ? 'All Types' : t}
-            </button>
-          ))}
+        <div className="flex items-center gap-1 overflow-x-auto scrollbar-none p-1 rounded-2xl bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800">
+          {types.map((t) => {
+            const active = typeFilter === t;
+            return (
+              <button
+                key={t}
+                type="button"
+                onClick={() => setTypeFilter(t)}
+                className={`relative px-3.5 py-1.5 rounded-xl text-xs font-semibold capitalize transition-colors duration-200 shrink-0 whitespace-nowrap cursor-pointer select-none ${
+                  active
+                    ? 'text-white font-bold'
+                    : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white'
+                }`}
+              >
+                {active && (
+                  <motion.div
+                    layoutId="activeThreatIntelIndicatorTypeTab"
+                    className="absolute inset-0 rounded-xl bg-blue-600"
+                    transition={{
+                      type: 'spring',
+                      stiffness: 450,
+                      damping: 32,
+                    }}
+                  />
+                )}
+                <span className="relative z-10">{t === 'all' ? 'All Types' : t}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -876,7 +824,7 @@ function IndicatorsTab({ result }: { result: EmailAnalysisResult | null }) {
         <div className="lg:col-span-2 overflow-x-auto scrollbar-thin">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-slate-200 dark:border-white/10 text-slate-500 dark:text-gray-400 text-[11px] uppercase tracking-wider font-mono">
+              <tr className="border-b border-gray-200 dark:border-zinc-800/50 text-gray-500 dark:text-zinc-300 text-[11px] uppercase tracking-wider font-mono">
                 <th className="py-2.5 px-3 text-left">Indicator</th>
                 <th className="py-2.5 px-3 text-left">Type</th>
                 <th className="py-2.5 px-3 text-left hidden md:table-cell">Relationship</th>
@@ -888,11 +836,11 @@ function IndicatorsTab({ result }: { result: EmailAnalysisResult | null }) {
                 <tr
                   key={ind.id}
                   onClick={() => setSelected(ind)}
-                  className={`border-b border-slate-200/60 dark:border-white/5 hover:bg-slate-100/60 dark:hover:bg-white/5 transition-colors cursor-pointer ${
-                    selected?.id === ind.id ? 'bg-purple-500/10' : ''
+                  className={`border-b border-gray-200/60 dark:border-zinc-800/50 hover:bg-gray-100/60 dark:hover:bg-white/5 transition-colors cursor-pointer ${
+                    selected?.id === ind.id ? 'bg-blue-600/10 dark:bg-blue-500/10' : ''
                   }`}
                 >
-                  <td className="py-3 px-3 text-xs font-mono text-slate-900 dark:text-white max-w-[200px] truncate" title={ind.indicator}>
+                  <td className="py-3 px-3 text-xs font-mono text-gray-900 dark:text-white max-w-[200px] truncate" title={ind.indicator}>
                     {ind.indicator}
                   </td>
                   <td className="py-3 px-3">
@@ -900,10 +848,10 @@ function IndicatorsTab({ result }: { result: EmailAnalysisResult | null }) {
                       {ind.type}
                     </span>
                   </td>
-                  <td className="py-3 px-3 text-xs text-slate-600 dark:text-gray-300 hidden md:table-cell">{ind.relationship}</td>
+                  <td className="py-3 px-3 text-xs text-gray-600 dark:text-zinc-200 hidden md:table-cell">{ind.relationship}</td>
                   <td className="py-3 px-3 hidden lg:table-cell">
                     <div className="flex items-center gap-2">
-                      <div className="w-16 h-1.5 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
+                      <div className="w-16 h-1.5 bg-slate-200 dark:bg-zinc-800 rounded-full overflow-hidden">
                         <div
                           className="h-full rounded-full"
                           style={{
@@ -912,7 +860,7 @@ function IndicatorsTab({ result }: { result: EmailAnalysisResult | null }) {
                           }}
                         />
                       </div>
-                      <span className="text-xs font-mono text-slate-900 dark:text-white font-bold">{ind.confidence}%</span>
+                      <span className="text-xs font-mono text-gray-900 dark:text-white font-bold">{ind.confidence}%</span>
                     </div>
                   </td>
                 </tr>
@@ -920,17 +868,17 @@ function IndicatorsTab({ result }: { result: EmailAnalysisResult | null }) {
             </tbody>
           </table>
           {filtered.length === 0 && (
-            <div className="text-center py-8 text-xs text-slate-500 dark:text-gray-500">No indicators match your search.</div>
+            <div className="text-center py-8 text-xs text-gray-500 dark:text-zinc-300">No indicators match your search.</div>
           )}
         </div>
 
         <div
-          className="rounded-xl p-4 h-full bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.06]"
+          className="rounded-xl p-4 h-full bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
         >
           {selected ? (
             <div className="space-y-3">
-              <h4 className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <Search className="w-4 h-4 text-purple-500 dark:text-purple-400" />
+              <h4 className="text-xs font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <Search className="w-4 h-4 text-blue-500 dark:text-blue-400" />
                 Indicator Details
               </h4>
               <div className="space-y-1">
@@ -944,8 +892,8 @@ function IndicatorsTab({ result }: { result: EmailAnalysisResult | null }) {
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center h-full text-center py-12">
-              <Search className="w-8 h-8 text-slate-400 dark:text-gray-600 mb-3" />
-              <p className="text-xs text-slate-500 dark:text-gray-400">Select an indicator from the table to view details</p>
+              <Search className="w-8 h-8 text-gray-400 dark:text-zinc-500 mb-3" />
+              <p className="text-xs text-gray-500 dark:text-zinc-300">Select an indicator from the table to view details</p>
             </div>
           )}
         </div>
@@ -972,30 +920,30 @@ function RelationshipFlow({ result }: { result: EmailAnalysisResult | null }) {
 
   return (
     <div
-      className="rounded-2xl p-5 bg-white dark:bg-[#090b12] border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+      className="rounded-2xl p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-white/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
     >
       <div className="mb-4">
-        <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+        <h3 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
           <Network className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
           Relationship Visualization
         </h3>
-        <p className="text-[11px] text-slate-500 dark:text-gray-400 mt-0.5">Connected indicator map from email sender to final payload URL</p>
+        <p className="text-[11px] text-gray-500 dark:text-zinc-300 mt-0.5">Connected indicator map from email sender to final payload URL</p>
       </div>
 
       <div className="flex flex-col items-center gap-2">
         {flowNodes.map((node, i) => (
           <div key={node.label} className="flex flex-col items-center w-full max-w-md">
             <div
-              className="w-full rounded-xl p-3.5 transition-all duration-200 hover:scale-[1.01] bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.06]"
+              className="w-full rounded-xl p-3.5 transition-all duration-200 hover:scale-[1.01] bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
             >
-              <span className="text-[10px] text-slate-500 dark:text-gray-400 uppercase tracking-widest font-mono font-bold">{node.label}</span>
+              <span className="text-[10px] text-gray-500 dark:text-zinc-300 uppercase tracking-widest font-mono font-bold">{node.label}</span>
               <div className="flex items-center gap-2 mt-1">
-                <span className="text-xs text-slate-900 dark:text-white font-mono break-all flex-1 font-semibold">{node.value}</span>
+                <span className="text-xs text-gray-900 dark:text-white font-mono break-all flex-1 font-semibold">{node.value}</span>
                 <CopyButton value={node.value} />
               </div>
             </div>
             {i < flowNodes.length - 1 && (
-              <ArrowDown className="w-4 h-4 text-purple-500 dark:text-purple-400 my-1 animate-bounce" />
+              <ArrowDown className="w-4 h-4 text-blue-500 dark:text-blue-400 my-1 animate-bounce" />
             )}
           </div>
         ))}

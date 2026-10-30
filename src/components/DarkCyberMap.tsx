@@ -73,7 +73,7 @@ function buildPulseIcon(severity: MapMarker['severity'] = 'critical') {
           opacity: 0.6;
           transform-origin: center;
         "></div>
-        <!-- Outer glow ring (static) -->
+        <!-- Outer  ring (static) -->
         <div style="
           position: absolute;
           width: 20px; height: 20px;
@@ -290,7 +290,7 @@ export function DarkCyberMap({
 
   return (
     <div
-      className={`relative w-full ${height} bg-[#06070a] rounded-2xl border border-white/10 overflow-hidden select-none shadow-2xl isolate`}
+      className={`relative w-full ${height} bg-white dark:bg-zinc-800 rounded-2xl border border-white/10 overflow-hidden select-none shadow-2xl isolate`}
       style={{ minHeight: '400px', isolation: 'isolate' }}
     >
       {/* ── Real Leaflet map fills the entire card ── */}
@@ -298,7 +298,7 @@ export function DarkCyberMap({
 
       {/* ── Top Right Origin Status Badge (Hidden on mobile, visible on tablet & PC) ── */}
       {primaryMarker && (
-        <div className="hidden sm:flex absolute top-4 right-4 z-[1000] items-center gap-2 px-3 py-1.5 rounded-xl bg-[#0c0f1a]/90 backdrop-blur-md border border-red-500/30 text-xs font-mono text-white pointer-events-none">
+        <div className="hidden sm:flex absolute top-4 right-4 z-[1000] items-center gap-2 px-3 py-1.5 rounded-xl bg-gray-50 dark:bg-zinc-800 border-none/90 backdrop-blur-md border border-red-500/30 text-xs font-mono text-white pointer-events-none">
           <span className="relative flex h-2.5 w-2.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500" />
@@ -311,7 +311,7 @@ export function DarkCyberMap({
       )}
 
       {/* ── Map Footer Info Bar ── */}
-      <div className="absolute bottom-3 left-4 right-4 z-[1000] flex items-center justify-between bg-[#0c0f1a]/95 backdrop-blur-md border border-white/10 rounded-xl px-4 py-2 text-xs font-mono text-gray-300 pointer-events-none">
+      <div className="absolute bottom-3 left-4 right-4 z-[1000] flex items-center justify-between bg-white dark:bg-zinc-800/95 backdrop-blur-md border border-white/10 rounded-xl px-4 py-2 text-xs font-mono text-gray-300 pointer-events-none">
         <div className="flex items-center gap-2">
           <Crosshair className="w-4 h-4 text-red-400 animate-spin" style={{ animationDuration: '8s' }} />
           <span>

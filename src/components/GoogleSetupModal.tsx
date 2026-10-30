@@ -52,8 +52,7 @@ export function GoogleSetupModal({ isOpen, onClose, onSuccessConnect }: GoogleSe
         style={{
           background: 'linear-gradient(145deg, #10121d, #0b0c14)',
           border: '1px solid rgba(255,255,255,0.12)',
-          boxShadow: '0 32px 80px rgba(0,0,0,0.8), 0 0 30px rgba(66,133,244,0.1)',
-        }}
+          boxShadow: 'none' }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -88,7 +87,7 @@ export function GoogleSetupModal({ isOpen, onClose, onSuccessConnect }: GoogleSe
               <span>Read-Only & Client-Side Privacy</span>
             </div>
             <p>
-              Mailveil connects directly to your Gmail account with <strong>read-only access</strong>. No emails are ever deleted, sent, or stored externally.
+              Sentinel-X connects directly to your Gmail account with <strong>read-only access</strong>. No emails are ever deleted, sent, or stored externally.
             </p>
           </div>
 
@@ -160,7 +159,7 @@ export function GoogleSetupModal({ isOpen, onClose, onSuccessConnect }: GoogleSe
             <button
               type="submit"
               disabled={isConnecting}
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-blue-900/40 flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50"
+              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg  flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50"
             >
               <CheckCircle2 className="w-4 h-4" />
               {isConnecting ? 'Opening Google Sign-In...' : 'Save & Sign In with Google'}

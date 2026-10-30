@@ -9,6 +9,7 @@ import {
 import { useTickets, type Ticket, type TicketAttachment, type TicketStatus } from '@/contexts/TicketContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import { motion } from 'framer-motion';
 
 interface UserRequestsPageProps {
   onNavigate: (id: string) => void;
@@ -66,7 +67,7 @@ function sendEmailToUser(ticket: Ticket, analystComment?: string, analystReport?
   const comment = analystComment || ticket.analystComment || 'The security investigation for your submitted suspicious email report has concluded.';
   const reportObj = analystReport || ticket.analystReport;
   const reportInfo = reportObj
-    ? `\nAttached Investigation Report: ${reportObj.name}\n(Available for instant download in your Mailveil Check Status portal)`
+    ? `\nAttached Investigation Report: ${reportObj.name}\n(Available for instant download in your Sentinel-X Check Status portal)`
     : '';
 
   if (reportObj?.data) {
@@ -75,7 +76,7 @@ function sendEmailToUser(ticket: Ticket, analystComment?: string, analystReport?
     } catch { /* ignore */ }
   }
 
-  const subject = `[MAILVEIL SOC] Investigation Report: ${ticket.id}`;
+  const subject = `[SENTINEL-X SOC] Investigation Report: ${ticket.id}`;
 
   const bodyText = `Dear User,
 
@@ -94,10 +95,10 @@ ${comment}
 ${reportInfo}
 
 SECURITY RECOMMENDATION:
-Please log in to your Mailveil portal under "Check Status" to view telemetry details.
+Please log in to your Sentinel-X portal under "Check Status" to view telemetry details.
 
 Regards,
-MAILVEIL Cyber Defense Operations
+SENTINEL-X Cyber Defense Operations
 Security Operations Center (SOC)`;
 
   const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(ticket.userEmail)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
@@ -279,7 +280,7 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
       className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
       style={{
         background: isDark ? 'rgba(0,0,0,0.82)' : 'rgba(15, 23, 42, 0.45)',
-        backdropFilter: 'blur(10px)',
+        backdropFilter: 'blur(10px)'
       }}
       onClick={onClose}
     >
@@ -288,14 +289,14 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
         style={{
           background: isDark ? 'linear-gradient(145deg, #0d1118, #0a0c14)' : '#ffffff',
           border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #e2e8f0',
-          boxShadow: isDark ? '0 32px 80px rgba(0,0,0,0.85)' : '0 25px 60px -15px rgba(0,0,0,0.25)',
+          boxShadow: isDark ? '0 32px 80px rgba(0,0,0,0.85)' : '0 25px 60px -15px rgba(0,0,0,0.25)'
         }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal header */}
         <div
           className="flex items-center justify-between px-4 sm:px-6 py-3.5 sm:py-4 shrink-0"
-          style={{ borderBottom: isDark ? '1px solid rgba(255,255,255,0.07)' : '1px solid #e2e8f0' }}
+          style={{ borderBottom: isDark ? '1px solid rgba(39,39,42,0.5)' : '1px solid #e2e8f0' }}
         >
           <div className="flex items-center gap-3">
             <div
@@ -304,23 +305,23 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
                 background: status === 'resolved' || status === 'analyzed'
                   ? 'rgba(168,85,247,0.15)'
                   : status === 'in_review'
-                  ? 'rgba(6,182,212,0.15)'
-                  : 'rgba(245,158,11,0.15)',
+                    ? 'rgba(6,182,212,0.15)'
+                    : 'rgba(245,158,11,0.15)',
                 border: status === 'resolved' || status === 'analyzed'
                   ? '1px solid rgba(168,85,247,0.3)'
                   : status === 'in_review'
-                  ? '1px solid rgba(6,182,212,0.3)'
-                  : '1px solid rgba(245,158,11,0.3)',
+                    ? '1px solid rgba(6,182,212,0.3)'
+                    : '1px solid rgba(245,158,11,0.3)'
               }}
             >
               <Inbox className={`w-5 h-5 ${status === 'resolved' || status === 'analyzed' ? 'text-purple-400' : status === 'in_review' ? 'text-cyan-400' : 'text-amber-400'}`} />
             </div>
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <p className="text-sm font-black text-slate-900 dark:text-white font-mono">{ticket.id}</p>
+                <p className="text-sm font-black text-gray-900 dark:text-zinc-100 font-mono">{ticket.id}</p>
                 <StatusBadge status={status} />
               </div>
-              <p className="text-[11px] text-slate-500 dark:text-gray-500 mt-0.5">
+              <p className="text-[11px] text-gray-500 dark:text-gray-500 mt-0.5">
                 <span>Submitted {formatDate(ticket.submittedAt)}</span>
                 <span className="hidden sm:inline"> • </span>
                 <span className="block sm:inline truncate mt-0.5 sm:mt-0 font-mono sm:font-sans">
@@ -339,7 +340,7 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
             </button>
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 dark:text-gray-500 transition-transform duration-150 ease-out active:scale-95 shrink-0 cursor-pointer"
+              className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-500 transition-transform duration-150 ease-out active:scale-95 shrink-0 cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -351,7 +352,7 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
           {/* Submission metadata */}
           <div
             className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 p-3.5 sm:p-4 rounded-2xl"
-            style={{ background: isDark ? 'rgba(255,255,255,0.02)' : '#f8fafc', border: isDark ? '1px solid rgba(255,255,255,0.07)' : '1px solid #e2e8f0' }}
+            style={{ background: isDark ? 'rgba(39,39,42,0.5)' : '#f8fafc', border: isDark ? '1px solid rgba(39,39,42,0.5)' : '1px solid #e2e8f0' }}
           >
             {[
               { icon: User, label: 'User Email', value: ticket.userEmail },
@@ -361,10 +362,10 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
             ].map(({ icon: Icon, label, value }) => (
               <div key={label} className="space-y-0.5">
                 <div className="flex items-center gap-1.5">
-                  <Icon className="w-3 h-3 text-slate-400 dark:text-gray-500" />
-                  <p className="text-[10px] text-slate-500 dark:text-gray-500 uppercase tracking-wider">{label}</p>
+                  <Icon className="w-3 h-3 text-gray-500 dark:text-gray-500" />
+                  <p className="text-[10px] text-gray-500 dark:text-gray-500 uppercase tracking-wider">{label}</p>
                 </div>
-                <p className="text-xs text-slate-800 dark:text-gray-200 truncate">{value}</p>
+                <p className="text-xs text-gray-900 dark:text-gray-200 truncate">{value}</p>
               </div>
             ))}
           </div>
@@ -372,12 +373,12 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
           {/* User Notes */}
           {ticket.userComment && (
             <div className="space-y-1.5">
-              <label className="text-[10px] font-mono font-bold text-slate-500 dark:text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
+              <label className="text-[10px] font-mono font-bold text-gray-500 dark:text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
                 <MessageSquare className="w-3 h-3" /> User Provided Notes
               </label>
               <p
-                className="text-sm text-slate-800 dark:text-gray-300 leading-relaxed p-3.5 rounded-xl text-xs"
-                style={{ background: isDark ? 'rgba(255,255,255,0.03)' : '#f8fafc', border: isDark ? '1px solid rgba(255,255,255,0.07)' : '1px solid #e2e8f0' }}
+                className="text-sm text-gray-900 dark:text-zinc-100 leading-relaxed p-3.5 rounded-xl text-xs"
+                style={{ background: isDark ? 'rgba(39,39,42,0.5)' : '#f8fafc', border: isDark ? '1px solid rgba(39,39,42,0.5)' : '1px solid #e2e8f0' }}
               >
                 {ticket.userComment}
               </p>
@@ -404,8 +405,8 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
           {/* EML download */}
           {ticket.emlFile && (
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold text-slate-500 dark:text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
-                <FileText className="w-3 h-3" /> Submitted Email File (.eml)
+              <label className="text-[10px] font-bold text-gray-500 dark:text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
+                <FileText className="w-3 h-3" /> Submitted Capture File (.eml / .pcap)
               </label>
               <button
                 onClick={() => downloadAttachment(ticket.emlFile!.data, ticket.emlFile!.name)}
@@ -414,7 +415,7 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
               >
                 <Download className="w-4 h-4 text-blue-500 dark:text-blue-400" />
                 <span className="truncate">{ticket.emlFile.name}</span>
-                <span className="text-[11px] text-slate-500 dark:text-gray-500 font-normal ml-auto shrink-0">
+                <span className="text-[11px] text-gray-500 dark:text-gray-500 font-normal ml-auto shrink-0">
                   {formatBytes(ticket.emlFile.size)}
                 </span>
               </button>
@@ -423,19 +424,19 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
 
           {/* Analyst response form */}
           <div
-            className="space-y-4 pt-3 border-t border-slate-200 dark:border-white/7"
+            className="space-y-4 pt-3 border-t border-gray-200 dark:border-white/7"
           >
             <div className="flex items-center justify-between">
-              <p className="text-xs font-bold text-slate-900 dark:text-white font-mono uppercase tracking-wider flex items-center gap-2">
+              <p className="text-xs font-bold text-gray-900 dark:text-zinc-100 font-mono uppercase tracking-wider flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-violet-600 dark:text-violet-400" />
                 Analyst Response & Findings
               </p>
-              <span className="text-[11px] text-slate-500 dark:text-gray-500 font-mono">Recipient: {ticket.userEmail}</span>
+              <span className="text-[11px] text-gray-500 dark:text-gray-500 font-mono">Recipient: {ticket.userEmail}</span>
             </div>
 
             {/* Comment textarea */}
             <div className="space-y-1.5">
-              <label className="text-[10px] font-mono font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">
+              <label className="text-[10px] font-mono font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Forensic Analysis & Findings
               </label>
               <textarea
@@ -443,19 +444,19 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
                 onChange={(e) => setAnalystComment(e.target.value)}
                 rows={4}
                 placeholder={`Provide your forensic findings, header analysis, and security advice for ${ticket.userEmail}...`}
-                className="w-full text-xs rounded-xl p-3 text-slate-900 dark:text-gray-100 placeholder-slate-400 dark:placeholder-gray-500 bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-violet-500 resize-none font-mono"
+                className="w-full text-xs rounded-xl p-3 text-gray-900 dark:text-gray-100 placeholder-slate-400 dark:placeholder-gray-500 bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 focus:outline-none focus:ring-1 focus:ring-violet-500 resize-none font-mono"
               />
             </div>
 
             {/* Report file upload */}
             <div className="space-y-1.5">
-              <label className="text-[10px] font-mono font-bold text-slate-600 dark:text-gray-400 uppercase tracking-wider">
+              <label className="text-[10px] font-mono font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Attach Forensic Report (.pdf / .txt / .json)
               </label>
               <input
                 ref={reportFileRef}
                 type="file"
-                className="hidden"
+                className="hidden dark:bg-zinc-900/50 dark:border-zinc-800/50"
                 accept=".pdf,.txt,.json,.doc,.docx"
                 onChange={async (e) => {
                   const f = e.target.files?.[0];
@@ -470,11 +471,11 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
                   <div className="flex items-center gap-2 truncate">
                     <FileText className="w-4 h-4 shrink-0" />
                     <span className="truncate font-semibold">{reportFile.name}</span>
-                    <span className="text-[10px] text-slate-500 dark:text-gray-500">({formatBytes(reportFile.size)})</span>
+                    <span className="text-[10px] text-gray-500 dark:text-gray-500">({formatBytes(reportFile.size)})</span>
                   </div>
                   <button
                     onClick={() => setReportFile(null)}
-                    className="text-slate-400 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400 ml-2 cursor-pointer transition-transform duration-150 ease-out active:scale-95"
+                    className="text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400 ml-2 cursor-pointer transition-transform duration-150 ease-out active:scale-95"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -483,9 +484,9 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
                 <button
                   type="button"
                   onClick={() => reportFileRef.current?.click()}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-dashed border-slate-300 dark:border-white/15 text-xs text-slate-700 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white bg-slate-50/70 dark:bg-transparent transition-transform duration-150 ease-out active:scale-95 font-mono cursor-pointer"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-dashed border-gray-200 dark:border-white/15 text-xs text-gray-900 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white bg-white/70 dark:bg-transparent transition-transform duration-150 ease-out active:scale-95 font-mono cursor-pointer"
                 >
-                  <Upload className="w-3.5 h-3.5 text-slate-500 dark:text-gray-500" />
+                  <Upload className="w-3.5 h-3.5 text-gray-500 dark:text-gray-500" />
                   Click to attach analysis dossier or PDF
                 </button>
               )}
@@ -493,7 +494,7 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
 
             {/* Status progression buttons */}
             <div className="space-y-1.5">
-              <p className="text-[10px] font-mono font-bold text-slate-600 dark:text-gray-500 uppercase tracking-wider">Set Ticket Status:</p>
+              <p className="text-[10px] font-mono font-bold text-gray-500 dark:text-gray-500 uppercase tracking-wider">Set Ticket Status:</p>
               <div className="relative flex gap-2 flex-wrap items-center">
                 {/* Smooth sliding indicator pill */}
                 <div
@@ -507,7 +508,7 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
                     border: status === 'analyzed' ? (isDark ? '1px solid rgba(34,197,94,0.4)' : '1px solid rgba(34,197,94,0.5)') : (isDark ? '1px solid rgba(6,182,212,0.4)' : '1px solid rgba(6,182,212,0.5)'),
                     transition: 'transform 260ms cubic-bezier(0.25, 1, 0.5, 1), width 260ms cubic-bezier(0.25, 1, 0.5, 1), height 260ms cubic-bezier(0.25, 1, 0.5, 1), opacity 150ms ease, background 200ms ease, border 200ms ease',
                     left: 0,
-                    top: 0,
+                    top: 0
                   }}
                 />
                 {(['in_review', 'analyzed'] as const).map((s) => (
@@ -521,7 +522,7 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
                     }}
                     className={`relative z-10 px-3 py-1.5 rounded-lg text-xs font-bold font-mono transition-colors duration-200 capitalize ${status === s
                       ? s === 'analyzed' ? 'text-emerald-700 dark:text-emerald-400' : 'text-cyan-700 dark:text-cyan-300'
-                      : 'text-slate-600 hover:text-slate-900 dark:text-gray-400 dark:hover:text-white'
+                      : 'text-gray-600 dark:text-zinc-400 font-medium hover:bg-gray-100/80 dark:hover:bg-zinc-800/80'
                       }`}
                   >
                     {s === 'in_review' ? 'In Investigation' : 'Analyzed'}
@@ -533,7 +534,7 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
                   title={
                     ticket.userAcknowledged || ticket.status === 'resolved'
                       ? 'Case confirmed and marked resolved by user.'
-                      : 'Locked for analyst: Only the user can confirm resolution and close this case.'
+                      : 'Waiting for user to acknowledge and resolve.'
                   }
                   className="inline-flex items-center"
                 >
@@ -544,7 +545,7 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
                     style={
                       ticket.userAcknowledged || ticket.status === 'resolved'
                         ? { background: isDark ? 'rgba(168,85,247,0.25)' : 'rgba(168,85,247,0.15)', color: isDark ? '#c084fc' : '#7e22ce', border: isDark ? '1px solid rgba(168,85,247,0.45)' : '1px solid rgba(168,85,247,0.4)' }
-                        : { background: isDark ? 'rgba(255,255,255,0.03)' : '#f1f5f9', color: isDark ? '#64748b' : '#64748b', border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #cbd5e1', opacity: 0.85 }
+                        : { background: isDark ? 'rgba(39,39,42,0.5)' : '#f1f5f9', color: isDark ? '#64748b' : '#64748b', border: isDark ? '1px solid rgba(39,39,42,0.5)' : '1px solid #cbd5e1', opacity: 0.85 }
                     }
                   >
                     {ticket.userAcknowledged || ticket.status === 'resolved' ? (
@@ -554,9 +555,9 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
                       </>
                     ) : (
                       <>
-                        <Lock className="w-3 h-3 text-slate-400 dark:text-gray-500" />
+                        <Lock className="w-3 h-3 text-gray-500 dark:text-gray-500" />
                         <span>Resolved</span>
-                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-slate-200 dark:bg-white/10 text-slate-600 dark:text-gray-400 font-normal">User Only</span>
+                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-gray-200 dark:bg-white/10 text-gray-500 dark:text-gray-400 font-normal">User Only</span>
                       </>
                     )}
                   </button>
@@ -578,9 +579,9 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
                         <div
                           key={msg.id}
                           className={`p-2.5 rounded-xl text-xs max-w-[85%] sm:max-w-[70%] min-w-[180px] ${isAnalyst
-                            ? 'ml-auto bg-blue-500/10 text-slate-900 border border-blue-500/25 dark:bg-blue-950/40 dark:border-blue-500/25 dark:text-blue-100'
-                            : 'mr-auto bg-purple-500/10 text-slate-900 border border-purple-500/25 dark:bg-purple-950/30 dark:border-purple-500/20 dark:text-purple-100'
-                            }`}
+                            ? 'ml-auto bg-blue-500/10 text-gray-900 border border-blue-500/25 dark:bg-black/40 dark:border-blue-500/25 dark:text-blue-100'
+                            : 'mr-auto bg-purple-500/10 text-gray-900 border border-purple-500/25 dark:bg-black/40 dark:border-purple-500/25 dark:text-purple-100'
+                        }`}
                         >
                           <div className={`flex items-center justify-between gap-2 text-[10px] font-mono mb-1 ${isAnalyst ? 'text-blue-600 dark:text-blue-400' : 'text-purple-600 dark:text-purple-400'
                             }`}>
@@ -602,7 +603,7 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
                     onChange={(e) => setChatMessage(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleSendChatMessage()}
                     placeholder="Post quick update in user's ticket thread..."
-                    className="flex-1 text-xs rounded-xl px-3 py-2 text-slate-900 dark:text-gray-100 placeholder-slate-400 dark:placeholder-gray-500 font-mono bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10"
+                    className="flex-1 text-xs rounded-xl px-3 py-2 text-gray-900 dark:text-gray-100 placeholder-slate-400 dark:placeholder-gray-500 font-mono bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
                   />
                   <button
                     type="button"
@@ -616,7 +617,7 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
               </div>
             ) : (
               /* User Review Section (Matching user side) */
-              <div className="pt-2 border-t border-slate-200 dark:border-white/5">
+              <div className="pt-2 border-t border-gray-200 dark:border-zinc-800/50">
                 {ticket.userAcknowledged || ticket.status === 'resolved' ? (
                   <div
                     className="p-4 rounded-2xl flex items-center justify-between"
@@ -627,9 +628,9 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
                         <CheckCircle2 className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" /> Case Resolved by User
                       </p>
                       {ticket.userFeedback ? (
-                        <p className="text-xs text-slate-800 dark:text-gray-200 mt-1 italic">"{ticket.userFeedback}"</p>
+                        <p className="text-xs text-gray-900 dark:text-gray-200 mt-1 italic">"{ticket.userFeedback}"</p>
                       ) : (
-                        <p className="text-xs text-slate-600 dark:text-gray-400 mt-1 italic">User acknowledged resolution and marked case complete.</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 italic">User acknowledged resolution and marked case complete.</p>
                       )}
                     </div>
                     <div className="flex items-center gap-1">
@@ -650,7 +651,7 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
                       <Clock className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                       <div>
                         <p className="text-xs font-bold text-emerald-700 dark:text-emerald-300 font-mono">Analysis Published — Awaiting User Review</p>
-                        <p className="text-[11px] text-slate-600 dark:text-gray-400 mt-0.5">
+                        <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">
                           User review and resolution feedback will appear here once submitted.
                         </p>
                       </div>
@@ -662,7 +663,7 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
 
             {/* Dispatch Gmail / Portal Notification Checkbox */}
             {status === 'analyzed' && (
-              <label className="flex items-center gap-3 p-3 rounded-xl cursor-pointer select-none transition-all duration-150 border bg-slate-50 dark:bg-white/[0.02] border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.04] hover:border-purple-500/40">
+              <label className="flex items-center gap-3 p-3 rounded-xl cursor-pointer select-none transition-all duration-150 border bg-white dark:bg-zinc-900/50 border-gray-200 dark:border-zinc-800/50 hover:bg-gray-50 dark:hover:bg-zinc-700/50 hover:border-purple-500/40">
                 <input
                   type="checkbox"
                   checked={sendEmail}
@@ -672,11 +673,11 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <Mail className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
-                    <span className="text-xs font-bold text-slate-900 dark:text-gray-200 font-mono">
+                    <span className="text-xs font-bold text-gray-900 dark:text-gray-200 font-mono">
                       Dispatch findings via Gmail to {ticket.userEmail}
                     </span>
                   </div>
-                  <p className="text-[10px] text-slate-600 dark:text-gray-500 mt-0.5 font-mono">
+                  <p className="text-[10px] text-gray-500 dark:text-gray-500 mt-0.5 font-mono">
                     {sendEmail
                       ? 'Pre-composes forensic report in Gmail draft & updates user portal'
                       : 'Saves findings directly to user portal without dispatching email'}
@@ -704,10 +705,7 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
                     ? 'linear-gradient(135deg, #0284c7, #0369a1)'
                     : status === 'resolved'
                       ? 'linear-gradient(135deg, #7c3aed, #6d28d9)'
-                      : 'linear-gradient(135deg, #7c3aed, #6d28d9)',
-                boxShadow: status === 'in_review'
-                  ? '0 4px 20px rgba(2,132,199,0.35)'
-                  : '0 4px 20px rgba(124,58,237,0.35)',
+                      : 'linear-gradient(135deg, #10b981, #059669)',
               }}
             >
               {sent ? (
@@ -738,30 +736,6 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
   const [searchQuery, setSearchQuery] = useState('');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  const filterRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-  const [filterIndicatorStyle, setFilterIndicatorStyle] = useState({ left: 0, top: 0, width: 0, height: 0, opacity: 0 });
-
-  useLayoutEffect(() => {
-    const updateIndicator = () => {
-      const el = filterRefs.current[filterStatus];
-      if (el) {
-        setFilterIndicatorStyle({
-          left: el.offsetLeft,
-          top: el.offsetTop,
-          width: el.offsetWidth,
-          height: el.offsetHeight,
-          opacity: 1,
-        });
-      }
-    };
-    updateIndicator();
-    const rafId = requestAnimationFrame(updateIndicator);
-    window.addEventListener('resize', updateIndicator);
-    return () => {
-      cancelAnimationFrame(rafId);
-      window.removeEventListener('resize', updateIndicator);
-    };
-  }, [filterStatus]);
 
   // Auto-open ticket if directed from notification click
   useEffect(() => {
@@ -857,17 +831,12 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
       {/* ── Page Header (Responsive Mobile + Desktop) ── */}
       <SlideIn delay={0} direction="down">
         {/* Mobile Card Header (Phone only: block md:hidden) */}
-        <div className="block md:hidden rounded-2xl p-4 sm:p-5 bg-white dark:bg-[#0e101a] border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-2xl space-y-4">
-          {/* Row 1: Icon + Title + Pending Count Badge */}
+        <div className="block md:hidden rounded-2xl p-4 sm:p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm dark:shadow-2xl space-y-4">
+          {/* Row 1: Title + Pending Count Badge */}
           <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-3 min-w-0">
-              <div className="w-12 h-12 rounded-2xl bg-purple-500/15 border border-purple-500/30 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 shadow-lg shadow-purple-500/10">
-                <Inbox className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-              </div>
-              <h1 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white whitespace-nowrap">
-                User Requests
-              </h1>
-            </div>
+            <h1 className="text-lg sm:text-xl font-bold tracking-tight text-gray-900 dark:text-zinc-100 whitespace-nowrap">
+              User Requests
+            </h1>
 
             <div
               className="flex items-center gap-1.5 px-3 py-1 rounded-full shrink-0"
@@ -879,7 +848,7 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
           </div>
 
           {/* Row 2: Subtitle Description */}
-          <p className="text-xs text-slate-600 dark:text-gray-400 leading-relaxed">
+          <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
             Investigate suspicious emails reported by end-users, publish forensic verdicts, and provide mitigation instructions.
           </p>
 
@@ -890,9 +859,9 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
                 <span>Sandbox: Active</span>
               </div>
-              <div className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-[11px] sm:text-xs text-slate-600 dark:text-gray-400 shrink-0 whitespace-nowrap">
+              <div className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 text-[11px] sm:text-xs text-gray-500 dark:text-gray-400 shrink-0 whitespace-nowrap">
                 <span>Avg SLA:</span>
-                <span className="text-slate-900 dark:text-white font-mono font-bold">12m</span>
+                <span className="text-gray-900 dark:text-zinc-100 font-mono font-bold">12m</span>
               </div>
             </div>
 
@@ -905,38 +874,38 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
           {currentPendingTicket ? (
             <div
               onClick={() => setSelectedTicket(currentPendingTicket)}
-              className="rounded-xl p-3 bg-slate-50 hover:bg-slate-100 dark:bg-[#131625] dark:hover:bg-[#161a2e] border border-slate-200 dark:border-white/10 hover:border-amber-500/40 flex items-center justify-between gap-3 transition-all cursor-pointer active:scale-[0.99] group shadow-inner"
+              className="rounded-xl p-3 bg-white hover:bg-gray-50 dark:bg-zinc-800 dark:hover:bg-gray-50 dark:bg-zinc-800 border-none border border-gray-200 dark:border-zinc-800/50 hover:border-amber-500/40 flex items-center justify-between gap-3 transition-all cursor-pointer active:scale-[0.99] group shadow-inner"
             >
               <div className={`min-w-0 flex-1 space-y-0.5 transition-opacity duration-200 ${pendingFade === 'in' ? 'opacity-100' : 'opacity-0'}`}>
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-amber-600 dark:text-amber-400 font-mono font-bold text-xs">
                     {currentPendingTicket.id.startsWith('#') ? currentPendingTicket.id : `#${currentPendingTicket.id}`}
                   </span>
-                  <span className="text-slate-400 dark:text-gray-500 text-xs">•</span>
-                  <span className="text-slate-500 dark:text-gray-400 text-xs font-mono">
+                  <span className="text-gray-500 dark:text-gray-500 text-xs">•</span>
+                  <span className="text-gray-500 dark:text-gray-400 text-xs font-mono">
                     {formatTimeAgo(currentPendingTicket.submittedAt)}
                   </span>
                 </div>
-                <p className="text-xs font-semibold text-slate-900 dark:text-white truncate max-w-[240px] sm:max-w-xs">
+                <p className="text-xs font-semibold text-gray-900 dark:text-zinc-100 truncate max-w-[240px] sm:max-w-xs">
                   {currentPendingTicket.userComment || (currentPendingTicket.emlFile ? currentPendingTicket.emlFile.name : 'Urgent: Suspicious Email Report')}
                 </p>
-                <p className="text-[11px] text-slate-500 dark:text-gray-400 truncate max-w-[240px] sm:max-w-xs">
+                <p className="text-[11px] text-gray-500 dark:text-gray-400 truncate max-w-[240px] sm:max-w-xs">
                   Reported by: {currentPendingTicket.userEmail || 'user@enterprise.internal'}
                 </p>
               </div>
 
-              <div className="w-8 h-8 rounded-xl bg-slate-200/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-gray-400 group-hover:text-slate-900 dark:group-hover:text-white flex items-center justify-center shrink-0">
+              <div className="w-8 h-8 rounded-xl bg-gray-200/60 dark:bg-white/5 border border-gray-200 dark:border-zinc-800/50 text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white flex items-center justify-center shrink-0">
                 <ChevronRight className="w-4 h-4" />
               </div>
             </div>
           ) : (
-            <div className="rounded-xl p-3 bg-slate-50/60 dark:bg-[#131625]/50 border border-slate-200 dark:border-white/5 text-center text-xs text-slate-500 dark:text-gray-500 font-mono">
+            <div className="rounded-xl p-3 bg-white/60 dark:bg-zinc-800 border-none/50 border border-gray-200 dark:border-zinc-800/50 text-center text-xs text-gray-500 dark:text-gray-500 font-mono">
               No pending cases in queue · All caught up
             </div>
           )}
 
           {/* Row 5: Divider */}
-          <div className="border-t border-slate-200 dark:border-white/10" />
+          <div className="border-t border-gray-200 dark:border-zinc-800/50" />
 
           {/* Row 6: Clear All Requests Button */}
           {tickets.length > 0 && (
@@ -954,12 +923,7 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
         <div className="hidden md:flex !mt-0 items-start justify-between gap-4 flex-wrap">
           <div>
             <div className="flex items-center gap-3 mb-1">
-              <div
-                className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 bg-violet-500/10 border border-violet-500/25 text-violet-600 dark:text-violet-400"
-              >
-                <Inbox className="w-4.5 h-4.5" />
-              </div>
-              <h1 className="text-2xl font-black text-slate-900 dark:text-white">User Requests &amp; Triage</h1>
+              <h1 className="text-2xl font-black text-gray-900 dark:text-zinc-100">User Requests &amp; Triage</h1>
               {pending > 0 && (
                 <span
                   className="px-2 py-0.5 rounded-full text-xs font-bold text-amber-600 dark:text-amber-300 font-mono shrink-0"
@@ -969,7 +933,7 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
                 </span>
               )}
             </div>
-            <p className="text-slate-600 dark:text-gray-400 text-sm">
+            <p className="text-gray-500 dark:text-zinc-400 text-sm">
               Investigate suspicious emails reported by end-users, publish forensic verdicts, and provide mitigation instructions.
             </p>
           </div>
@@ -994,34 +958,34 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
             {
               label: 'Total In Queue',
               value: tickets.length,
-              dotColor: 'bg-[#3b82f6] dark:bg-[#60a5fa] shadow-sm shadow-blue-400/50',
+              dotColor: 'bg-[#3b82f6] dark:bg-zinc-800 shadow-sm ',
               numColor: 'text-[#2563eb] dark:text-[#60a5fa]',
             },
             {
               label: 'Pending Review',
               value: pending,
-              dotColor: 'bg-[#f59e0b] dark:bg-[#fbbf24] shadow-sm shadow-amber-400/50',
+              dotColor: 'bg-[#f59e0b] dark:bg-zinc-800 shadow-sm ',
               numColor: 'text-[#d97706] dark:text-[#fbbf24]',
             },
             {
               label: 'In Investigation',
               value: inReview,
-              dotColor: 'bg-[#06b6d4] dark:bg-[#22d3ee] shadow-sm shadow-cyan-400/50',
+              dotColor: 'bg-white dark:bg-zinc-800 dark:bg-zinc-800 shadow-sm ',
               numColor: 'text-[#0891b2] dark:text-[#22d3ee]',
             },
             {
               label: 'Resolved / Closed',
               value: resolved,
-              dotColor: 'bg-[#10b981] dark:bg-[#4ade80] shadow-sm shadow-emerald-400/50',
+              dotColor: 'bg-white dark:bg-zinc-800 dark:bg-zinc-800 shadow-sm ',
               numColor: 'text-[#059669] dark:text-[#4ade80]',
             },
           ].map((stat) => (
             <div
               key={stat.label}
-              className="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-[#0c0e18] border border-slate-200 dark:border-white/[0.08] transition-all flex flex-col justify-between min-h-[82px] sm:min-h-[92px]"
+              className="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 transition-all flex flex-col justify-between min-h-[82px] sm:min-h-[92px]"
             >
               <div className="flex items-center justify-between mb-2">
-                <span className="font-mono text-[11px] sm:text-xs font-semibold text-slate-500 dark:text-gray-400 uppercase tracking-wider">
+                <span className="font-mono text-[11px] sm:text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   {stat.label}
                 </span>
                 <span className={`w-2 h-2 rounded-full ${stat.dotColor}`} />
@@ -1038,61 +1002,60 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
       <SlideIn delay={100} direction="up">
         <div className="flex items-center gap-3 flex-wrap">
           <div
-            className="relative isolate h-10 flex items-center gap-1 p-1 rounded-xl overflow-x-auto overflow-y-hidden scrollbar-none max-w-full touch-scroll touch-pan-x overscroll-x-contain bg-white dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.08] shadow-sm"
-            style={{
-              touchAction: 'pan-x',
-              WebkitOverflowScrolling: 'touch',
-              overscrollBehaviorY: 'none',
-            }}
+            className="h-11 flex items-center gap-1 p-1 rounded-2xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm overflow-x-auto scrollbar-none"
           >
-            {/* Smooth sliding indicator pill (the purple cube) */}
-            <div
-              className="absolute z-0 pointer-events-none rounded-lg bg-purple-500/15 dark:bg-purple-500/20 border border-purple-500/35 dark:border-purple-500/40 shadow-sm"
-              style={{
-                transform: `translate3d(${filterIndicatorStyle.left}px, ${filterIndicatorStyle.top}px, 0)`,
-                width: filterIndicatorStyle.width,
-                height: filterIndicatorStyle.height,
-                opacity: filterIndicatorStyle.opacity,
-                transition: 'transform 300ms cubic-bezier(0.25, 1, 0.5, 1), width 300ms cubic-bezier(0.25, 1, 0.5, 1), height 300ms cubic-bezier(0.25, 1, 0.5, 1), opacity 150ms ease',
-                left: 0,
-                top: 0,
-                zIndex: 0,
-              }}
-            />
-
-            <Filter className="w-3.5 h-3.5 text-slate-400 dark:text-gray-500 ml-2 mr-1 shrink-0 relative z-10" />
             {(['all', 'pending', 'in_review', 'analyzed', 'resolved'] as const).map((s) => {
               const active = filterStatus === s;
+              const label = s === 'all'
+                ? 'All'
+                : s === 'pending'
+                ? 'Pending'
+                : s === 'in_review'
+                ? 'In Review'
+                : s === 'analyzed'
+                ? 'Analyzed'
+                : 'Resolved';
               return (
                 <button
                   key={s}
-                  ref={(el) => { filterRefs.current[s] = el; }}
+                  type="button"
                   onClick={() => setFilterStatus(s)}
-                  style={{ zIndex: 10 }}
-                  className={`relative z-10 h-8 px-3.5 rounded-lg text-xs font-bold capitalize transition-colors duration-200 font-mono shrink-0 whitespace-nowrap cursor-pointer select-none ${active
-                    ? 'text-purple-900 dark:text-white font-bold'
-                    : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-gray-200'
-                    }`}
+                  className={`relative h-9 px-4 rounded-xl text-xs sm:text-sm font-semibold capitalize transition-colors duration-200 shrink-0 whitespace-nowrap cursor-pointer select-none ${
+                    active
+                      ? 'text-white font-bold'
+                      : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100/60 dark:hover:bg-zinc-800/40'
+                  }`}
                 >
-                  {s.replace('_', ' ')}
+                  {active && (
+                    <motion.div
+                      layoutId="activeUserRequestsFilterTab"
+                      className="absolute inset-0 rounded-xl bg-blue-600"
+                      transition={{
+                        type: 'spring',
+                        stiffness: 450,
+                        damping: 32,
+                      }}
+                    />
+                  )}
+                  <span className="relative z-10">{label}</span>
                 </button>
               );
             })}
           </div>
 
           <div
-            className="h-10 flex-1 min-w-[200px] flex items-center gap-2.5 px-3.5 rounded-xl bg-slate-100 dark:bg-white border border-slate-200 dark:border-slate-200 shadow-sm"
+            className="h-11 flex-1 min-w-[200px] flex items-center gap-2.5 px-3.5 rounded-2xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm"
           >
-            <Search className="w-4 h-4 text-slate-400 dark:text-slate-400 shrink-0" />
+            <Search className="w-4 h-4 text-gray-400 dark:text-zinc-500 shrink-0" />
             <input
               type="text"
               placeholder="Search by case ID, user email, filename, or verdict..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full text-xs text-slate-900 dark:text-slate-900 bg-transparent placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none"
+              className="w-full text-xs text-gray-900 dark:text-zinc-100 bg-transparent placeholder-gray-400 dark:placeholder-zinc-500 focus:outline-none"
             />
             {searchQuery && (
-              <button onClick={() => setSearchQuery('')} className="text-slate-400 hover:text-black dark:text-slate-400 dark:hover:text-black">
+              <button onClick={() => setSearchQuery('')} className="text-gray-400 hover:text-gray-900 dark:text-zinc-500 dark:hover:text-white cursor-pointer">
                 <X className="w-3.5 h-3.5" />
               </button>
             )}
@@ -1104,11 +1067,11 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
       <SlideIn delay={140} direction="up">
         {filtered.length === 0 ? (
           <div
-            className="rounded-2xl p-12 text-center bg-white dark:bg-white/[0.02] border border-slate-200 dark:border-white/[0.06] shadow-sm"
+            className="rounded-2xl p-12 text-center bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 shadow-sm"
           >
-            <Inbox className="w-12 h-12 text-slate-300 dark:text-gray-600 mx-auto mb-3" />
-            <p className="text-sm font-bold text-slate-800 dark:text-gray-400">No requests found</p>
-            <p className="text-xs text-slate-500 dark:text-gray-600 mt-1">No user requests match the active filter.</p>
+            <Inbox className="w-12 h-12 text-gray-200 dark:text-gray-600 mx-auto mb-3" />
+            <p className="text-sm font-bold text-gray-900 dark:text-gray-400">No requests found</p>
+            <p className="text-xs text-gray-500 dark:text-gray-600 mt-1">No user requests match the active filter.</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -1116,7 +1079,7 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
               <div
                 key={ticket.id}
                 onClick={() => setSelectedTicket(ticket)}
-                className="rounded-2xl p-4 transition-all duration-200 hover:scale-[1.005] cursor-pointer group bg-white dark:bg-[#0d1118] border border-slate-200 dark:border-white/[0.07] shadow-sm dark:shadow-[0_4px_20px_rgba(0,0,0,0.3)]"
+                className="rounded-2xl p-4 transition-all duration-200 hover:scale-[1.005] cursor-pointer group bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm "
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="flex items-start gap-3 flex-1 min-w-0">
@@ -1136,7 +1099,7 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
                             ? '1px solid rgba(34,197,94,0.25)'
                             : ticket.status === 'in_review'
                               ? '1px solid rgba(6,182,212,0.3)'
-                              : '1px solid rgba(245,158,11,0.25)',
+                              : '1px solid rgba(245,158,11,0.25)'
                       }}
                     >
                       {ticket.status === 'resolved' ? (
@@ -1152,24 +1115,24 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
 
                     <div className="min-w-0 flex-1 space-y-1">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-xs font-mono font-bold text-slate-900 dark:text-white whitespace-nowrap">{ticket.id}</span>
+                        <span className="text-xs font-mono font-bold text-gray-900 dark:text-zinc-100 whitespace-nowrap">{ticket.id}</span>
                         <StatusBadge status={ticket.status} />
                         {ticket.verdict && (
-                          <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-transparent text-slate-700 dark:text-gray-300">
+                          <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-zinc-800/50 text-gray-900 dark:text-zinc-100">
                             {ticket.verdict}
                           </span>
                         )}
                       </div>
 
-                      <div className="text-[11px] font-mono text-slate-500 dark:text-gray-400 font-bold truncate block" title={ticket.userEmail}>
+                      <div className="text-[11px] font-mono text-gray-500 dark:text-gray-400 font-bold truncate block" title={ticket.userEmail}>
                         {ticket.userEmail}
                       </div>
 
-                      <p className="text-xs text-slate-700 dark:text-gray-300 break-words leading-snug">
+                      <p className="text-xs text-gray-900 dark:text-zinc-100 break-words leading-snug">
                         {ticket.userComment || (ticket.emlFile ? `Attachment: ${ticket.emlFile.name}` : 'No comment')}
                       </p>
 
-                      <div className="flex items-center gap-x-3 gap-y-1 mt-1.5 text-[11px] text-slate-500 dark:text-gray-500 flex-wrap font-mono">
+                      <div className="flex items-center gap-x-3 gap-y-1 mt-1.5 text-[11px] text-gray-500 dark:text-gray-500 flex-wrap font-mono">
                         <span className="whitespace-nowrap">Submitted: {formatDate(ticket.submittedAt)}</span>
                         {ticket.emlFile && <span className="truncate max-w-[200px]">• {ticket.emlFile.name}</span>}
                         {ticket.threadMessages && ticket.threadMessages.length > 0 && (
@@ -1183,7 +1146,7 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
                   </div>
 
                   {/* Mobile action bar */}
-                  <div className="sm:hidden flex items-center justify-between pt-2 border-t border-slate-100 dark:border-white/5">
+                  <div className="sm:hidden flex items-center justify-between pt-2 border-t border-gray-100 dark:border-zinc-800/50">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -1192,7 +1155,7 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
                           setToastMessage(`Deleted ticket ${ticket.id}.`);
                         }
                       }}
-                      className="p-1.5 rounded-lg text-slate-400 dark:text-gray-500 transition-transform duration-150 ease-out active:scale-95 cursor-pointer"
+                      className="p-1.5 rounded-lg text-gray-500 dark:text-gray-500 transition-transform duration-150 ease-out active:scale-95 cursor-pointer"
                       title="Delete ticket"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -1212,7 +1175,7 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
                           setToastMessage(`Deleted ticket ${ticket.id}.`);
                         }
                       }}
-                      className="p-1.5 rounded-lg text-slate-400 dark:text-gray-500 transition-transform duration-150 ease-out active:scale-95 cursor-pointer"
+                      className="p-1.5 rounded-lg text-gray-500 dark:text-gray-500 transition-transform duration-150 ease-out active:scale-95 cursor-pointer"
                       title="Delete ticket"
                     >
                       <Trash2 className="w-3.5 h-3.5" />

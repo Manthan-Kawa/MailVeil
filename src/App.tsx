@@ -48,7 +48,13 @@ function AppShell() {
   useEffect(() => {
     if (!showWelcome) {
       window.location.hash = `/${route}`;
+      document.body.classList.add('in-app');
+    } else {
+      document.body.classList.remove('in-app');
     }
+    return () => {
+      document.body.classList.remove('in-app');
+    };
   }, [route, showWelcome]);
 
   useEffect(() => {
@@ -167,7 +173,7 @@ function AppShell() {
   }
 
   return (
-    <div className="flex h-screen h-[100dvh] overflow-hidden bg-slate-50 dark:bg-[#08090e] text-slate-900 dark:text-slate-100 transition-colors">
+    <div className="flex locked-h-screen h-screen h-[100dvh] overflow-hidden bg-white dark:bg-black text-gray-900 dark:text-gray-100 transition-colors">
       <Sidebar
         activeId={effectiveNavId}
         onNavigate={(id) => handleNavigate(id)}
@@ -182,7 +188,7 @@ function AppShell() {
           activeLabel={route.includes('/forensics') ? 'Deep Forensics Report' : (activeNav?.label ?? 'Dashboard')}
           onNavigate={(id) => handleNavigate(id)}
         />
-        <main className="flex-1 min-h-0 overflow-y-auto scrollbar-thin touch-scroll p-3 sm:p-4 lg:p-5 bg-slate-50 dark:bg-[#08090e] transition-colors">
+        <main className="flex-1 min-h-0 overflow-y-auto scrollbar-thin touch-scroll p-3 sm:p-4 lg:p-5 bg-white dark:bg-black transition-colors">
           <div className="max-w-[1600px] mx-auto animate-fade-in" key={route}>
             {renderPage()}
           </div>

@@ -242,11 +242,11 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
   };
 
   return (
-    <div className="space-y-6 text-slate-900 dark:text-white pb-16">
+    <div className="space-y-6 text-gray-900 dark:text-zinc-100 pb-16">
       {/* ── Header Card (Responsive Desktop + Mobile) ── */}
       <SlideIn delay={0} direction="down">
         {/* ── Desktop Card (PC only: md:flex) Matching Screenshot ── */}
-        <div className="hidden md:flex items-center justify-between gap-4 p-4 lg:p-5 rounded-2xl bg-white dark:bg-[#090b12] border border-slate-200 dark:border-white/10 relative overflow-hidden shadow-sm dark:shadow-2xl">
+        <div className="hidden md:flex items-center justify-between gap-4 p-4 lg:p-5 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 relative overflow-hidden shadow-sm dark:shadow-2xl">
           {/* Left: Icon + Title & Badges + Connected Account */}
           <div className="flex items-center gap-4 min-w-0">
             <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shrink-0 shadow-lg shadow-cyan-500/10">
@@ -256,7 +256,7 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
           <div className="min-w-0 space-y-1">
             {/* Title + Badges */}
             <div className="flex items-center gap-3 flex-wrap">
-              <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+              <h1 className="text-xl font-bold tracking-tight text-gray-900 dark:text-zinc-100">
                 Automated Email Ingestion &amp; Analysis
               </h1>
               <span className="text-xs font-semibold px-2.5 py-0.5 rounded-lg bg-purple-100 dark:bg-purple-500/20 text-purple-800 dark:text-purple-300 border border-purple-300 dark:border-purple-500/30 shrink-0">
@@ -276,10 +276,10 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
             </div>
 
             {/* Subtitle & Connected Account Details */}
-            <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-gray-400 flex-wrap">
-              <span className="text-slate-400 dark:text-gray-500">Connected account</span>
+            <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-zinc-400 dark:text-gray-400 flex-wrap">
+              <span className="text-gray-400 dark:text-zinc-500 dark:text-gray-500">Connected account</span>
               {isGoogleConnected ? (
-                <span className="relative group inline-flex items-center gap-1.5 pl-2.5 pr-1 py-0.5 rounded-lg bg-slate-100 hover:bg-slate-200/80 dark:bg-white/[0.04] dark:hover:bg-white/[0.07] border border-slate-200 dark:border-white/10 text-slate-700 dark:text-gray-300 font-mono text-xs transition-all">
+                <span className="relative group inline-flex items-center gap-1.5 pl-2.5 pr-1 py-0.5 rounded-lg bg-gray-100 hover:bg-slate-200/80 dark:bg-zinc-800/50 dark:hover:bg-white/[0.07] border border-gray-200 dark:border-zinc-800/50 text-gray-700 dark:text-zinc-300 dark:text-gray-300 font-mono text-xs transition-all">
                   {googleProfile?.picture ? (
                     <img src={googleProfile.picture} alt="" className="w-3.5 h-3.5 rounded-full object-cover" />
                   ) : (
@@ -294,19 +294,19 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
                     }}
                     title="Disconnect Gmail (Unlink)"
                     aria-label="Disconnect Gmail"
-                    className="p-0.5 rounded hover:bg-red-500/20 text-slate-400 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400 transition-all cursor-pointer flex items-center justify-center group/unlink"
+                    className="p-0.5 rounded hover:bg-red-500/20 text-gray-400 dark:text-zinc-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400 transition-all cursor-pointer flex items-center justify-center group/unlink"
                   >
                     <Link2Off className="w-3 h-3 group-hover/unlink:scale-110 transition-transform" />
                   </button>
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-700 dark:text-gray-300 font-mono text-xs">
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-gray-100 dark:bg-zinc-800/50 border border-gray-200 dark:border-zinc-800/50 text-gray-700 dark:text-zinc-300 dark:text-gray-300 font-mono text-xs">
                   <span className="w-2 h-2 rounded-full bg-cyan-500 dark:bg-cyan-400" />
                   {currentUser?.email || 'user@company.corp'}
                 </span>
               )}
-              <span className="text-slate-300 dark:text-gray-600">|</span>
-              <span className="text-slate-500 dark:text-gray-500 text-xs">
+              <span className="text-gray-300 dark:text-zinc-600 dark:text-gray-600">|</span>
+              <span className="text-gray-500 dark:text-zinc-400 dark:text-gray-500 text-xs">
                 Real-time Gemini security scoring &amp; phishing detection
               </span>
             </div>
@@ -316,11 +316,11 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
         {/* Right: Telemetry status + Action buttons */}
         <div className="flex items-center gap-4 shrink-0">
           <div className="text-right space-y-0.5">
-            <div className={`text-xs font-medium flex items-center gap-1.5 justify-end ${isGoogleConnected ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-500 dark:text-gray-400'}`}>
+            <div className={`text-xs font-medium flex items-center gap-1.5 justify-end ${isGoogleConnected ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-500 dark:text-zinc-400 dark:text-gray-400'}`}>
               <span className={`w-1.5 h-1.5 rounded-full ${isGoogleConnected ? 'bg-emerald-500 dark:bg-emerald-400 animate-pulse' : 'bg-slate-400 dark:bg-gray-500'}`} />
               <span>{isGoogleConnected ? 'Live Gmail · auto-sync 30s' : 'Gmail Not Connected'}</span>
             </div>
-            <div className="text-[11px] text-slate-400 dark:text-gray-500 font-mono">
+            <div className="text-[11px] text-gray-400 dark:text-zinc-500 dark:text-gray-500 font-mono">
               {isGoogleConnected && lastSyncedAt ? `Last synced ${new Date(lastSyncedAt).toLocaleTimeString()}` : 'Connect account to sync'}
             </div>
           </div>
@@ -328,7 +328,7 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
           {!isGoogleConnected && (
             <button
               onClick={handleConnectGoogle}
-              className="px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 dark:bg-white/[0.06] dark:hover:bg-white/10 dark:border-white/15 dark:text-white text-xs font-semibold flex items-center gap-2 transition-all active:scale-95 cursor-pointer"
+              className="px-3.5 py-2.5 rounded-xl bg-gray-100 hover:bg-slate-200 border border-gray-200 text-gray-800 dark:text-zinc-200 dark:bg-white/[0.06] dark:hover:bg-white/10 dark:border-white/15 dark:text-white text-xs font-semibold flex items-center gap-2 transition-all active:scale-95 cursor-pointer"
             >
               <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -352,17 +352,17 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
       </div>
 
       {/* ── Mobile Card (Phone only: block md:hidden) ── */}
-      <div className="block md:hidden rounded-2xl p-4 bg-white dark:bg-[#11121b] border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-xl space-y-3.5">
+      <div className="block md:hidden rounded-2xl p-4 bg-white dark:bg-[#11121b] border border-gray-200 dark:border-zinc-800/50 shadow-sm dark:shadow-xl space-y-3.5">
         {/* Row 1: Icon + Title + Subtitle */}
         <div className="flex items-start gap-3">
           <div className="w-10 h-10 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-600 dark:text-cyan-400 flex items-center justify-center shrink-0 shadow-lg shadow-cyan-500/10 mt-0.5">
             <Mail className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
-            <h1 className="text-base font-bold tracking-tight text-slate-900 dark:text-white leading-snug">
+            <h1 className="text-base font-bold tracking-tight text-gray-900 dark:text-zinc-100 leading-snug">
               Automated email ingestion
             </h1>
-            <p className="text-xs text-slate-500 dark:text-gray-400 mt-0.5">
+            <p className="text-xs text-gray-500 dark:text-zinc-400 dark:text-gray-400 mt-0.5">
               AI-powered inbox monitoring and triage
             </p>
           </div>
@@ -389,11 +389,11 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
 
         {/* Row 3: Connected account section */}
         <div className="space-y-1.5">
-          <div className="text-xs text-slate-500 dark:text-gray-400 font-medium">
+          <div className="text-xs text-gray-500 dark:text-zinc-400 dark:text-gray-400 font-medium">
             Connected account
           </div>
           {isGoogleConnected ? (
-            <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 flex items-center justify-between gap-3">
+            <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 flex items-center justify-between gap-3">
               <div className="flex items-center gap-2.5 min-w-0">
                 {googleProfile?.picture ? (
                   <img src={googleProfile.picture} alt="" className="w-7 h-7 rounded-full object-cover shrink-0" />
@@ -402,7 +402,7 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
                     {(googleProfile?.email || currentUser?.email || 'MK').slice(0, 2).toUpperCase()}
                   </div>
                 )}
-                <span className="text-xs font-medium text-slate-900 dark:text-white truncate">
+                <span className="text-xs font-medium text-gray-900 dark:text-zinc-100 truncate">
                   {googleProfile?.email || currentUser?.email}
                 </span>
               </div>
@@ -424,18 +424,18 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
               </div>
             </div>
           ) : (
-            <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 flex items-center justify-between gap-3">
+            <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 flex items-center justify-between gap-3">
               <div className="flex items-center gap-2.5 min-w-0">
-                <div className="w-7 h-7 rounded-full bg-slate-200 dark:bg-gray-500/20 text-slate-700 dark:text-gray-300 border border-slate-300 dark:border-white/10 text-[11px] font-bold flex items-center justify-center shrink-0">
+                <div className="w-7 h-7 rounded-full bg-slate-200 dark:bg-gray-500/20 text-gray-700 dark:text-zinc-300 dark:text-gray-300 border border-gray-300 dark:border-zinc-800/50 text-[11px] font-bold flex items-center justify-center shrink-0">
                   {(currentUser?.displayName || currentUser?.email || 'US').slice(0, 2).toUpperCase()}
                 </div>
-                <span className="text-xs font-medium text-slate-900 dark:text-white truncate">
+                <span className="text-xs font-medium text-gray-900 dark:text-zinc-100 truncate">
                   {currentUser?.email || 'user@company.corp'}
                 </span>
               </div>
               <button
                 onClick={handleConnectGoogle}
-                className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-white/10 dark:hover:bg-white/15 border border-slate-200 dark:border-white/15 text-cyan-700 dark:text-cyan-300 hover:text-cyan-800 dark:hover:text-cyan-200 text-xs font-medium flex items-center gap-1.5 shrink-0 transition-all cursor-pointer"
+                className="px-2.5 py-1 rounded-lg bg-gray-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-white/15 border border-gray-200 dark:border-white/15 text-cyan-700 dark:text-cyan-300 hover:text-cyan-800 dark:hover:text-cyan-200 text-xs font-medium flex items-center gap-1.5 shrink-0 transition-all cursor-pointer"
               >
                 <svg className="w-3 h-3 shrink-0" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -450,25 +450,25 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
         </div>
 
         {/* Row 4: Subtle divider line */}
-        <div className="border-t border-slate-200 dark:border-white/10 pt-3">
+        <div className="border-t border-gray-200 dark:border-zinc-800/50 pt-3">
           {/* Row 5: Status indicator + Last synced */}
           <div className="flex items-start justify-between text-xs font-mono">
             <div className="space-y-0.5">
               <div className="flex items-center gap-1.5">
                 <span className={`w-2 h-2 rounded-full shrink-0 ${isGoogleConnected ? 'bg-emerald-500 dark:bg-emerald-400 animate-pulse' : 'bg-slate-400 dark:bg-gray-500'}`} />
-                <span className={`font-medium ${isGoogleConnected ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-500 dark:text-gray-400'}`}>
+                <span className={`font-medium ${isGoogleConnected ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-500 dark:text-zinc-400 dark:text-gray-400'}`}>
                   {isGoogleConnected ? 'Live Gmail' : 'Gmail Not Connected'}
                 </span>
               </div>
-              <div className="text-[11px] text-slate-400 dark:text-gray-400 pl-3.5">
+              <div className="text-[11px] text-gray-400 dark:text-zinc-500 dark:text-gray-400 pl-3.5">
                 {isGoogleConnected ? 'auto-sync 30s' : 'Auto-sync disabled'}
               </div>
             </div>
             <div className="text-right space-y-0.5">
-              <div className="text-[11px] text-slate-400 dark:text-gray-400">
+              <div className="text-[11px] text-gray-400 dark:text-zinc-500 dark:text-gray-400">
                 {isGoogleConnected && lastSyncedAt ? 'Last synced' : 'Status'}
               </div>
-              <div className="text-xs text-slate-900 dark:text-white font-mono">
+              <div className="text-xs text-gray-900 dark:text-zinc-100 font-mono">
                 {isGoogleConnected && lastSyncedAt ? new Date(lastSyncedAt).toLocaleTimeString() : 'Not connected'}
               </div>
             </div>
@@ -537,7 +537,7 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
               ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-300 dark:border-amber-500/40 text-amber-950 dark:text-amber-200'
               : isSuccess
               ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-500/40 text-emerald-950 dark:text-emerald-200'
-              : 'bg-cyan-50 dark:bg-cyan-950/40 border-cyan-300 dark:border-cyan-500/40 text-slate-900 dark:text-cyan-100';
+              : 'bg-cyan-50 dark:bg-cyan-950/40 border-cyan-300 dark:border-cyan-500/40 text-gray-900 dark:text-cyan-100';
 
             const iconClasses = isError
               ? 'text-rose-600 dark:text-rose-400'
@@ -553,7 +553,7 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
               ? 'text-amber-950 dark:text-amber-100'
               : isSuccess
               ? 'text-emerald-950 dark:text-emerald-100'
-              : 'text-slate-900 dark:text-cyan-100';
+              : 'text-gray-900 dark:text-cyan-100';
 
             return (
               <div
@@ -574,7 +574,7 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
                 <button
                   type="button"
                   onClick={() => setSyncNotice(null)}
-                  className="text-slate-500 hover:text-slate-900 dark:text-gray-400 dark:hover:text-white shrink-0 p-1.5 rounded-lg hover:bg-slate-200/60 dark:hover:bg-white/10 transition-colors font-bold cursor-pointer text-sm"
+                  className="text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white shrink-0 p-1.5 rounded-lg hover:bg-slate-200/60 dark:hover:bg-white/10 transition-colors font-bold cursor-pointer text-sm"
                   title="Dismiss"
                 >
                   ✕
@@ -625,10 +625,10 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
             return (
               <div
                 key={stat.label}
-                className="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-[#0c0e18] border border-slate-200 dark:border-white/[0.08] transition-all flex flex-col justify-between min-h-[92px] sm:min-h-[102px] shadow-none"
+                className="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-[#0c0e18] border border-gray-200 dark:border-white/[0.08] transition-all flex flex-col justify-between min-h-[92px] sm:min-h-[102px] shadow-none"
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="font-mono text-[11px] sm:text-xs font-semibold text-slate-500 dark:text-gray-400 uppercase tracking-wider">
+                  <span className="font-mono text-[11px] sm:text-xs font-semibold text-gray-500 dark:text-zinc-400 dark:text-gray-400 uppercase tracking-wider">
                     {stat.label}
                   </span>
                   <span className={`w-2 h-2 rounded-full ${stat.dotColor}`} />
@@ -637,7 +637,7 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
                   <div className={`text-2xl sm:text-3xl font-bold font-mono tracking-tight ${stat.numColor}`}>
                     {stat.value}
                   </div>
-                  <div className="text-[10px] sm:text-[11px] text-slate-400 dark:text-gray-500 font-mono mt-0.5 truncate">
+                  <div className="text-[10px] sm:text-[11px] text-gray-400 dark:text-zinc-500 dark:text-gray-500 font-mono mt-0.5 truncate">
                     {stat.subtitle}
                   </div>
                 </div>
@@ -649,10 +649,10 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
 
       {/* Filters and Search Bar */}
       <SlideIn delay={120} direction="up">
-        <div className="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-[#11121b] border border-slate-200 dark:border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 shadow-sm">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-[#11121b] border border-gray-200 dark:border-zinc-800/50 flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 shadow-sm">
           {/* Search input */}
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-gray-400" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-zinc-500 dark:text-gray-400" />
             <input
               type="text"
               value={filterState.searchQuery}
@@ -661,17 +661,17 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
                 setCurrentPage(1);
               }}
               placeholder="Search by sender, subject, or AI summary..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 text-xs text-gray-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors"
             />
           </div>
 
           {/* Filter pills */}
           <div className="flex items-center gap-1.5 overflow-x-auto overflow-y-hidden scrollbar-none touch-scroll touch-pan-x overscroll-x-contain pb-1 md:pb-0">
-            <span className="text-xs text-slate-500 dark:text-gray-400 mr-1 flex items-center gap-1 shrink-0 font-medium">
+            <span className="text-xs text-gray-500 dark:text-zinc-400 dark:text-gray-400 mr-1 flex items-center gap-1 shrink-0 font-medium">
               <Filter className="w-3.5 h-3.5" />
               Filter:
             </span>
-            <div className="relative isolate flex items-center gap-1 p-1 rounded-xl bg-slate-100/80 dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/5 select-none">
+            <div className="relative isolate flex items-center gap-1 p-1 rounded-xl bg-gray-100/80 dark:bg-zinc-800/50 border border-gray-200/80 dark:border-zinc-800/50 select-none">
               {/* Smooth sliding indicator pill */}
               <div
                 className={`absolute pointer-events-none rounded-xl border transition-all duration-300 ease-out shadow-sm ${
@@ -731,7 +731,7 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
                             : tab.id === 'clean'
                               ? 'text-emerald-950 dark:text-emerald-200 font-bold'
                               : 'text-cyan-950 dark:text-cyan-200 font-bold'
-                        : 'text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white'
+                        : 'text-gray-600 dark:text-zinc-400 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
                     }`}
                   >
                     <Icon
@@ -744,7 +744,7 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
                               : tab.id === 'clean'
                                 ? 'text-emerald-700 dark:text-emerald-300'
                                 : 'text-cyan-700 dark:text-cyan-300'
-                          : 'text-slate-500 dark:text-gray-400'
+                          : 'text-gray-500 dark:text-zinc-400 dark:text-gray-400'
                       }`}
                     />
                     <span>{tab.label}</span>
@@ -758,9 +758,9 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
 
       {/* Main Paginated Emails: Mobile Cards + Desktop Table */}
       <SlideIn delay={160} direction="up">
-        <div className="rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#11121b] overflow-hidden shadow-sm dark:shadow-xl">
+        <div className="rounded-2xl border border-gray-200 dark:border-zinc-800/50 bg-white dark:bg-[#11121b] overflow-hidden shadow-sm dark:shadow-xl">
         {/* ── Mobile Card View (md:hidden) ── */}
-        <div className="block md:hidden divide-y divide-slate-100 dark:divide-white/5">
+        <div className="block md:hidden divide-y divide-gray-100 dark:divide-zinc-800/60">
           {isLoading ? (
             <div className="py-12 text-center text-gray-400">
               <div className="flex flex-col items-center justify-center gap-3">
@@ -776,8 +776,8 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
                     <Mail className="w-7 h-7 text-cyan-400" />
                   </div>
                   <div className="space-y-1">
-                    <p className="text-sm font-semibold text-slate-900 dark:text-white">Connect Gmail to get started</p>
-                    <p className="text-xs text-slate-500 dark:text-gray-400">Link your Gmail account to monitor, scan and triage your inbox in real time.</p>
+                    <p className="text-sm font-semibold text-gray-900 dark:text-zinc-100">Connect Gmail to get started</p>
+                    <p className="text-xs text-gray-500 dark:text-zinc-400 dark:text-gray-400">Link your Gmail account to monitor, scan and triage your inbox in real time.</p>
                   </div>
                   <button
                     onClick={handleConnectGoogle}
@@ -788,8 +788,8 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
                   </button>
                 </div>
               ) : (
-                <div className="flex flex-col items-center justify-center gap-3 text-slate-500 dark:text-gray-400">
-                  <Inbox className="w-8 h-8 text-slate-400 dark:text-gray-500" />
+                <div className="flex flex-col items-center justify-center gap-3 text-gray-500 dark:text-zinc-400 dark:text-gray-400">
+                  <Inbox className="w-8 h-8 text-gray-400 dark:text-zinc-500 dark:text-gray-500" />
                   <span className="text-xs">No live Gmail messages loaded yet. Tap "Sync Now" above to fetch your inbox.</span>
                 </div>
               )}
@@ -811,7 +811,7 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
                 <div
                   key={email.id}
                   onClick={() => selectEmail(email)}
-                  className="p-3.5 hover:bg-slate-50 active:bg-slate-100 dark:hover:bg-white/[0.04] dark:active:bg-white/[0.08] transition-colors cursor-pointer space-y-2.5"
+                  className="p-3.5 hover:bg-gray-50 active:bg-gray-100 dark:hover:bg-white/[0.04] dark:active:bg-white/[0.08] transition-colors cursor-pointer space-y-2.5"
                 >
                   {/* Row 1: Status badge + Date */}
                   <div className="flex items-center justify-between gap-2">
@@ -824,7 +824,7 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
                         </span>
                       )}
                     </div>
-                    <span className="text-[11px] text-slate-400 dark:text-gray-400 shrink-0 font-mono">
+                    <span className="text-[11px] text-gray-400 dark:text-zinc-500 dark:text-gray-400 shrink-0 font-mono">
                       {new Date(email.received_at).toLocaleDateString(undefined, {
                         month: 'short',
                         day: 'numeric',
@@ -836,21 +836,21 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
 
                   {/* Row 2: Sender */}
                   <div>
-                    <div className="font-semibold text-slate-900 dark:text-white text-xs sm:text-sm truncate">
+                    <div className="font-semibold text-gray-900 dark:text-zinc-100 text-xs sm:text-sm truncate">
                       {decodeMimeHeader(email.sender_name || email.sender)}
                     </div>
-                    <div className="text-[11px] text-slate-500 dark:text-gray-400 truncate">
+                    <div className="text-[11px] text-gray-500 dark:text-zinc-400 dark:text-gray-400 truncate">
                       {email.sender}
                     </div>
                   </div>
 
                   {/* Row 3: Subject & Snippet */}
                   <div className="space-y-0.5">
-                    <div className="font-medium text-slate-800 dark:text-gray-200 text-xs line-clamp-1">
+                    <div className="font-medium text-gray-800 dark:text-zinc-200 dark:text-gray-200 text-xs line-clamp-1">
                       {decodeMimeHeader(email.subject)}
                     </div>
                     {email.snippet && (
-                      <div className="text-[11px] text-slate-500 dark:text-gray-400 line-clamp-2 leading-relaxed">
+                      <div className="text-[11px] text-gray-500 dark:text-zinc-400 dark:text-gray-400 line-clamp-2 leading-relaxed">
                         {decodeMimeHeader(email.snippet)}
                       </div>
                     )}
@@ -873,7 +873,7 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
         <div className="hidden md:block overflow-x-auto scrollbar-thin touch-scroll">
           <table className="w-full text-left text-xs min-w-[640px] md:min-w-0">
             <thead>
-              <tr className="border-b border-slate-200 dark:border-white/10 bg-slate-50/60 dark:bg-white/[0.02] text-slate-500 dark:text-gray-400 uppercase tracking-wider text-[11px]">
+              <tr className="border-b border-gray-200 dark:border-zinc-800/50 bg-gray-50/60 dark:bg-zinc-900/40 text-gray-500 dark:text-zinc-400 dark:text-gray-400 uppercase tracking-wider text-[11px]">
                 <th className="py-3.5 px-4 w-44 whitespace-nowrap">Status / Risk</th>
                 <th className="py-3.5 px-4 w-60">Sender</th>
                 <th className="py-3.5 px-4">Subject</th>
@@ -881,10 +881,10 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
                 <th className="py-3.5 px-4 w-28 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-white/5">
+            <tbody className="divide-y divide-gray-100 dark:divide-zinc-800/60">
               {isLoading ? (
                 <tr>
-                  <td colSpan={5} className="py-12 text-center text-slate-500 dark:text-gray-400">
+                  <td colSpan={5} className="py-12 text-center text-gray-500 dark:text-zinc-400 dark:text-gray-400">
                     <div className="flex flex-col items-center justify-center gap-3">
                       <RefreshCw className="w-6 h-6 animate-spin text-cyan-500 dark:text-cyan-400" />
                       <span>Ingesting email feed and running Gemini security triage...</span>
@@ -900,8 +900,8 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
                           <Mail className="w-7 h-7 text-cyan-500 dark:text-cyan-400" />
                         </div>
                         <div className="space-y-1">
-                          <p className="text-sm font-semibold text-slate-900 dark:text-white">Connect Gmail to get started</p>
-                          <p className="text-xs text-slate-500 dark:text-gray-400">Link your Gmail account to monitor, scan and triage your inbox in real time.</p>
+                          <p className="text-sm font-semibold text-gray-900 dark:text-zinc-100">Connect Gmail to get started</p>
+                          <p className="text-xs text-gray-500 dark:text-zinc-400 dark:text-gray-400">Link your Gmail account to monitor, scan and triage your inbox in real time.</p>
                         </div>
                         <button
                           onClick={handleConnectGoogle}
@@ -912,8 +912,8 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
                         </button>
                       </div>
                     ) : (
-                      <div className="flex flex-col items-center justify-center gap-3 text-slate-500 dark:text-gray-400">
-                        <Inbox className="w-8 h-8 text-slate-400 dark:text-gray-500" />
+                      <div className="flex flex-col items-center justify-center gap-3 text-gray-500 dark:text-zinc-400 dark:text-gray-400">
+                        <Inbox className="w-8 h-8 text-gray-400 dark:text-zinc-500 dark:text-gray-500" />
                         <span>No live Gmail messages loaded yet. Click "Sync Gmail" above to fetch and triage your real inbox.</span>
                       </div>
                     )}
@@ -936,7 +936,7 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
                     <tr
                       key={email.id}
                       onClick={() => selectEmail(email)}
-                      className="hover:bg-slate-50/80 dark:hover:bg-white/[0.04] transition-colors cursor-pointer group"
+                      className="hover:bg-gray-50/80 dark:hover:bg-white/[0.04] transition-colors cursor-pointer group"
                     >
                       {/* Risk Badge */}
                       <td className="py-3.5 px-4 align-middle whitespace-nowrap">
@@ -954,10 +954,10 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
                       {/* Sender */}
                       <td className="py-3.5 px-4 align-middle">
                         <div className="space-y-0.5 max-w-[220px]">
-                          <div className="font-semibold text-slate-900 group-hover:text-cyan-600 dark:text-white dark:group-hover:text-cyan-300 transition-colors truncate text-xs">
+                          <div className="font-semibold text-gray-900 group-hover:text-cyan-600 dark:text-white dark:group-hover:text-cyan-300 transition-colors truncate text-xs">
                             {decodeMimeHeader(email.sender_name || email.sender)}
                           </div>
-                          <div className="text-[11px] text-slate-500 dark:text-gray-400 truncate">
+                          <div className="text-[11px] text-gray-500 dark:text-zinc-400 dark:text-gray-400 truncate">
                             {email.sender}
                           </div>
                         </div>
@@ -966,11 +966,11 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
                       {/* Subject & Preview */}
                       <td className="py-3.5 px-4 align-middle">
                         <div className="space-y-0.5 pr-4">
-                          <div className="font-medium text-slate-900 group-hover:text-cyan-600 dark:text-white dark:group-hover:text-cyan-200 transition-colors line-clamp-1 text-xs">
+                          <div className="font-medium text-gray-900 group-hover:text-cyan-600 dark:text-white dark:group-hover:text-cyan-200 transition-colors line-clamp-1 text-xs">
                             {decodeMimeHeader(email.subject)}
                           </div>
                           {email.snippet && (
-                            <div className="text-[11px] text-slate-500 dark:text-gray-400 line-clamp-1">
+                            <div className="text-[11px] text-gray-500 dark:text-zinc-400 dark:text-gray-400 line-clamp-1">
                               {decodeMimeHeader(email.snippet)}
                             </div>
                           )}
@@ -978,7 +978,7 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
                       </td>
 
                       {/* Date */}
-                      <td className="py-3.5 px-4 align-middle text-slate-500 dark:text-gray-400 text-[11px] whitespace-nowrap">
+                      <td className="py-3.5 px-4 align-middle text-gray-500 dark:text-zinc-400 dark:text-gray-400 text-[11px] whitespace-nowrap">
                         {new Date(email.received_at).toLocaleDateString(undefined, {
                           month: 'short',
                           day: 'numeric',
@@ -1012,24 +1012,24 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
         </div>
 
         {/* Pagination Footer */}
-        <div className="p-3.5 sm:p-4 border-t border-slate-200 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-500 dark:text-gray-400 bg-slate-50/50 dark:bg-white/[0.01]">
+        <div className="p-3.5 sm:p-4 border-t border-gray-200 dark:border-zinc-800/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-gray-500 dark:text-zinc-400 dark:text-gray-400 bg-gray-50/50 dark:bg-white/[0.01]">
           <div>
             Showing{' '}
-            <span className="text-slate-900 dark:text-white font-semibold">
+            <span className="text-gray-900 dark:text-zinc-100 font-semibold">
               {filteredEmails.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0}
             </span>{' '}
             to{' '}
-            <span className="text-slate-900 dark:text-white font-semibold">
+            <span className="text-gray-900 dark:text-zinc-100 font-semibold">
               {Math.min(currentPage * itemsPerPage, filteredEmails.length)}
             </span>{' '}
-            of <span className="text-slate-900 dark:text-white font-semibold">{filteredEmails.length}</span> emails
+            of <span className="text-gray-900 dark:text-zinc-100 font-semibold">{filteredEmails.length}</span> emails
           </div>
 
           <div className="flex items-center gap-2 self-end sm:self-auto">
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-white/5 dark:hover:bg-white/10 dark:text-gray-300 disabled:opacity-40 disabled:pointer-events-none transition-colors"
+              className="p-1.5 rounded-lg bg-gray-100 hover:bg-slate-200 text-gray-700 dark:text-zinc-300 dark:bg-zinc-800/50 dark:hover:bg-white/10 dark:text-gray-300 disabled:opacity-40 disabled:pointer-events-none transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
@@ -1039,7 +1039,7 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
             <button
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-white/5 dark:hover:bg-white/10 dark:text-gray-300 disabled:opacity-40 disabled:pointer-events-none transition-colors"
+              className="p-1.5 rounded-lg bg-gray-100 hover:bg-slate-200 text-gray-700 dark:text-zinc-300 dark:bg-zinc-800/50 dark:hover:bg-white/10 dark:text-gray-300 disabled:opacity-40 disabled:pointer-events-none transition-colors"
             >
               <ChevronRight className="w-4 h-4" />
             </button>

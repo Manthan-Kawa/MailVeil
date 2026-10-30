@@ -6,18 +6,18 @@ export function AppearanceCard() {
   const { theme, toggleTheme, setTheme } = useTheme();
 
   return (
-    <div className="p-5 rounded-2xl bg-white dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.06] shadow-sm transition-colors">
-      <h3 className="font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+    <div className="p-5 rounded-2xl bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 shadow-sm transition-colors">
+      <h3 className="font-semibold text-gray-900 dark:text-zinc-100 mb-4 flex items-center gap-2">
         <Monitor className="w-5 h-5 text-sky-500" />
         Appearance
       </h3>
 
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
+          <p className="text-sm font-medium text-gray-900 dark:text-zinc-100">
             {theme === 'dark' ? 'Dark Mode' : 'Light Mode'}
           </p>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-gray-500 mt-0.5">
             {theme === 'dark'
               ? 'Switch to light for a brighter look'
               : 'Switch to dark for easier night use'}
@@ -31,24 +31,23 @@ export function AppearanceCard() {
           aria-label="Toggle dark/light mode"
           animate={{
             background: theme === 'dark'
-              ? 'linear-gradient(to right, #4f46e5, #9333ea)'
-              : 'linear-gradient(to right, #38bdf8, #22d3ee)'
+              ? 'linear-gradient(135deg, #4c1d95 0%, #6d28d9 50%, #7e22ce 100%)'
+              : 'linear-gradient(135deg, #f59e0b 0%, #f97316 100%)'
           }}
           transition={{ duration: 0.3, ease: 'easeInOut' }}
-          className="relative w-16 h-8 rounded-full focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-2"
+          className="relative w-16 h-8 rounded-full focus:outline-none cursor-pointer"
         >
           <motion.div
             layout
             initial={false}
             animate={{
               x: theme === 'dark' ? 32 : 4,
-              backgroundColor: theme === 'dark' ? '#0f172a' : '#ffffff'
+              backgroundColor: theme === 'dark' ? '#09090b' : '#ffffff'
             }}
             transition={{
               type: 'spring',
               stiffness: 500,
-              damping: 30,
-            }}
+              damping: 30 }}
             className="absolute top-1 w-6 h-6 rounded-full flex items-center justify-center shadow-md"
           >
             <AnimatePresence mode="wait" initial={false}>
@@ -61,7 +60,7 @@ export function AppearanceCard() {
                   transition={{ duration: 0.2 }}
                   className="absolute flex items-center justify-center"
                 >
-                  <Moon className="w-3.5 h-3.5 text-indigo-300" />
+                  <Moon className="w-3.5 h-3.5 text-purple-400" />
                 </motion.div>
               ) : (
                 <motion.div
@@ -81,36 +80,47 @@ export function AppearanceCard() {
       </div>
 
       {/* Visual preview tiles */}
-      <div className="mt-5 grid grid-cols-2 gap-3">
-        <button
-          type="button"
-          onClick={(e) => setTheme('light', e)}
-          className={`p-3 rounded-xl border-2 transition-all cursor-pointer text-left ${
-            theme === 'light'
-              ? 'border-sky-500 bg-sky-50'
-              : 'border-slate-200 dark:border-white/10 bg-white dark:bg-white/[0.02] hover:border-slate-300 dark:hover:border-white/20'
-          }`}
-        >
-          <div className="w-full h-8 rounded-lg bg-gradient-to-br from-slate-100 to-white border border-slate-200 mb-2 shadow-[inset_0_1px_2px_rgba(0,0,0,0.04)]" />
-          <p className={`text-xs font-medium text-center ${theme === 'light' ? 'text-sky-600 font-semibold' : 'text-slate-500 dark:text-slate-400'}`}>
-            Light
-          </p>
-        </button>
+      <div className="mt-5 grid grid-cols-2 gap-3 relative">
+        {(['light', 'dark'] as const).map((mode) => {
+          const isSelected = theme === mode;
+          return (
+            <button
+              key={mode}
+              type="button"
+              onClick={(e) => setTheme(mode, e)}
+              className="relative p-3 rounded-2xl cursor-pointer text-left focus:outline-none transition-colors duration-200 bg-gray-50/70 dark:bg-black/50 border border-gray-200/80 dark:border-zinc-800"
+            >
+              {isSelected && (
+                <motion.div
+                  layoutId="themeSelectionActiveBorder"
+                  className="absolute inset-0 rounded-2xl border-2 border-blue-600 dark:border-white pointer-events-none shadow-sm"
+                  transition={{
+                    type: 'spring',
+                    stiffness: 420,
+                    damping: 32,
+                  }}
+                />
+              )}
 
-        <button
-          type="button"
-          onClick={(e) => setTheme('dark', e)}
-          className={`p-3 rounded-xl border-2 transition-all cursor-pointer text-left ${
-            theme === 'dark'
-              ? 'border-indigo-500 bg-indigo-950/30'
-              : 'border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.02] hover:border-slate-300 dark:hover:border-white/20'
-          }`}
-        >
-          <div className="w-full h-8 rounded-lg bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 dark:border-white/10 mb-2 shadow-[inset_0_1px_2px_rgba(0,0,0,0.3)]" />
-          <p className={`text-xs font-medium text-center ${theme === 'dark' ? 'text-indigo-400 font-semibold' : 'text-slate-400'}`}>
-            Dark
-          </p>
-        </button>
+              <div
+                className={`w-full h-8 rounded-xl mb-2.5 transition-all ${
+                  mode === 'light'
+                    ? 'bg-gradient-to-br from-slate-50 to-white border border-gray-200 shadow-sm'
+                    : 'bg-black border border-zinc-700/80 shadow-inner'
+                }`}
+              />
+              <p
+                className={`text-xs font-semibold text-center transition-colors ${
+                  isSelected
+                    ? 'text-gray-900 dark:text-white font-bold'
+                    : 'text-gray-500 dark:text-gray-400'
+                }`}
+              >
+                {mode === 'light' ? 'Light' : 'Dark'}
+              </p>
+            </button>
+          );
+        })}
       </div>
     </div>
   );

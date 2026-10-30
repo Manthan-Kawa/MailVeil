@@ -56,7 +56,7 @@ const EML_INSTRUCTIONS = [
     client: 'Apple Mail',
     icon: '🍎',
     color: 'text-black dark:text-white',
-    border: 'border-slate-300 dark:border-gray-500/20',
+    border: 'border-gray-300 dark:border-gray-500/20',
     bg: 'rgba(156,163,175,0.05)',
     steps: [
       'Open the suspicious email in Apple Mail.',
@@ -187,35 +187,34 @@ export function SubmitReportPage({ onNavigate }: SubmitReportPageProps) {
       <div className="min-h-[70vh] flex flex-col items-center justify-center gap-6 animate-fade-in px-4">
         <div
           className="w-20 h-20 rounded-3xl flex items-center justify-center"
-          style={{ background: 'rgba(34,197,94,0.12)', border: '1px solid rgba(34,197,94,0.3)', boxShadow: '0 0 40px rgba(34,197,94,0.15)' }}
+          style={{ background: 'rgba(34,197,94,0.12)', border: '1px solid rgba(34,197,94,0.3)' }}
         >
           <CheckCircle2 className="w-10 h-10 text-green-500 dark:text-green-400" />
         </div>
         <div className="text-center">
-          <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-2">Report Submitted!</h2>
-          <p className="text-slate-500 dark:text-gray-400 text-sm">Your report has been received and is pending analyst review.</p>
+          <h2 className="text-2xl font-black text-gray-900 dark:text-zinc-100 mb-2">Report Submitted!</h2>
+          <p className="text-gray-500 dark:text-gray-400 text-sm">Your report has been received and is pending analyst review.</p>
         </div>
         <div
           className="px-6 py-4 rounded-2xl text-center"
           style={{ background: 'rgba(34,197,94,0.06)', border: '1px solid rgba(34,197,94,0.2)' }}
         >
-          <p className="text-xs text-slate-500 dark:text-gray-400 mb-1">Case ID</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Case ID</p>
           <p className="text-xl font-black text-green-600 dark:text-green-400">{submitted.caseId}</p>
         </div>
-        <p className="text-xs text-slate-400 dark:text-gray-500 text-center max-w-sm">
+        <p className="text-xs text-gray-400 dark:text-zinc-500 text-center max-w-sm">
           You will be notified when an analyst has reviewed your submission. Track the status in Check Status.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
           <button
             onClick={() => { setSubmitted(null); setEmlFile(null); setComment(''); }}
-            className="w-full sm:w-auto px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white transition-all text-center bg-slate-100 dark:bg-white/[0.06] border border-slate-200 dark:border-white/10"
+            className="w-full sm:w-auto px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white transition-all text-center bg-slate-100 dark:bg-white/[0.06] border border-gray-200 dark:border-zinc-800/50"
           >
             Submit Another
           </button>
           <button
             onClick={() => onNavigate('check-status')}
-            className="w-full sm:w-auto px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 text-center"
-            style={{ background: 'linear-gradient(135deg, #059669, #047857)', boxShadow: '0 4px 20px rgba(5,150,105,0.3)' }}
+            className="w-full sm:w-auto px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all bg-emerald-600 hover:bg-emerald-500 text-center shadow-sm"
           >
             Check Status
           </button>
@@ -236,9 +235,9 @@ export function SubmitReportPage({ onNavigate }: SubmitReportPageProps) {
             >
               <Upload className="w-4.5 h-4.5 text-blue-500 dark:text-blue-400" />
             </div>
-            <h1 className="text-2xl font-black text-slate-900 dark:text-white">Submit a Report</h1>
+            <h1 className="text-2xl font-black text-gray-900 dark:text-zinc-100">Submit a Report</h1>
           </div>
-          <p className="text-slate-500 dark:text-gray-400 text-sm">
+          <p className="text-gray-500 dark:text-gray-400 text-sm">
             Upload a suspicious .eml email file for our security analysts to investigate.
           </p>
         </div>
@@ -284,8 +283,8 @@ export function SubmitReportPage({ onNavigate }: SubmitReportPageProps) {
                 <FileText className="w-6 h-6 text-green-500 dark:text-green-400" />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-bold text-slate-900 dark:text-white truncate">{emlFile.name}</p>
-                <p className="text-xs text-slate-400 dark:text-gray-500 mt-0.5">{formatBytes(emlFile.size)} · .eml</p>
+                <p className="text-sm font-bold text-gray-900 dark:text-zinc-100 truncate">{emlFile.name}</p>
+                <p className="text-xs text-gray-400 dark:text-zinc-500 mt-0.5">{formatBytes(emlFile.size)} · .eml</p>
               </div>
               <button
                 onClick={(e) => { e.stopPropagation(); setEmlFile(null); }}
@@ -301,11 +300,11 @@ export function SubmitReportPage({ onNavigate }: SubmitReportPageProps) {
                 className="w-14 h-14 rounded-2xl flex items-center justify-center"
                 style={{ background: 'rgba(99,116,160,0.08)', border: '1px solid rgba(99,116,160,0.18)' }}
               >
-                <Paperclip className="w-7 h-7 text-slate-400 dark:text-gray-500" />
+                <Paperclip className="w-7 h-7 text-gray-400 dark:text-zinc-500" />
               </div>
               <div>
                 <p className="text-slate-700 dark:text-white font-semibold text-sm">Drop your .eml file here</p>
-                <p className="text-slate-400 dark:text-gray-500 text-xs mt-1">or click to browse</p>
+                <p className="text-gray-400 dark:text-zinc-500 text-xs mt-1">or click to browse</p>
               </div>
               <span
                 className="px-3 py-1 rounded-full text-[10px] font-bold text-blue-600 dark:text-blue-400"
@@ -334,7 +333,7 @@ export function SubmitReportPage({ onNavigate }: SubmitReportPageProps) {
           className="rounded-2xl overflow-hidden"
           style={{ border: '1px solid rgba(99,116,160,0.18)', background: 'rgba(0,0,0,0.01)' }}
         >
-          <div className="px-5 py-3 flex items-center gap-2 border-b border-slate-200 dark:border-white/5">
+          <div className="px-5 py-3 flex items-center gap-2 border-b border-gray-200 dark:border-zinc-800/50">
             <HelpCircle className="w-4 h-4 text-slate-400 dark:text-gray-400" />
             <span className="text-xs font-bold text-slate-500 dark:text-gray-300 uppercase tracking-wider">
               How to export a .eml file
@@ -354,9 +353,9 @@ export function SubmitReportPage({ onNavigate }: SubmitReportPageProps) {
                       <span className={`text-sm font-semibold ${client.color}`}>{client.client}</span>
                     </div>
                     {open ? (
-                      <ChevronUp className="w-4 h-4 text-slate-400 dark:text-gray-500" />
+                      <ChevronUp className="w-4 h-4 text-gray-400 dark:text-zinc-500" />
                     ) : (
-                      <ChevronDown className="w-4 h-4 text-slate-400 dark:text-gray-500" />
+                      <ChevronDown className="w-4 h-4 text-gray-400 dark:text-zinc-500" />
                     )}
                   </button>
                   {open && (
@@ -368,7 +367,7 @@ export function SubmitReportPage({ onNavigate }: SubmitReportPageProps) {
                         {client.steps.map((step, i) => (
                           <li key={i} className="flex items-start gap-3">
                             <span
-                              className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5 text-slate-500 dark:text-gray-400 bg-slate-200 dark:bg-white/[0.08]"
+                              className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5 text-gray-500 dark:text-gray-400 bg-slate-200 dark:bg-white/[0.08]"
                             >
                               {i + 1}
                             </span>
@@ -397,7 +396,7 @@ export function SubmitReportPage({ onNavigate }: SubmitReportPageProps) {
             onChange={(e) => setComment(e.target.value)}
             placeholder="Describe any suspicious behaviour, why you think this email is malicious, any context that may help the analyst…"
             rows={4}
-            className="w-full px-4 py-3 rounded-xl text-sm text-slate-800 dark:text-gray-200 placeholder-slate-400 dark:placeholder-gray-600 focus:outline-none resize-none transition-all bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10"
+            className="w-full px-4 py-3 rounded-xl text-sm text-slate-800 dark:text-gray-200 placeholder-slate-400 dark:placeholder-gray-600 focus:outline-none resize-none transition-all bg-slate-50 dark:bg-white/[0.04] border border-gray-200 dark:border-zinc-800/50"
             onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(59,130,246,0.5)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(59,130,246,0.08)'; }}
             onBlur={(e) => { e.currentTarget.style.borderColor = ''; e.currentTarget.style.boxShadow = 'none'; }}
           />
@@ -408,7 +407,7 @@ export function SubmitReportPage({ onNavigate }: SubmitReportPageProps) {
       {/* Incident Urgency & Interaction Checklist */}
       <SlideIn delay={180} direction="up">
         <div
-          className="p-4 rounded-2xl space-y-2.5 bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/[0.08]"
+          className="p-4 rounded-2xl space-y-2.5 bg-slate-50 dark:bg-white/[0.02] border border-gray-200 dark:border-white/[0.08]"
         >
           <p className="text-xs font-bold text-slate-500 dark:text-gray-300 uppercase tracking-wider">
             Incident Severity &amp; Interaction (Helps SOC prioritize)
@@ -450,11 +449,7 @@ export function SubmitReportPage({ onNavigate }: SubmitReportPageProps) {
         <button
           onClick={handleSubmit}
           disabled={submitting || (!emlFile && !comment.trim())}
-          className="w-full flex items-center justify-center gap-2.5 py-4 rounded-2xl text-white font-bold text-sm transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 active:scale-[0.98]"
-          style={{
-            background: 'linear-gradient(135deg, #2563eb 0%, #4f46e5 50%, #7c3aed 100%)',
-            boxShadow: (emlFile || comment.trim()) ? '0 6px 28px rgba(99,102,241,0.4)' : 'none',
-          }}
+          className="w-full flex items-center justify-center gap-2.5 py-4 rounded-2xl text-white font-bold text-sm transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed bg-blue-600 hover:bg-blue-500 active:scale-[0.98] shadow-sm"
         >
           {submitting ? (
             <>

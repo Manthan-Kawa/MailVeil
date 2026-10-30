@@ -75,8 +75,7 @@ function SlideIn({
       style={{
         opacity: vis ? 1 : 0,
         transform: vis ? 'none' : from,
-        transition: 'opacity .5s cubic-bezier(.22,1,.36,1), transform .5s cubic-bezier(.22,1,.36,1)',
-      }}
+        transition: 'opacity .5s cubic-bezier(.22,1,.36,1), transform .5s cubic-bezier(.22,1,.36,1)' }}
     >
       {children}
     </div>
@@ -84,12 +83,12 @@ function SlideIn({
 }
 
 /* ─── Severity config ─── */
-const SEVERITY_STYLES: Record<Severity, { border: string; bg: string; text: string; dot: string; glow: string }> = {
-  critical: { border: 'rgba(239,68,68,0.4)', bg: 'rgba(239,68,68,0.1)', text: '#f87171', dot: '#ef4444', glow: 'rgba(239,68,68,0.25)' },
-  high: { border: 'rgba(249,115,22,0.4)', bg: 'rgba(249,115,22,0.1)', text: '#fb923c', dot: '#f97316', glow: 'rgba(249,115,22,0.2)' },
-  medium: { border: 'rgba(245,158,11,0.35)', bg: 'rgba(245,158,11,0.08)', text: '#fbbf24', dot: '#f59e0b', glow: 'rgba(245,158,11,0.15)' },
-  low: { border: 'rgba(59,130,246,0.35)', bg: 'rgba(59,130,246,0.08)', text: '#60a5fa', dot: '#3b82f6', glow: 'rgba(59,130,246,0.15)' },
-  info: { border: 'rgba(156,163,175,0.25)', bg: 'rgba(156,163,175,0.06)', text: '#9ca3af', dot: '#6b7280', glow: 'rgba(156,163,175,0.1)' },
+const SEVERITY_STYLES: Record<Severity, { border: string; bg: string; text: string; dot: string }> = {
+  critical: { border: 'rgba(239,68,68,0.4)', bg: 'rgba(239,68,68,0.1)', text: '#f87171', dot: '#ef4444' },
+  high: { border: 'rgba(249,115,22,0.4)', bg: 'rgba(249,115,22,0.1)', text: '#fb923c', dot: '#f97316' },
+  medium: { border: 'rgba(245,158,11,0.35)', bg: 'rgba(245,158,11,0.08)', text: '#fbbf24', dot: '#f59e0b' },
+  low: { border: 'rgba(59,130,246,0.35)', bg: 'rgba(59,130,246,0.08)', text: '#60a5fa', dot: '#3b82f6' },
+  info: { border: 'rgba(156,163,175,0.25)', bg: 'rgba(156,163,175,0.06)', text: '#9ca3af', dot: '#6b7280' },
 };
 
 const STATUS_CONFIG: Record<CampaignStatus, { color: string; bg: string; border: string; label: string; pulse?: string }> = {
@@ -131,7 +130,7 @@ function buildCaseFromAnalysis(r: EmailAnalysisResult): InvestigationCase {
     severity: alertToSeverity(r.alert_level),
     status,
     created: now,
-    assignedAnalyst: 'Mailveil Engine',
+    assignedAnalyst: 'SENTINEL-X Engine',
     threatType: (r.verdict?.split(' ')[0] ?? 'BEC') as any,
     relatedCampaign: r.campaign_id ?? 'UNKNOWN',
     lastUpdated: now,
@@ -141,16 +140,16 @@ function buildCaseFromAnalysis(r: EmailAnalysisResult): InvestigationCase {
         ? r.recommended_actions.map((a) => ({
           time: now,
           event: `[${a.priority.toUpperCase()}] ${a.action}: ${a.detail}`,
-          actor: 'Mailveil Engine',
+          actor: 'SENTINEL-X Engine',
         }))
-        : [{ time: now, event: `Analysis completed — threat score ${r.threat_score}/100`, actor: 'Mailveil Engine' }],
+        : [{ time: now, event: `Analysis completed — threat score ${r.threat_score}/100`, actor: 'SENTINEL-X Engine' }],
     analystNotes: r.ai_inferences.slice(0, 3).map((inf) => ({
       author: 'AI Engine',
       timestamp: now,
       note: `${inf.inference} — ${inf.confidence}% confidence. Basis: ${inf.basis}`,
     })),
     activityHistory: [
-      { time: now, action: 'Case generated via live email analysis', actor: 'Mailveil Engine' },
+      { time: now, action: 'Case generated via live email analysis', actor: 'SENTINEL-X Engine' },
     ],
     relatedEvidence: r.evidence?.map((e) => e.id) ?? [],
   };
@@ -321,31 +320,31 @@ export function CampaignsPage({ onNavigate }: { onNavigate?: (id: string) => voi
     {
       label: 'Emails Observed',
       value: stats.emailsObserved,
-      dotColor: 'bg-[#f43f5e] dark:bg-[#f87171] shadow-sm shadow-rose-500/50',
+      dotColor: 'bg-[#f43f5e] dark:bg-zinc-800 shadow-sm ',
       numColor: 'text-[#e11d48] dark:text-[#f87171]',
     },
     {
       label: 'Unique Domains',
       value: stats.uniqueDomains,
-      dotColor: 'bg-[#0d9488] dark:bg-[#2dd4bf] shadow-sm shadow-teal-400/50',
+      dotColor: 'bg-white dark:bg-zinc-800 dark:bg-zinc-800 shadow-sm ',
       numColor: 'text-[#0d9488] dark:text-[#2dd4bf]',
     },
     {
       label: 'Unique IPs',
       value: stats.uniqueIPs,
-      dotColor: 'bg-[#ea580c] dark:bg-[#fb923c] shadow-sm shadow-orange-400/50',
+      dotColor: 'bg-[#ea580c] dark:bg-zinc-800 shadow-sm ',
       numColor: 'text-[#ea580c] dark:text-[#fb923c]',
     },
     {
       label: 'Suspicious URLs',
       value: stats.suspiciousURLs,
-      dotColor: 'bg-[#f59e0b] dark:bg-[#fbbf24] shadow-sm shadow-amber-400/50',
+      dotColor: 'bg-[#f59e0b] dark:bg-zinc-800 shadow-sm ',
       numColor: 'text-[#d97706] dark:text-[#fbbf24]',
     },
     {
       label: 'Active Cases',
       value: stats.activeCases,
-      dotColor: 'bg-[#9333ea] dark:bg-[#c084fc] shadow-sm shadow-purple-400/50',
+      dotColor: 'bg-[#9333ea] dark:bg-zinc-800 shadow-sm ',
       numColor: 'text-[#9333ea] dark:text-[#c084fc]',
     },
   ];
@@ -355,15 +354,15 @@ export function CampaignsPage({ onNavigate }: { onNavigate?: (id: string) => voi
       {/* ── Page Header (Single top-level SlideIn eliminates extra top margin on PC) ── */}
       <SlideIn delay={0} direction="down">
         {/* Mobile Card Header (Phone only: block md:hidden) Matching User Screenshot */}
-        <div className="block md:hidden rounded-2xl sm:rounded-3xl p-4 sm:p-5 bg-white dark:bg-[#0e101a] border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-2xl space-y-4">
+        <div className="block md:hidden rounded-2xl sm:rounded-3xl p-4 sm:p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm dark:shadow-2xl space-y-4">
           {/* Row 1: Icon + Eyebrow + Title + Active Count Pill */}
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="w-12 h-12 rounded-2xl bg-purple-500/15 border border-purple-500/30 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 shadow-lg shadow-purple-500/10">
+              <div className="w-12 h-12 rounded-2xl bg-purple-500/15 border border-purple-500/30 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 shadow-lg ">
                 <Crosshair className="w-5 h-5 text-purple-600 dark:text-purple-400" />
               </div>
               <div className="min-w-0">
-                <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
+                <h1 className="text-xl font-bold tracking-tight text-gray-900 dark:text-zinc-100 leading-tight">
                   Campaign Intelligence
                 </h1>
               </div>
@@ -379,7 +378,7 @@ export function CampaignsPage({ onNavigate }: { onNavigate?: (id: string) => voi
           </div>
 
           {/* Row 2: Subtitle Description */}
-          <p className="text-xs text-slate-600 dark:text-gray-400 leading-relaxed">
+          <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
             Correlated threat clusters — multi-vector attack tracking, case intelligence &amp; real-time indicator grouping.
           </p>
 
@@ -399,7 +398,7 @@ export function CampaignsPage({ onNavigate }: { onNavigate?: (id: string) => voi
 
           {/* Row 4: Subheader (TARGET CLUSTERS | HIGH PRIORITY) */}
           <div className="flex items-center justify-between gap-2 pt-1">
-            <span className="text-[11px] font-mono tracking-wider text-slate-600 dark:text-gray-400 uppercase font-semibold">
+            <span className="text-[11px] font-mono tracking-wider text-gray-500 dark:text-gray-400 uppercase font-semibold">
               TARGET CLUSTERS
             </span>
             <span className="px-2 py-0.5 rounded bg-rose-500/10 border border-rose-500/25 text-[10px] font-mono font-bold text-rose-600 dark:text-rose-400 tracking-wider uppercase">
@@ -411,19 +410,19 @@ export function CampaignsPage({ onNavigate }: { onNavigate?: (id: string) => voi
           {currentCluster && (
             <div
               onClick={() => setSelected(currentCluster)}
-              className="rounded-xl p-3 bg-slate-100 dark:bg-[#131625] hover:bg-slate-200 dark:hover:bg-[#161a2e] border border-slate-200 dark:border-white/10 hover:border-purple-400 dark:hover:border-purple-500/40 flex items-center justify-between gap-3 transition-all cursor-pointer active:scale-[0.99] group shadow-sm"
+              className="rounded-xl p-3 bg-gray-50 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-gray-50 dark:bg-zinc-800 border-none border border-gray-200 dark:border-zinc-800/50 hover:border-purple-400 dark:hover:border-purple-500/40 flex items-center justify-between gap-3 transition-all cursor-pointer active:scale-[0.99] group shadow-sm"
             >
               <div className={`min-w-0 flex-1 space-y-1 transition-opacity duration-200 ${clusterFade === 'in' ? 'opacity-100' : 'opacity-0'}`}>
                 <div className="flex items-center gap-2 flex-wrap font-mono text-xs">
                   <span className={clusterIdx % 2 === 0 ? 'text-amber-600 dark:text-amber-400 font-bold' : 'text-purple-600 dark:text-purple-400 font-bold'}>
                     #{currentCluster.id.replace(/^#/, '')}
                   </span>
-                  <span className="text-slate-400 dark:text-gray-500">•</span>
-                  <span className="text-slate-500 dark:text-gray-400">
+                  <span className="text-gray-500 dark:text-gray-500">•</span>
+                  <span className="text-gray-500 dark:text-gray-400">
                     {clusterIdx % 2 === 0 ? '3m ago' : '11m ago'}
                   </span>
                 </div>
-                <p className="text-xs sm:text-sm font-semibold text-slate-900 dark:text-white truncate">
+                <p className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-zinc-100 truncate">
                   {currentCluster.name}
                 </p>
                 <div className="flex items-center gap-2 text-[11px] flex-wrap">
@@ -431,26 +430,26 @@ export function CampaignsPage({ onNavigate }: { onNavigate?: (id: string) => voi
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                     {currentCluster.indicators || 14} IOCs detected
                   </span>
-                  <span className="text-slate-400 dark:text-gray-500">·</span>
-                  <span className="text-slate-600 dark:text-gray-400 truncate">
+                  <span className="text-gray-500 dark:text-gray-500">·</span>
+                  <span className="text-gray-500 dark:text-gray-400 truncate">
                     {currentCluster.threatType || 'Tor Exit Node'}
                   </span>
                 </div>
               </div>
 
-              <div className="w-8 h-8 rounded-xl bg-slate-200 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-700 dark:text-gray-400 group-hover:text-black dark:group-hover:text-white flex items-center justify-center shrink-0">
+              <div className="w-8 h-8 rounded-xl bg-gray-200 dark:bg-white/5 border border-gray-200 dark:border-zinc-800/50 text-gray-900 dark:text-gray-400 group-hover:text-black dark:group-hover:text-white flex items-center justify-center shrink-0">
                 <ChevronRight className="w-4 h-4" />
               </div>
             </div>
           )}
 
           {/* Row 6: Divider */}
-          <div className="border-t border-slate-200 dark:border-white/10 pt-1" />
+          <div className="border-t border-gray-200 dark:border-zinc-800/50 pt-1" />
 
           {/* Row 7: Create Campaign button */}
           <button
             onClick={() => setShowCreateModal(true)}
-            className="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-xs font-mono font-bold flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 transition-transform duration-150 ease-out active:scale-95 cursor-pointer"
+            className="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-xs font-mono font-bold flex items-center justify-center gap-2 shadow-lg  transition-transform duration-150 ease-out active:scale-95 cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Create Campaign</span>
@@ -460,8 +459,8 @@ export function CampaignsPage({ onNavigate }: { onNavigate?: (id: string) => voi
         {/* Desktop Header (PC only: hidden md:flex) */}
         <div className="hidden md:flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Campaign Intelligence</h2>
-            <p className="text-sm text-slate-600 dark:text-gray-400 mt-0.5">
+            <h2 className="text-2xl font-black text-gray-900 dark:text-zinc-100 tracking-tight">Campaign Intelligence</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
               Correlated threat clusters — multi-vector attack tracking, case intelligence &amp; real-time indicator grouping
             </p>
           </div>
@@ -485,8 +484,7 @@ export function CampaignsPage({ onNavigate }: { onNavigate?: (id: string) => voi
               className="w-full sm:w-auto flex items-center justify-center gap-1.5 px-3.5 py-2 sm:py-1 rounded-lg text-xs font-bold text-white transition-transform duration-150 ease-out active:scale-95 font-mono shadow-md shrink-0 whitespace-nowrap cursor-pointer"
               style={{
                 background: 'linear-gradient(135deg, #a855f7 0%, #7c3aed 100%)',
-                boxShadow: '0 0 12px rgba(168,85,247,0.3)',
-              }}
+                 }}
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Create Campaign</span>
@@ -503,12 +501,12 @@ export function CampaignsPage({ onNavigate }: { onNavigate?: (id: string) => voi
             return (
               <div
                 key={stat.label}
-                className={`p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-[#0c0e18] border border-slate-200 dark:border-white/[0.08] transition-all flex flex-col justify-between min-h-[82px] sm:min-h-[92px] ${
+                className={`p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 transition-all flex flex-col justify-between min-h-[82px] sm:min-h-[92px] ${
                   isFullWidthMobile ? 'col-span-2 lg:col-span-1' : 'col-span-1'
                 }`}
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="font-mono text-[11px] sm:text-xs font-semibold text-slate-500 dark:text-gray-400 uppercase tracking-wider">
+                  <span className="font-mono text-[11px] sm:text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     {stat.label}
                   </span>
                   <span className={`w-2 h-2 rounded-full ${stat.dotColor}`} />
@@ -525,19 +523,19 @@ export function CampaignsPage({ onNavigate }: { onNavigate?: (id: string) => voi
       {/* ── Filters ── */}
       <SlideIn delay={120} direction="up">
         <div
-          className="rounded-2xl p-4 bg-white dark:bg-[#090b12] border border-slate-200 dark:border-transparent shadow-sm dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+          className="rounded-2xl p-4 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm "
         >
           <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3">
             <div
-              className="flex items-center gap-2 flex-1 rounded-xl px-3 py-2.5 min-w-0 bg-slate-100 dark:bg-white border border-slate-200 dark:border-slate-200 shadow-sm"
+              className="flex items-center gap-2 flex-1 rounded-xl px-3 py-2.5 min-w-0 bg-gray-50 dark:bg-white border border-gray-200 dark:border-gray-200 shadow-sm"
             >
-              <Search className="w-4 h-4 text-slate-400 dark:text-slate-400 shrink-0" />
+              <Search className="w-4 h-4 text-gray-500 dark:text-gray-500 shrink-0" />
               <input
                 type="text"
                 placeholder="Search by campaign ID, cluster name, case ID, or threat type..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="bg-transparent text-xs sm:text-sm text-slate-900 dark:text-slate-900 placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none w-full font-mono"
+                className="bg-transparent text-xs sm:text-sm text-gray-900 dark:text-gray-900 placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none w-full font-mono"
               />
             </div>
 
@@ -548,15 +546,15 @@ export function CampaignsPage({ onNavigate }: { onNavigate?: (id: string) => voi
                 <select
                   value={severityFilter}
                   onChange={(e) => setSeverityFilter(e.target.value as any)}
-                  className="w-full sm:w-auto appearance-none px-2.5 sm:px-3.5 py-1.5 sm:py-2.5 pr-6 sm:pr-8 rounded-xl text-[11px] sm:text-xs font-mono font-medium sm:font-semibold text-slate-800 dark:text-gray-200 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-500/40 cursor-pointer transition-all"
+                  className="w-full sm:w-auto appearance-none px-2.5 sm:px-3.5 py-1.5 sm:py-2.5 pr-6 sm:pr-8 rounded-xl text-[11px] sm:text-xs font-mono font-medium sm:font-semibold text-gray-900 dark:text-gray-200 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-zinc-800/50 hover:border-gray-200 dark:hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-500/40 cursor-pointer transition-all"
                 >
-                  <option value="all" className="bg-white dark:bg-[#0b0e17] text-slate-800 dark:text-gray-300">All Severity</option>
-                  <option value="critical" className="bg-white dark:bg-[#0b0e17] text-red-500 dark:text-red-400">Critical</option>
-                  <option value="high" className="bg-white dark:bg-[#0b0e17] text-orange-500 dark:text-orange-400">High</option>
-                  <option value="medium" className="bg-white dark:bg-[#0b0e17] text-amber-500 dark:text-amber-400">Medium</option>
-                  <option value="low" className="bg-white dark:bg-[#0b0e17] text-green-500 dark:text-green-400">Low</option>
+                  <option value="all" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-zinc-100">All Severity</option>
+                  <option value="critical" className="bg-white dark:bg-zinc-800 text-red-500 dark:text-red-400">Critical</option>
+                  <option value="high" className="bg-white dark:bg-zinc-800 text-orange-500 dark:text-orange-400">High</option>
+                  <option value="medium" className="bg-white dark:bg-zinc-800 text-amber-500 dark:text-amber-400">Medium</option>
+                  <option value="low" className="bg-white dark:bg-zinc-800 text-green-500 dark:text-green-400">Low</option>
                 </select>
-                <ChevronDown className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-500 dark:text-gray-400 absolute right-2 sm:right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <ChevronDown className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-500 dark:text-gray-400 absolute right-2 sm:right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
 
               {/* Status Dropdown */}
@@ -564,15 +562,15 @@ export function CampaignsPage({ onNavigate }: { onNavigate?: (id: string) => voi
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value as any)}
-                  className="w-full sm:w-auto appearance-none px-2.5 sm:px-3.5 py-1.5 sm:py-2.5 pr-6 sm:pr-8 rounded-xl text-[11px] sm:text-xs font-mono font-medium sm:font-semibold text-slate-800 dark:text-gray-200 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-500/40 cursor-pointer transition-all"
+                  className="w-full sm:w-auto appearance-none px-2.5 sm:px-3.5 py-1.5 sm:py-2.5 pr-6 sm:pr-8 rounded-xl text-[11px] sm:text-xs font-mono font-medium sm:font-semibold text-gray-900 dark:text-gray-200 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-zinc-800/50 hover:border-gray-200 dark:hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-500/40 cursor-pointer transition-all"
                 >
-                  <option value="all" className="bg-white dark:bg-[#0b0e17] text-slate-800 dark:text-gray-300">All Status</option>
-                  <option value="active" className="bg-white dark:bg-[#0b0e17] text-red-500 dark:text-red-400">Active</option>
-                  <option value="dormant" className="bg-white dark:bg-[#0b0e17] text-slate-600 dark:text-gray-400">Dormant</option>
-                  <option value="disrupted" className="bg-white dark:bg-[#0b0e17] text-green-600 dark:text-green-400">Disrupted</option>
-                  <option value="monitoring" className="bg-white dark:bg-[#0b0e17] text-blue-600 dark:text-cyan-400">Monitoring</option>
+                  <option value="all" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-zinc-100">All Status</option>
+                  <option value="active" className="bg-white dark:bg-zinc-800 text-red-500 dark:text-red-400">Active</option>
+                  <option value="dormant" className="bg-white dark:bg-zinc-800 text-gray-500 dark:text-gray-400">Dormant</option>
+                  <option value="disrupted" className="bg-white dark:bg-zinc-800 text-green-600 dark:text-green-400">Disrupted</option>
+                  <option value="monitoring" className="bg-white dark:bg-zinc-800 text-blue-600 dark:text-cyan-400">Monitoring</option>
                 </select>
-                <ChevronDown className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-500 dark:text-gray-400 absolute right-2 sm:right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <ChevronDown className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-500 dark:text-gray-400 absolute right-2 sm:right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
             </div>
           </div>
@@ -582,7 +580,7 @@ export function CampaignsPage({ onNavigate }: { onNavigate?: (id: string) => voi
       {/* ── Campaigns Table ── */}
       <SlideIn delay={180} direction="up">
         <div
-          className="rounded-2xl overflow-hidden bg-white dark:bg-[#090b12] border border-slate-200 dark:border-transparent shadow-sm dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+          className="rounded-2xl overflow-hidden bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm "
         >
           {/* ── Mobile Campaign Cards View (< md) ── */}
           <div className="md:hidden divide-y divide-slate-100 dark:divide-white/5">
@@ -597,7 +595,7 @@ export function CampaignsPage({ onNavigate }: { onNavigate?: (id: string) => voi
                 <div
                   key={c.id}
                   onClick={() => setSelected(c)}
-                  className="p-3.5 space-y-2 cursor-pointer transition-all duration-150 hover:bg-slate-50 dark:hover:bg-white/[0.03] active:bg-slate-100 dark:active:bg-white/[0.05]"
+                  className="p-3.5 space-y-2 cursor-pointer transition-all duration-150 hover:bg-white dark:hover:bg-zinc-700/50 active:bg-gray-50 dark:active:bg-white/[0.05]"
                 >
                   {/* Row 1: Campaign ID + Live dot + Status pill */}
                   <div className="flex items-center justify-between gap-2">
@@ -619,12 +617,12 @@ export function CampaignsPage({ onNavigate }: { onNavigate?: (id: string) => voi
                   </div>
 
                   {/* Row 2: Full Cluster Name */}
-                  <div className="text-xs text-slate-900 dark:text-white font-semibold leading-snug break-words">
+                  <div className="text-xs text-gray-900 dark:text-zinc-100 font-semibold leading-snug break-words">
                     {c.name}
                   </div>
 
                   {/* Row 3: Linked Case ID badge, Threat Type, Severity, Confidence, & Actions */}
-                  <div className="flex items-center justify-between gap-2 pt-1 border-t border-slate-100 dark:border-white/[0.04] text-xs">
+                  <div className="flex items-center justify-between gap-2 pt-1 border-t border-gray-100 dark:border-zinc-800/50 text-xs">
                     <div className="flex items-center gap-1.5 flex-wrap min-w-0">
                       {primaryCaseId ? (
                         <span
@@ -634,9 +632,9 @@ export function CampaignsPage({ onNavigate }: { onNavigate?: (id: string) => voi
                           <span className="whitespace-nowrap">{primaryCaseId}</span>
                         </span>
                       ) : (
-                        <span className="text-[10px] text-slate-400 dark:text-gray-600 font-mono italic shrink-0">No Case</span>
+                        <span className="text-[10px] text-gray-500 dark:text-gray-600 font-mono italic shrink-0">No Case</span>
                       )}
-                      <span className="text-[10px] text-slate-600 dark:text-gray-400 font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/5 shrink-0 whitespace-nowrap">
+                      <span className="text-[10px] text-gray-500 dark:text-gray-400 font-mono px-2 py-0.5 rounded bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 shrink-0 whitespace-nowrap">
                         {c.threatType}
                       </span>
                       <div className="shrink-0">
@@ -645,13 +643,13 @@ export function CampaignsPage({ onNavigate }: { onNavigate?: (id: string) => voi
                     </div>
 
                     <div className="flex items-center gap-1.5 shrink-0">
-                      <span className="text-[10px] font-mono text-slate-600 dark:text-gray-400 font-bold">{c.confidence}%</span>
+                      <span className="text-[10px] font-mono text-gray-500 dark:text-gray-400 font-bold">{c.confidence}%</span>
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           setEditingCampaign(c);
                         }}
-                        className="p-1 rounded text-slate-400 hover:text-purple-600 dark:text-gray-400 dark:hover:text-purple-400 hover:bg-purple-500/10 transition-colors cursor-pointer"
+                        className="p-1 rounded text-gray-500 hover:text-purple-600 dark:text-gray-400 dark:hover:text-purple-400 hover:bg-purple-500/10 transition-colors cursor-pointer"
                         title="Edit Campaign"
                       >
                         <Pencil className="w-3.5 h-3.5" />
@@ -663,12 +661,12 @@ export function CampaignsPage({ onNavigate }: { onNavigate?: (id: string) => voi
                             deleteCampaign(c.id);
                           }
                         }}
-                        className="p-1 rounded text-slate-400 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 hover:bg-red-500/15 transition-colors cursor-pointer"
+                        className="p-1 rounded text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 hover:bg-red-500/15 transition-colors cursor-pointer"
                         title="Delete Campaign"
                       >
                         <Trash2 className="w-3.5 h-3.5 text-red-500 dark:text-red-400" />
                       </button>
-                      <ChevronRight className="w-3.5 h-3.5 text-slate-400 dark:text-gray-600" />
+                      <ChevronRight className="w-3.5 h-3.5 text-gray-500 dark:text-gray-600" />
                     </div>
                   </div>
                 </div>
@@ -681,7 +679,7 @@ export function CampaignsPage({ onNavigate }: { onNavigate?: (id: string) => voi
             <div className="min-w-[700px] md:min-w-0">
               {/* Table Header */}
               <div
-                className="grid grid-cols-12 gap-2 px-5 py-3 text-[10px] font-mono font-bold text-slate-500 dark:text-gray-500 uppercase tracking-wider border-b border-slate-200 dark:border-transparent bg-slate-50/70 dark:bg-white/[0.02]"
+                className="grid grid-cols-12 gap-2 px-5 py-3 text-[10px] font-mono font-bold text-gray-500 dark:text-gray-500 uppercase tracking-wider border-b border-gray-200 dark:border-zinc-800/50 bg-white/70 dark:bg-zinc-900/50"
               >
                 <div className="col-span-2">Campaign ID</div>
                 <div className="col-span-2">Case ID</div>
@@ -705,7 +703,7 @@ export function CampaignsPage({ onNavigate }: { onNavigate?: (id: string) => voi
                     <div
                       key={c.id}
                       onClick={() => setSelected(c)}
-                      className="grid grid-cols-12 gap-2 px-5 py-3.5 cursor-pointer transition-all duration-150 hover:bg-slate-50 dark:hover:bg-white/[0.03] group items-center"
+                      className="grid grid-cols-12 gap-2 px-5 py-3.5 cursor-pointer transition-all duration-150 hover:bg-white dark:hover:bg-zinc-700/50 group items-center"
                     >
                       {/* Campaign ID */}
                       <div className="col-span-2 flex items-center gap-2">
@@ -726,13 +724,13 @@ export function CampaignsPage({ onNavigate }: { onNavigate?: (id: string) => voi
                             {primaryCaseId}
                           </span>
                         ) : (
-                          <span className="text-[11px] text-slate-400 dark:text-gray-600 font-mono italic">None</span>
+                          <span className="text-[11px] text-gray-500 dark:text-gray-600 font-mono italic">None</span>
                         )}
                       </div>
 
                       {/* Cluster Name */}
                       <div className="col-span-3 flex items-center gap-1.5">
-                        <span className="text-xs text-slate-900 dark:text-white font-medium truncate block">{c.name}</span>
+                        <span className="text-xs text-gray-900 dark:text-zinc-100 font-medium truncate block">{c.name}</span>
                         {hasLiveCase && (
                           <span
                             className="shrink-0 w-2 h-2 rounded-full bg-green-400 animate-pulse"
@@ -743,7 +741,7 @@ export function CampaignsPage({ onNavigate }: { onNavigate?: (id: string) => voi
 
                       {/* Threat Type */}
                       <div className="col-span-1 hidden md:flex items-center">
-                        <span className="text-xs text-slate-700 dark:text-gray-300 font-mono truncate">{c.threatType}</span>
+                        <span className="text-xs text-gray-900 dark:text-zinc-100 font-mono truncate">{c.threatType}</span>
                       </div>
 
                       {/* Severity */}
@@ -758,24 +756,22 @@ export function CampaignsPage({ onNavigate }: { onNavigate?: (id: string) => voi
 
                       {/* Confidence & Actions */}
                       <div className="col-span-1 hidden xl:flex items-center justify-end gap-2">
-                        <div className="w-10 h-1.5 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
+                        <div className="w-10 h-1.5 bg-gray-200 dark:bg-white/10 rounded-full overflow-hidden">
                           <div
                             className="h-full rounded-full"
                             style={{
                               width: `${c.confidence}%`,
                               background: c.confidence > 80 ? '#ef4444' : '#f97316',
-                              boxShadow: `0 0 6px ${c.confidence > 80 ? 'rgba(239,68,68,0.5)' : 'rgba(249,115,22,0.5)'
-                                }`,
-                            }}
+                               }}
                           />
                         </div>
-                        <span className="text-xs font-mono text-slate-900 dark:text-white font-bold">{c.confidence}%</span>
+                        <span className="text-xs font-mono text-gray-900 dark:text-zinc-100 font-bold">{c.confidence}%</span>
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
                             setEditingCampaign(c);
                           }}
-                          className="p-1 rounded-lg text-slate-400 hover:text-purple-600 hover:bg-slate-100 dark:text-gray-400 dark:hover:text-purple-400 dark:hover:bg-purple-500/10 transition-colors cursor-pointer"
+                          className="p-1 rounded-lg text-gray-500 hover:text-purple-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-purple-400 dark:hover:bg-purple-500/10 transition-colors cursor-pointer"
                           title="Edit Campaign"
                         >
                           <Pencil className="w-3.5 h-3.5" />
@@ -787,12 +783,12 @@ export function CampaignsPage({ onNavigate }: { onNavigate?: (id: string) => voi
                               deleteCampaign(c.id);
                             }
                           }}
-                          className="p-1 rounded-lg text-slate-400 hover:text-red-600 hover:bg-slate-100 dark:text-gray-400 dark:hover:text-red-400 dark:hover:bg-red-500/15 transition-colors cursor-pointer"
+                          className="p-1 rounded-lg text-gray-500 hover:text-red-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-red-400 dark:hover:bg-red-500/15 transition-colors cursor-pointer"
                           title="Delete Campaign"
                         >
                           <Trash2 className="w-3.5 h-3.5 text-red-500 dark:text-red-400" />
                         </button>
-                        <ChevronRight className="w-3.5 h-3.5 text-slate-400 dark:text-gray-600 group-hover:text-purple-600 dark:group-hover:text-purple-400 group-hover:translate-x-0.5 transition-all shrink-0" />
+                        <ChevronRight className="w-3.5 h-3.5 text-gray-500 dark:text-gray-600 group-hover:text-purple-600 dark:group-hover:text-purple-400 group-hover:translate-x-0.5 transition-all shrink-0" />
                       </div>
                     </div>
                   );
@@ -809,8 +805,8 @@ export function CampaignsPage({ onNavigate }: { onNavigate?: (id: string) => voi
                     <Network className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-slate-900 dark:text-white font-mono">No Campaigns Recorded</h3>
-                    <p className="text-xs text-slate-600 dark:text-gray-400 mt-1 leading-relaxed">
+                    <h3 className="text-sm font-bold text-gray-900 dark:text-zinc-100 font-mono">No Campaigns Recorded</h3>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">
                       No campaign threat clusters exist yet. Ingest and analyze emails in Email Analyzer or manually create a correlated campaign cluster.
                     </p>
                   </div>
@@ -825,7 +821,7 @@ export function CampaignsPage({ onNavigate }: { onNavigate?: (id: string) => voi
                     {onNavigate && (
                       <button
                         onClick={() => onNavigate('email-analyzer')}
-                        className="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:text-black dark:text-gray-300 dark:hover:text-white bg-slate-100 hover:bg-slate-200 dark:bg-white/5 border border-slate-200 dark:border-white/10 transition-all font-mono flex items-center gap-1.5"
+                        className="px-3.5 py-2 rounded-xl text-xs font-semibold text-gray-900 hover:text-black dark:text-zinc-100 dark:hover:text-white bg-gray-50 hover:bg-gray-200 dark:bg-white/5 border border-gray-200 dark:border-zinc-800/50 transition-all font-mono flex items-center gap-1.5"
                       >
                         <Network className="w-3.5 h-3.5" />
                         Analyze Email
@@ -968,8 +964,7 @@ function CampaignFormModal({
       className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
       style={{
         background: isDark ? 'rgba(0,0,0,0.82)' : 'rgba(15, 23, 42, 0.45)',
-        backdropFilter: 'blur(10px)',
-      }}
+        backdropFilter: 'blur(10px)' }}
       onClick={onClose}
     >
       <div
@@ -977,36 +972,34 @@ function CampaignFormModal({
         style={{
           background: isDark ? 'linear-gradient(145deg, #0d1118, #0a0c14)' : '#ffffff',
           border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #e2e8f0',
-          boxShadow: isDark ? '0 32px 80px rgba(0,0,0,0.85)' : '0 25px 60px -15px rgba(0,0,0,0.25)',
-        }}
+          boxShadow: isDark ? '0 32px 80px rgba(0,0,0,0.85)' : '0 25px 60px -15px rgba(0,0,0,0.25)' }}
         onClick={(e) => e.stopPropagation()}
       >
         <div
           className="flex items-center justify-between px-4 sm:px-6 py-3.5 sm:py-4 shrink-0"
-          style={{ borderBottom: isDark ? '1px solid rgba(255,255,255,0.07)' : '1px solid #e2e8f0' }}
+          style={{ borderBottom: isDark ? '1px solid rgba(39,39,42,0.5)' : '1px solid #e2e8f0' }}
         >
           <div className="flex items-center gap-3">
             <div
               className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
               style={{
                 background: 'rgba(168,85,247,0.15)',
-                border: '1px solid rgba(168,85,247,0.3)',
-              }}
+                border: '1px solid rgba(168,85,247,0.3)' }}
             >
               {mode === 'edit' ? <Pencil className="w-5 h-5 text-purple-400" /> : <Plus className="w-5 h-5 text-purple-400" />}
             </div>
             <div>
-              <p className="text-sm font-black text-slate-900 dark:text-white font-mono">
+              <p className="text-sm font-black text-gray-900 dark:text-zinc-100 font-mono">
                 {mode === 'edit' ? 'Edit Campaign Cluster' : 'Create Threat Campaign Cluster'}
               </p>
-              <p className="text-[11px] text-slate-500 dark:text-gray-500 mt-0.5">
+              <p className="text-[11px] text-gray-500 dark:text-gray-500 mt-0.5">
                 {mode === 'edit' ? 'Update campaign intelligence dossier' : 'Add a correlated campaign intelligence dossier'}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 dark:text-gray-500 transition-transform duration-150 ease-out active:scale-95 shrink-0 cursor-pointer"
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-500 transition-transform duration-150 ease-out active:scale-95 shrink-0 cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -1015,7 +1008,7 @@ function CampaignFormModal({
         <form onSubmit={handleSubmit} className="flex-1 overflow-hidden flex flex-col min-h-0">
           <div className="overflow-y-auto overflow-x-hidden scrollbar-thin flex-1 px-4 sm:px-6 py-4 sm:py-5 space-y-4 sm:space-y-5 touch-scroll">
             <div>
-              <label className="text-xs font-mono font-semibold text-slate-700 dark:text-gray-300 block mb-1">
+              <label className="text-xs font-mono font-semibold text-gray-900 dark:text-zinc-100 block mb-1">
                 Campaign Cluster Name *
               </label>
               <input
@@ -1024,60 +1017,60 @@ function CampaignFormModal({
                 placeholder="e.g. Executive Wire-Transfer Phishing Ring"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-3.5 py-2 rounded-xl text-sm text-slate-900 dark:text-white bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-purple-500 focus:outline-none font-mono placeholder:text-slate-400 dark:placeholder:text-gray-600 transition-colors"
+                className="w-full px-3.5 py-2 rounded-xl text-sm text-gray-900 dark:text-zinc-100 bg-white dark:bg-white/5 border border-gray-200 dark:border-zinc-800/50 focus:border-purple-500 focus:outline-none font-mono placeholder:text-gray-500 dark:placeholder:text-gray-600 transition-colors"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
-                <label className="text-xs font-mono font-semibold text-slate-700 dark:text-gray-300 block mb-1">Threat Type</label>
+                <label className="text-xs font-mono font-semibold text-gray-900 dark:text-zinc-100 block mb-1">Threat Type</label>
                 <select
                   value={threatType}
                   onChange={(e) => setThreatType(e.target.value as ThreatType)}
-                  className="w-full px-3 py-2 rounded-xl text-xs text-slate-900 dark:text-white bg-slate-50 dark:bg-[#0f1422] border border-slate-200 dark:border-white/10 focus:border-purple-500 focus:outline-none font-mono transition-colors"
+                  className="w-full px-3 py-2 rounded-xl text-xs text-gray-900 dark:text-zinc-100 bg-gray-50 dark:bg-zinc-800 border-none border border-gray-200 dark:border-zinc-800/50 focus:border-purple-500 focus:outline-none font-mono transition-colors"
                 >
-                  <option value="BEC" className="bg-white dark:bg-[#0f1422] text-slate-900 dark:text-white">BEC</option>
-                  <option value="Phishing" className="bg-white dark:bg-[#0f1422] text-slate-900 dark:text-white">Phishing</option>
-                  <option value="Malware" className="bg-white dark:bg-[#0f1422] text-slate-900 dark:text-white">Malware</option>
-                  <option value="Spoofing" className="bg-white dark:bg-[#0f1422] text-slate-900 dark:text-white">Spoofing</option>
-                  <option value="Credential Harvesting" className="bg-white dark:bg-[#0f1422] text-slate-900 dark:text-white">Credential Harvesting</option>
-                  <option value="Ransomware" className="bg-white dark:bg-[#0f1422] text-slate-900 dark:text-white">Ransomware</option>
-                  <option value="C2" className="bg-white dark:bg-[#0f1422] text-slate-900 dark:text-white">C2</option>
-                  <option value="Spam" className="bg-white dark:bg-[#0f1422] text-slate-900 dark:text-white">Spam</option>
+                  <option value="BEC" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-zinc-100">BEC</option>
+                  <option value="Phishing" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-zinc-100">Phishing</option>
+                  <option value="Malware" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-zinc-100">Malware</option>
+                  <option value="Spoofing" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-zinc-100">Spoofing</option>
+                  <option value="Credential Harvesting" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-zinc-100">Credential Harvesting</option>
+                  <option value="Ransomware" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-zinc-100">Ransomware</option>
+                  <option value="C2" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-zinc-100">C2</option>
+                  <option value="Spam" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-zinc-100">Spam</option>
                 </select>
               </div>
 
               <div>
-                <label className="text-xs font-mono font-semibold text-slate-700 dark:text-gray-300 block mb-1">Severity</label>
+                <label className="text-xs font-mono font-semibold text-gray-900 dark:text-zinc-100 block mb-1">Severity</label>
                 <select
                   value={severity}
                   onChange={(e) => setSeverity(e.target.value as Severity)}
-                  className="w-full px-3 py-2 rounded-xl text-xs text-slate-900 dark:text-white bg-slate-50 dark:bg-[#0f1422] border border-slate-200 dark:border-white/10 focus:border-purple-500 focus:outline-none font-mono transition-colors"
+                  className="w-full px-3 py-2 rounded-xl text-xs text-gray-900 dark:text-zinc-100 bg-gray-50 dark:bg-zinc-800 border-none border border-gray-200 dark:border-zinc-800/50 focus:border-purple-500 focus:outline-none font-mono transition-colors"
                 >
-                  <option value="critical" className="bg-white dark:bg-[#0f1422] text-slate-900 dark:text-white">Critical</option>
-                  <option value="high" className="bg-white dark:bg-[#0f1422] text-slate-900 dark:text-white">High</option>
-                  <option value="medium" className="bg-white dark:bg-[#0f1422] text-slate-900 dark:text-white">Medium</option>
-                  <option value="low" className="bg-white dark:bg-[#0f1422] text-slate-900 dark:text-white">Low</option>
+                  <option value="critical" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-zinc-100">Critical</option>
+                  <option value="high" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-zinc-100">High</option>
+                  <option value="medium" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-zinc-100">Medium</option>
+                  <option value="low" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-zinc-100">Low</option>
                 </select>
               </div>
 
               <div>
-                <label className="text-xs font-mono font-semibold text-slate-700 dark:text-gray-300 block mb-1">Status</label>
+                <label className="text-xs font-mono font-semibold text-gray-900 dark:text-zinc-100 block mb-1">Status</label>
                 <select
                   value={status}
                   onChange={(e) => setStatus(e.target.value as CampaignStatus)}
-                  className="w-full px-3 py-2 rounded-xl text-xs text-slate-900 dark:text-white bg-slate-50 dark:bg-[#0f1422] border border-slate-200 dark:border-white/10 focus:border-purple-500 focus:outline-none font-mono transition-colors"
+                  className="w-full px-3 py-2 rounded-xl text-xs text-gray-900 dark:text-zinc-100 bg-gray-50 dark:bg-zinc-800 border-none border border-gray-200 dark:border-zinc-800/50 focus:border-purple-500 focus:outline-none font-mono transition-colors"
                 >
-                  <option value="active" className="bg-white dark:bg-[#0f1422] text-slate-900 dark:text-white">Active</option>
-                  <option value="monitoring" className="bg-white dark:bg-[#0f1422] text-slate-900 dark:text-white">Monitoring</option>
-                  <option value="dormant" className="bg-white dark:bg-[#0f1422] text-slate-900 dark:text-white">Dormant</option>
-                  <option value="disrupted" className="bg-white dark:bg-[#0f1422] text-slate-900 dark:text-white">Disrupted</option>
+                  <option value="active" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-zinc-100">Active</option>
+                  <option value="monitoring" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-zinc-100">Monitoring</option>
+                  <option value="dormant" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-zinc-100">Dormant</option>
+                  <option value="disrupted" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-zinc-100">Disrupted</option>
                 </select>
               </div>
             </div>
 
             <div>
-              <label className="text-xs font-mono font-semibold text-slate-700 dark:text-gray-300 block mb-1">
+              <label className="text-xs font-mono font-semibold text-gray-900 dark:text-zinc-100 block mb-1">
                 Confidence Score: <span className="text-purple-600 dark:text-purple-400 font-bold">{confidence}%</span>
               </label>
               <input
@@ -1091,7 +1084,7 @@ function CampaignFormModal({
             </div>
 
             <div>
-              <label className="text-xs font-mono font-semibold text-slate-700 dark:text-gray-300 block mb-1">
+              <label className="text-xs font-mono font-semibold text-gray-900 dark:text-zinc-100 block mb-1">
                 Description &amp; Threat Context
               </label>
               <textarea
@@ -1099,59 +1092,59 @@ function CampaignFormModal({
                 placeholder="Describe attack methodology, targeted roles, impersonated brands..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full px-3.5 py-2 rounded-xl text-xs text-slate-900 dark:text-white bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-purple-500 focus:outline-none font-mono placeholder:text-slate-400 dark:placeholder:text-gray-600 transition-colors"
+                className="w-full px-3.5 py-2 rounded-xl text-xs text-gray-900 dark:text-zinc-100 bg-white dark:bg-white/5 border border-gray-200 dark:border-zinc-800/50 focus:border-purple-500 focus:outline-none font-mono placeholder:text-gray-500 dark:placeholder:text-gray-600 transition-colors"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="text-xs font-mono font-semibold text-slate-700 dark:text-gray-300 block mb-1">
-                  Related Domains <span className="text-slate-400 dark:text-gray-500 font-normal">(comma-separated)</span>
+                <label className="text-xs font-mono font-semibold text-gray-900 dark:text-zinc-100 block mb-1">
+                  Related Domains <span className="text-gray-500 dark:text-gray-500 font-normal">(comma-separated)</span>
                 </label>
                 <input
                   type="text"
                   placeholder="malicious-domain.com, spoof-bank.net"
                   value={domains}
                   onChange={(e) => setDomains(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl text-xs text-slate-900 dark:text-white bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-purple-500 focus:outline-none font-mono placeholder:text-slate-400 dark:placeholder:text-gray-600 transition-colors"
+                  className="w-full px-3 py-2 rounded-xl text-xs text-gray-900 dark:text-zinc-100 bg-white dark:bg-white/5 border border-gray-200 dark:border-zinc-800/50 focus:border-purple-500 focus:outline-none font-mono placeholder:text-gray-500 dark:placeholder:text-gray-600 transition-colors"
                 />
               </div>
               <div>
-                <label className="text-xs font-mono font-semibold text-slate-700 dark:text-gray-300 block mb-1">
-                  Related IPs <span className="text-slate-400 dark:text-gray-500 font-normal">(comma-separated)</span>
+                <label className="text-xs font-mono font-semibold text-gray-900 dark:text-zinc-100 block mb-1">
+                  Related IPs <span className="text-gray-500 dark:text-gray-500 font-normal">(comma-separated)</span>
                 </label>
                 <input
                   type="text"
                   placeholder="185.220.101.47, 91.240.118.52"
                   value={ips}
                   onChange={(e) => setIps(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl text-xs text-slate-900 dark:text-white bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-purple-500 focus:outline-none font-mono placeholder:text-slate-400 dark:placeholder:text-gray-600 transition-colors"
+                  className="w-full px-3 py-2 rounded-xl text-xs text-gray-900 dark:text-zinc-100 bg-white dark:bg-white/5 border border-gray-200 dark:border-zinc-800/50 focus:border-purple-500 focus:outline-none font-mono placeholder:text-gray-500 dark:placeholder:text-gray-600 transition-colors"
                 />
               </div>
             </div>
 
             <div>
-              <label className="text-xs font-mono font-semibold text-slate-700 dark:text-gray-300 block mb-1">
-                Suspicious URLs <span className="text-slate-400 dark:text-gray-500 font-normal">(comma-separated)</span>
+              <label className="text-xs font-mono font-semibold text-gray-900 dark:text-zinc-100 block mb-1">
+                Suspicious URLs <span className="text-gray-500 dark:text-gray-500 font-normal">(comma-separated)</span>
               </label>
               <input
                 type="text"
                 placeholder="https://phish-site.example/verify, https://cred-capture.example/login"
                 value={urls}
                 onChange={(e) => setUrls(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl text-xs text-slate-900 dark:text-white bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-purple-500 focus:outline-none font-mono placeholder:text-slate-400 dark:placeholder:text-gray-600 transition-colors"
+                className="w-full px-3 py-2 rounded-xl text-xs text-gray-900 dark:text-zinc-100 bg-white dark:bg-white/5 border border-gray-200 dark:border-zinc-800/50 focus:border-purple-500 focus:outline-none font-mono placeholder:text-gray-500 dark:placeholder:text-gray-600 transition-colors"
               />
             </div>
           </div>
 
           <div
             className="px-6 py-4 flex items-center justify-end gap-3 shrink-0"
-            style={{ borderTop: isDark ? '1px solid rgba(255,255,255,0.07)' : '1px solid #e2e8f0' }}
+            style={{ borderTop: isDark ? '1px solid rgba(39,39,42,0.5)' : '1px solid #e2e8f0' }}
           >
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:text-slate-900 dark:text-gray-400 dark:hover:text-white bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 font-mono transition-transform duration-150 ease-out active:scale-95 cursor-pointer"
+              className="px-4 py-2 rounded-xl text-xs font-semibold text-gray-900 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white bg-gray-50 hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 border border-gray-200 dark:border-zinc-800/50 font-mono transition-transform duration-150 ease-out active:scale-95 cursor-pointer"
             >
               Cancel
             </button>
@@ -1205,13 +1198,13 @@ function CampaignDetail({
     <div className="space-y-6" style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
       {/* Back button + Meta */}
       <SlideIn delay={0} direction="down">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 p-3 sm:p-0 rounded-2xl bg-white sm:bg-transparent dark:bg-[#090b12] sm:dark:bg-transparent border border-slate-200 sm:border-none dark:border-white/10 sm:dark:border-none shadow-sm sm:shadow-none backdrop-blur-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 p-3 sm:p-0 rounded-2xl bg-white sm:bg-transparent dark:bg-zinc-800 sm:dark:bg-transparent border border-gray-200 sm:border-none dark:border-zinc-800/50 sm:dark:border-none shadow-sm sm:shadow-none backdrop-blur-sm">
           <div className="flex items-center justify-between sm:justify-start gap-2 w-full sm:w-auto">
             <button
               onClick={onBack}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-700 hover:text-slate-900 dark:text-gray-200 dark:hover:text-white transition-all cursor-pointer shrink-0 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 active:scale-[0.98] border border-slate-200 dark:border-white/10 shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-gray-900 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white transition-all cursor-pointer shrink-0 bg-gray-50 hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 active:scale-[0.98] border border-gray-200 dark:border-zinc-800/50 shadow-sm"
             >
-              <ArrowLeft className="w-3.5 h-3.5 text-slate-500 dark:text-gray-400" />
+              <ArrowLeft className="w-3.5 h-3.5 text-gray-500 dark:text-gray-400" />
               <span className="hidden min-[380px]:inline">Back to Campaigns</span>
               <span className="min-[380px]:hidden">Back</span>
             </button>
@@ -1239,7 +1232,7 @@ function CampaignDetail({
             </div>
           </div>
 
-          <div className="flex items-center justify-between sm:justify-end gap-2.5 sm:gap-3 w-full sm:w-auto pt-2.5 sm:pt-0 border-t border-slate-200 dark:border-white/[0.06] sm:border-t-0">
+          <div className="flex items-center justify-between sm:justify-end gap-2.5 sm:gap-3 w-full sm:w-auto pt-2.5 sm:pt-0 border-t border-gray-200 dark:border-zinc-800/50 sm:border-t-0">
             <div className="flex items-center gap-1.5 sm:gap-2 w-full sm:w-auto">
               <span
                 className="flex-1 sm:flex-none inline-flex items-center justify-center sm:justify-start gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider font-mono bg-purple-50 text-purple-700 border border-purple-200 dark:bg-purple-500/15 dark:border-purple-500/30 dark:text-purple-300 whitespace-nowrap min-w-0"
@@ -1255,7 +1248,7 @@ function CampaignDetail({
             <div className="hidden sm:flex items-center gap-2 shrink-0">
               <button
                 onClick={onEdit}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-purple-700 dark:text-gray-300 hover:text-purple-900 dark:hover:text-white transition-all cursor-pointer bg-purple-50 dark:bg-purple-500/10 hover:bg-purple-100 dark:hover:bg-purple-500/20 border border-purple-200 dark:border-purple-500/25"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-purple-700 dark:text-zinc-100 hover:text-purple-900 dark:hover:text-white transition-all cursor-pointer bg-purple-50 dark:bg-purple-500/10 hover:bg-purple-100 dark:hover:bg-purple-500/20 border border-purple-200 dark:border-purple-500/25"
               >
                 <Pencil className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
                 Edit Campaign
@@ -1281,10 +1274,10 @@ function CampaignDetail({
       {/* Cluster summary card */}
       <SlideIn delay={60} direction="up">
         <div
-          className="rounded-2xl p-5 bg-white dark:bg-[#090b12] border border-slate-200 dark:border-purple-500/30 shadow-sm dark:shadow-none"
+          className="rounded-2xl p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-purple-500/30 shadow-sm dark:shadow-none"
         >
-          <h2 className="text-xl font-black text-slate-900 dark:text-white mb-2">{campaign.name}</h2>
-          <p className="text-sm text-slate-600 dark:text-gray-400 leading-relaxed mb-4">{campaign.description}</p>
+          <h2 className="text-xl font-black text-gray-900 dark:text-zinc-100 mb-2">{campaign.name}</h2>
+          <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-4">{campaign.description}</p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
               { label: 'Threat Type', val: campaign.threatType, icon: Zap, color: '#c084fc' },
@@ -1301,13 +1294,13 @@ function CampaignDetail({
               return (
                 <div
                   key={box.label}
-                  className="rounded-xl p-3.5 bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.06]"
+                  className="rounded-xl p-3.5 bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
                 >
-                  <span className="flex items-center gap-1.5 text-[10px] text-slate-500 dark:text-gray-500 font-mono uppercase tracking-wider mb-1">
+                  <span className="flex items-center gap-1.5 text-[10px] text-gray-500 dark:text-gray-500 font-mono uppercase tracking-wider mb-1">
                     <Icon className="w-3 h-3" style={{ color: box.color }} />
                     {box.label}
                   </span>
-                  <p className="text-xs font-bold text-slate-900 dark:text-white font-mono">{box.val}</p>
+                  <p className="text-xs font-bold text-gray-900 dark:text-zinc-100 font-mono">{box.val}</p>
                 </div>
               );
             })}
@@ -1318,12 +1311,12 @@ function CampaignDetail({
       {/* ── Linked Investigation Cases (Merged from Investigations Page) ── */}
       <SlideIn delay={120} direction="up">
         <div
-          className="rounded-2xl p-5 bg-white dark:bg-[#090b12] border border-slate-200 dark:border-white/[0.08] shadow-sm dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+          className="rounded-2xl p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm "
         >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-4 mb-4">
             <div className="flex items-center gap-2 flex-wrap">
               <FolderSearch className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0" />
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white whitespace-nowrap">
+              <h3 className="text-sm font-bold text-gray-900 dark:text-zinc-100 whitespace-nowrap">
                 Linked Investigation Cases
               </h3>
               <span
@@ -1332,16 +1325,16 @@ function CampaignDetail({
                 {casesForCampaign.length}
               </span>
             </div>
-            <span className="text-[11px] text-slate-500 dark:text-gray-400 font-mono">
+            <span className="text-[11px] text-gray-500 dark:text-gray-400 font-mono">
               Click any case to inspect timeline &amp; analyst notes
             </span>
           </div>
 
           {casesForCampaign.length === 0 ? (
             <div className="text-center py-8">
-              <ShieldAlert className="w-8 h-8 text-slate-400 dark:text-gray-700 mx-auto mb-2" />
-              <p className="text-xs text-slate-600 dark:text-gray-400 font-mono">No cases linked to this campaign yet</p>
-              <p className="text-[11px] text-slate-400 dark:text-gray-600 mt-1">
+              <ShieldAlert className="w-8 h-8 text-gray-500 dark:text-gray-700 mx-auto mb-2" />
+              <p className="text-xs text-gray-500 dark:text-gray-400 font-mono">No cases linked to this campaign yet</p>
+              <p className="text-[11px] text-gray-500 dark:text-gray-600 mt-1">
                 Analyze an email that references this campaign cluster to automatically attach it here.
               </p>
             </div>
@@ -1355,7 +1348,7 @@ function CampaignDetail({
                     <div
                       key={c.id}
                       onClick={() => setSelectedCase(c)}
-                      className="p-3.5 rounded-xl cursor-pointer transition-all duration-150 active:scale-[0.99] space-y-2 bg-slate-50 hover:bg-slate-100 dark:bg-white/[0.03] dark:hover:bg-white/[0.06] border border-slate-200 dark:border-white/[0.06]"
+                      className="p-3.5 rounded-xl cursor-pointer transition-all duration-150 active:scale-[0.99] space-y-2 bg-white hover:bg-gray-50 dark:bg-zinc-900/50 dark:hover:bg-zinc-700/50 border border-gray-200 dark:border-zinc-800/50"
                     >
                       <div className="flex items-center justify-between gap-2">
                         <div className="flex items-center gap-1.5 min-w-0">
@@ -1377,14 +1370,14 @@ function CampaignDetail({
                         </div>
                       </div>
 
-                      <div className="text-xs text-slate-900 dark:text-white font-medium leading-snug break-words">
+                      <div className="text-xs text-gray-900 dark:text-zinc-100 font-medium leading-snug break-words">
                         {c.title}
                       </div>
 
-                      <div className="flex items-center justify-between gap-2 pt-1.5 border-t border-slate-200 dark:border-white/[0.04] text-xs">
+                      <div className="flex items-center justify-between gap-2 pt-1.5 border-t border-gray-200 dark:border-zinc-800/50 text-xs">
                         <div className="flex items-center gap-2 shrink-0">
                           <SeverityPill severity={c.severity} />
-                          <span className="text-[10px] text-slate-600 dark:text-gray-400 font-mono px-2 py-0.5 rounded bg-slate-200/60 dark:bg-white/[0.04] border border-slate-300/60 dark:border-white/5 whitespace-nowrap">
+                          <span className="text-[10px] text-gray-500 dark:text-gray-400 font-mono px-2 py-0.5 rounded bg-gray-200/60 dark:bg-zinc-900/50 border border-gray-200/60 dark:border-zinc-800/50 whitespace-nowrap">
                             {c.threatType}
                           </span>
                         </div>
@@ -1402,7 +1395,7 @@ function CampaignDetail({
               <div className="hidden md:block">
                 {/* Table header */}
                 <div
-                  className="grid grid-cols-12 gap-2 px-4 py-2.5 text-[10px] font-mono font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider mb-1 bg-slate-100 dark:bg-white/[0.02] border border-slate-200/60 dark:border-transparent rounded-xl"
+                  className="grid grid-cols-12 gap-2 px-4 py-2.5 text-[10px] font-mono font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200/60 dark:border-zinc-800/50 rounded-xl"
                 >
                   <div className="col-span-3">Case ID</div>
                   <div className="col-span-4">Title / Subject</div>
@@ -1419,7 +1412,7 @@ function CampaignDetail({
                       <div
                         key={c.id}
                         onClick={() => setSelectedCase(c)}
-                        className="grid grid-cols-12 gap-2 px-4 py-3 rounded-xl cursor-pointer transition-all duration-150 active:scale-[0.99] group items-center bg-slate-50 hover:bg-slate-100 dark:bg-white/[0.03] dark:hover:bg-white/[0.06] border border-slate-200 dark:border-white/[0.06]"
+                        className="grid grid-cols-12 gap-2 px-4 py-3 rounded-xl cursor-pointer transition-all duration-150 active:scale-[0.99] group items-center bg-white hover:bg-gray-50 dark:bg-zinc-900/50 dark:hover:bg-zinc-700/50 border border-gray-200 dark:border-zinc-800/50"
                       >
                         <div className="col-span-3 flex items-center gap-1.5">
                           <Crosshair className="w-3 h-3 text-cyan-600 dark:text-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
@@ -1433,7 +1426,7 @@ function CampaignDetail({
                           )}
                         </div>
                         <div className="col-span-4">
-                          <span className="text-xs text-slate-900 dark:text-white font-medium truncate block">{c.title}</span>
+                          <span className="text-xs text-gray-900 dark:text-zinc-100 font-medium truncate block">{c.title}</span>
                         </div>
                         <div className="col-span-2">
                           <SeverityPill severity={c.severity} />
@@ -1445,8 +1438,8 @@ function CampaignDetail({
                           />
                         </div>
                         <div className="col-span-1 flex items-center justify-between">
-                          <span className="text-[10px] text-slate-600 dark:text-gray-400 font-mono truncate">{c.threatType}</span>
-                          <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-cyan-600 dark:text-gray-600 dark:group-hover:text-cyan-400 transition-all shrink-0" />
+                          <span className="text-[10px] text-gray-500 dark:text-gray-400 font-mono truncate">{c.threatType}</span>
+                          <ChevronRight className="w-3.5 h-3.5 text-gray-500 group-hover:text-cyan-600 dark:text-gray-600 dark:group-hover:text-cyan-400 transition-all shrink-0" />
                         </div>
                       </div>
                     );
@@ -1462,14 +1455,14 @@ function CampaignDetail({
         {/* Campaign Timeline */}
         <SlideIn delay={180} direction="left">
           <div
-            className="rounded-2xl p-5 h-full bg-white dark:bg-[#090b12] border border-slate-200 dark:border-white/[0.08] shadow-sm dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+            className="rounded-2xl p-5 h-full bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm "
           >
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-4">
+            <h3 className="text-sm font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2 mb-4">
               <Activity className="w-4 h-4 text-purple-600 dark:text-purple-400" />
               Campaign Timeline
             </h3>
             <div className="relative pl-0 sm:pl-1">
-              <div className="absolute left-4 top-4 bottom-4 w-0.5 bg-slate-200 dark:bg-white/15 -translate-x-1/2" />
+              <div className="absolute left-4 top-4 bottom-4 w-0.5 bg-gray-200 dark:bg-white/15 -translate-x-1/2" />
               <div className="space-y-3.5 sm:space-y-4">
                 {campaign.timeline.map((t, i) => (
                   <div key={i} className="relative flex gap-3 sm:gap-4 items-start min-w-0">
@@ -1479,10 +1472,10 @@ function CampaignDetail({
                       <span className="text-xs font-bold font-mono">{i + 1}</span>
                     </div>
                     <div
-                      className="flex-1 min-w-0 rounded-xl p-3 bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.05]"
+                      className="flex-1 min-w-0 rounded-xl p-3 bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
                     >
-                      <span className="text-xs text-slate-900 dark:text-white font-medium leading-relaxed block break-words">{t.event}</span>
-                      <div className="text-[10px] text-slate-500 dark:text-gray-500 font-mono mt-1">{t.time}</div>
+                      <span className="text-xs text-gray-900 dark:text-zinc-100 font-medium leading-relaxed block break-words">{t.event}</span>
+                      <div className="text-[10px] text-gray-500 dark:text-gray-500 font-mono mt-1">{t.time}</div>
                     </div>
                   </div>
                 ))}
@@ -1494,30 +1487,30 @@ function CampaignDetail({
         {/* Campaign Relationships */}
         <SlideIn delay={200} direction="right">
           <div
-            className="rounded-2xl p-5 h-full bg-white dark:bg-[#090b12] border border-slate-200 dark:border-white/[0.08] shadow-sm dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+            className="rounded-2xl p-5 h-full bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm "
           >
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-4">
+            <h3 className="text-sm font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2 mb-4">
               <Network className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
               Campaign Relationships
             </h3>
             <div className="flex flex-col items-center gap-1">
               <FlowNode label="Emails" values={campaign.relatedEmails} icon={Mail} />
-              <ArrowDown className="w-4 h-4 text-slate-400 dark:text-gray-600 my-0.5" />
+              <ArrowDown className="w-4 h-4 text-gray-500 dark:text-gray-600 my-0.5" />
               <FlowNode label="Domains" values={campaign.relatedDomains} icon={Globe} />
-              <ArrowDown className="w-4 h-4 text-slate-400 dark:text-gray-600 my-0.5" />
+              <ArrowDown className="w-4 h-4 text-gray-500 dark:text-gray-600 my-0.5" />
               <FlowNode label="IPs" values={campaign.relatedIPs} icon={Server} />
-              <ArrowDown className="w-4 h-4 text-slate-400 dark:text-gray-600 my-0.5" />
+              <ArrowDown className="w-4 h-4 text-gray-500 dark:text-gray-600 my-0.5" />
               <FlowNode label="URLs" values={campaign.relatedURLs} icon={Link2} />
-              <ArrowDown className="w-4 h-4 text-slate-400 dark:text-gray-600 my-0.5" />
+              <ArrowDown className="w-4 h-4 text-gray-500 dark:text-gray-600 my-0.5" />
               <div
                 className="w-full rounded-xl p-3 text-center bg-purple-50 dark:bg-purple-500/10 border border-purple-200 dark:border-purple-500/30"
               >
                 <span className="text-[10px] text-purple-700 dark:text-purple-300 font-mono uppercase tracking-wider font-bold">
                   Campaign Cluster
                 </span>
-                <p className="text-sm text-slate-900 dark:text-white font-mono font-bold">{campaign.id}</p>
+                <p className="text-sm text-gray-900 dark:text-zinc-100 font-mono font-bold">{campaign.id}</p>
               </div>
-              <ArrowDown className="w-4 h-4 text-slate-400 dark:text-gray-600 my-0.5" />
+              <ArrowDown className="w-4 h-4 text-gray-500 dark:text-gray-600 my-0.5" />
               <FlowNode label="Cases" values={campaign.relatedCases} icon={FolderSearch} />
             </div>
           </div>
@@ -1585,7 +1578,7 @@ function CaseDetail({
         <div className="flex items-center gap-3 flex-wrap">
           <button
             onClick={onBack}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-700 hover:text-slate-900 dark:text-gray-400 dark:hover:text-white transition-all bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 border border-slate-200 dark:border-white/[0.08]"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-gray-900 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-all bg-gray-50 hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 border border-gray-200 dark:border-zinc-800/50"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             {onBackLabel}
@@ -1607,18 +1600,18 @@ function CaseDetail({
       {/* Case Title Card */}
       <SlideIn delay={60} direction="up">
         <div
-          className="rounded-2xl p-5 bg-white dark:bg-[#090b12] border border-slate-200 dark:border-purple-500/30 shadow-sm dark:shadow-[0_0_30px_rgba(168,85,247,0.15)]"
+          className="rounded-2xl p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-purple-500/30 shadow-sm "
         >
           <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
             <div className="flex-1">
-              <h2 className="text-xl font-black text-slate-900 dark:text-white mb-2">{caseData.title}</h2>
-              <p className="text-sm text-slate-600 dark:text-gray-400 leading-relaxed">{caseData.summary}</p>
+              <h2 className="text-xl font-black text-gray-900 dark:text-zinc-100 mb-2">{caseData.title}</h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{caseData.summary}</p>
             </div>
             {/* Status Control */}
             <div
-              className="rounded-xl p-4 shrink-0 min-w-[160px] bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.06]"
+              className="rounded-xl p-4 shrink-0 min-w-[160px] bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
             >
-              <p className="text-[10px] text-slate-500 dark:text-gray-500 font-mono uppercase tracking-wider mb-3">Status Control</p>
+              <p className="text-[10px] text-gray-500 dark:text-gray-500 font-mono uppercase tracking-wider mb-3">Status Control</p>
               <div className="flex flex-col gap-1.5">
                 {STATUS_ORDER.map((s) => {
                   const cfg = CASE_STATUS_CONFIG[s];
@@ -1630,7 +1623,7 @@ function CaseDetail({
                       className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold transition-all font-mono ${
                         active
                           ? ''
-                          : 'bg-slate-100 hover:bg-slate-200 dark:bg-white/[0.02] dark:hover:bg-white/[0.05] border border-slate-200 dark:border-white/[0.04] text-slate-600 dark:text-gray-400'
+                          : 'text-gray-900 dark:text-zinc-100'
                       }`}
                       style={
                         active
@@ -1658,9 +1651,9 @@ function CaseDetail({
           {/* Case Metadata */}
           <SlideIn delay={140} direction="left">
             <div
-              className="rounded-2xl p-5 bg-white dark:bg-[#090b12] border border-slate-200 dark:border-white/[0.08] shadow-sm dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+              className="rounded-2xl p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm "
             >
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-4">
+              <h3 className="text-sm font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2 mb-4">
                 <ShieldAlert className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
                 Case Metadata
               </h3>
@@ -1681,9 +1674,9 @@ function CaseDetail({
           {/* Activity History */}
           <SlideIn delay={200} direction="left">
             <div
-              className="rounded-2xl p-5 bg-white dark:bg-[#090b12] border border-slate-200 dark:border-white/[0.08] shadow-sm dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+              className="rounded-2xl p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm "
             >
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-4">
+              <h3 className="text-sm font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2 mb-4">
                 <Activity className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                 Activity History
               </h3>
@@ -1693,13 +1686,13 @@ function CaseDetail({
                     <div className="relative mt-1.5 shrink-0">
                       <span
                         className="w-2 h-2 rounded-full block"
-                        style={{ background: '#a855f7', boxShadow: '0 0 6px rgba(168,85,247,0.5)' }}
+                        style={{ background: '#a855f7' }}
                       />
                     </div>
                     <div>
-                      <span className="text-xs text-slate-900 dark:text-white font-medium">{a.action}</span>
-                      <span className="text-xs text-slate-500 dark:text-gray-500"> — {a.actor}</span>
-                      <div className="text-[10px] text-slate-400 dark:text-gray-600 font-mono mt-0.5">{a.time}</div>
+                      <span className="text-xs text-gray-900 dark:text-zinc-100 font-medium">{a.action}</span>
+                      <span className="text-xs text-gray-500 dark:text-gray-500"> — {a.actor}</span>
+                      <div className="text-[10px] text-gray-500 dark:text-gray-600 font-mono mt-0.5">{a.time}</div>
                     </div>
                   </div>
                 ))}
@@ -1713,14 +1706,14 @@ function CaseDetail({
           {/* Investigation Timeline */}
           <SlideIn delay={160} direction="right">
             <div
-              className="rounded-2xl p-5 bg-white dark:bg-[#090b12] border border-slate-200 dark:border-white/[0.08] shadow-sm dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+              className="rounded-2xl p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm "
             >
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-4">
+              <h3 className="text-sm font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2 mb-4">
                 <Clock className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
                 Investigation Timeline
               </h3>
               <div className="relative pl-2">
-                <div className="absolute left-[19px] top-3 bottom-3 w-0.5 bg-slate-200 dark:bg-white/10" />
+                <div className="absolute left-[19px] top-3 bottom-3 w-0.5 bg-gray-200 dark:bg-white/10" />
                 <div className="space-y-4">
                   {caseData.timeline.map((t, i) => (
                     <div key={i} className="relative flex gap-4 items-start">
@@ -1732,14 +1725,12 @@ function CaseDetail({
                               background: 'rgba(239,68,68,0.2)',
                               borderColor: '#ef4444',
                               color: '#ef4444',
-                              boxShadow: '0 0 12px rgba(239,68,68,0.3)',
                             }
                             : i === caseData.timeline.length - 1
                               ? {
                                 background: 'rgba(34,197,94,0.2)',
                                 borderColor: '#22c55e',
                                 color: '#16a34a',
-                                boxShadow: '0 0 12px rgba(34,197,94,0.3)',
                               }
                               : {
                                 background: 'rgba(148,163,184,0.15)',
@@ -1751,15 +1742,15 @@ function CaseDetail({
                         <span className="text-xs font-bold font-mono">{i + 1}</span>
                       </div>
                       <div
-                        className="flex-1 rounded-xl p-3.5 transition-all hover:scale-[1.005] bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.06]"
+                        className="flex-1 rounded-xl p-3.5 transition-all hover:scale-[1.005] bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
                       >
-                        <span className="text-xs text-slate-900 dark:text-white font-medium">{t.event}</span>
-                        <div className="text-[10px] text-slate-500 dark:text-gray-500 font-mono mt-1">
+                        <span className="text-xs text-gray-900 dark:text-zinc-100 font-medium">{t.event}</span>
+                        <div className="text-[10px] text-gray-500 dark:text-gray-500 font-mono mt-1">
                           {t.time}
                           {'actor' in t && (t as any).actor ? (
                             <>
                               {' '}
-                              — <span className="text-slate-600 dark:text-gray-400">{(t as any).actor}</span>
+                              — <span className="text-gray-500 dark:text-gray-400">{(t as any).actor}</span>
                             </>
                           ) : null}
                         </div>
@@ -1774,28 +1765,28 @@ function CaseDetail({
           {/* Analyst Notes */}
           <SlideIn delay={240} direction="right">
             <div
-              className="rounded-2xl p-5 bg-white dark:bg-[#090b12] border border-slate-200 dark:border-white/[0.08] shadow-sm dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+              className="rounded-2xl p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm "
             >
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-4">
+              <h3 className="text-sm font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2 mb-4">
                 <StickyNote className="w-4 h-4 text-amber-500 dark:text-amber-400" />
                 Analyst Notes
               </h3>
               <div className="space-y-3 mb-4">
                 {notes.length === 0 && (
-                  <p className="text-xs text-slate-500 dark:text-gray-600 font-mono text-center py-4">
+                  <p className="text-xs text-gray-500 dark:text-gray-600 font-mono text-center py-4">
                     No analyst notes yet. Add one below.
                   </p>
                 )}
                 {notes.map((n, i) => (
                   <div
                     key={i}
-                    className="rounded-xl p-3.5 transition-all hover:scale-[1.005] bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.06]"
+                    className="rounded-xl p-3.5 transition-all hover:scale-[1.005] bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
                   >
                     <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-xs text-slate-900 dark:text-white font-bold">{n.author}</span>
-                      <span className="text-[10px] text-slate-500 dark:text-gray-500 font-mono">{n.timestamp}</span>
+                      <span className="text-xs text-gray-900 dark:text-zinc-100 font-bold">{n.author}</span>
+                      <span className="text-[10px] text-gray-500 dark:text-gray-500 font-mono">{n.timestamp}</span>
                     </div>
-                    <p className="text-xs text-slate-600 dark:text-gray-400 leading-relaxed">{n.note}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{n.note}</p>
                   </div>
                 ))}
               </div>
@@ -1806,7 +1797,7 @@ function CaseDetail({
                   onChange={(e) => setNewNote(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && addNote()}
                   placeholder="Add a note…"
-                  className="flex-1 rounded-xl px-3 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-600 focus:outline-none font-mono bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.08]"
+                  className="flex-1 rounded-xl px-3 py-2.5 text-sm text-gray-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-gray-600 focus:outline-none font-mono bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
                 />
                 <button
                   onClick={addNote}
@@ -1838,13 +1829,13 @@ function MetaRow({
 }) {
   return (
     <div
-      className="flex items-center justify-between gap-3 py-2.5 border-b border-slate-200 dark:border-white/[0.05]"
+      className="flex items-center justify-between gap-3 py-2.5 border-b border-gray-200 dark:border-zinc-800/50"
     >
-      <span className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-gray-500 shrink-0">
+      <span className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-500 shrink-0">
         <Icon className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
         {label}
       </span>
-      <span className={`text-xs text-slate-900 dark:text-white text-right break-all ${mono ? 'font-mono' : 'font-medium'}`}>{value}</span>
+      <span className={`text-xs text-gray-900 dark:text-zinc-100 text-right break-all ${mono ? 'font-mono' : 'font-medium'}`}>{value}</span>
     </div>
   );
 }
@@ -1862,23 +1853,23 @@ function IndicatorPanel({
 }) {
   return (
     <div
-      className="rounded-2xl p-5 bg-white dark:bg-[#090b12] border border-slate-200 dark:border-white/[0.08] shadow-sm dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+      className="rounded-2xl p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm "
     >
-      <h3 className={`text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-3`}>
+      <h3 className={`text-sm font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2 mb-3`}>
         <Icon className={`w-4 h-4 ${color}`} />
         {label}
       </h3>
       <div className="space-y-2">
         {items.length === 0 ? (
-          <p className="text-xs text-slate-400 dark:text-gray-600 font-mono py-2 text-center">None observed</p>
+          <p className="text-xs text-gray-500 dark:text-gray-600 font-mono py-2 text-center">None observed</p>
         ) : (
           items.map((item) => (
             <div
               key={item}
-              className="flex items-center gap-2 rounded-xl p-3 transition-colors bg-slate-50 hover:bg-slate-100 dark:bg-white/[0.03] dark:hover:bg-white/[0.05] border border-slate-200 dark:border-white/[0.05]"
+              className="flex items-center gap-2 rounded-xl p-3 transition-colors bg-white hover:bg-gray-50 dark:bg-zinc-900/50 dark:hover:bg-zinc-700/50 border border-gray-200 dark:border-zinc-800/50"
             >
-              <Icon className="w-3.5 h-3.5 text-slate-400 dark:text-gray-500 shrink-0" />
-              <span className="text-xs text-slate-800 dark:text-white font-mono break-all flex-1">{item}</span>
+              <Icon className="w-3.5 h-3.5 text-gray-500 dark:text-gray-500 shrink-0" />
+              <span className="text-xs text-gray-900 dark:text-zinc-100 font-mono break-all flex-1">{item}</span>
               <CopyButton value={item} />
             </div>
           ))
@@ -1891,23 +1882,23 @@ function IndicatorPanel({
 function FlowNode({ label, values, icon: Icon }: { label: string; values: string[]; icon: LucideIcon }) {
   return (
     <div
-      className="w-full rounded-xl p-3 bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.05]"
+      className="w-full rounded-xl p-3 bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
     >
       <div className="flex items-center gap-1.5 mb-2">
-        <Icon className="w-3.5 h-3.5 text-slate-400 dark:text-gray-500" />
-        <span className="text-[10px] text-slate-500 dark:text-gray-500 uppercase tracking-wider font-mono font-bold">{label}</span>
+        <Icon className="w-3.5 h-3.5 text-gray-500 dark:text-gray-500" />
+        <span className="text-[10px] text-gray-500 dark:text-gray-500 uppercase tracking-wider font-mono font-bold">{label}</span>
       </div>
       {values.length > 0 ? (
         <div className="space-y-1">
           {values.map((v) => (
             <div key={v} className="flex items-center gap-1">
-              <span className="text-xs text-slate-800 dark:text-white font-mono break-all flex-1 font-semibold">{v}</span>
+              <span className="text-xs text-gray-900 dark:text-zinc-100 font-mono break-all flex-1 font-semibold">{v}</span>
               <CopyButton value={v} />
             </div>
           ))}
         </div>
       ) : (
-        <span className="text-xs text-slate-400 dark:text-gray-600 font-mono italic">None</span>
+        <span className="text-xs text-gray-500 dark:text-gray-600 font-mono italic">None</span>
       )}
     </div>
   );

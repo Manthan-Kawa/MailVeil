@@ -1,4 +1,5 @@
 import { useState, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
+import { motion } from 'framer-motion';
 import {
   FileText,
   FileCode,
@@ -880,21 +881,8 @@ function FullReportPreview({
 
   return (
     <div className="rounded-2xl p-6 space-y-6 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-cyan-500/20 shadow-sm dark:shadow-2xl">
-      {/* ── Quick Navigation Tabs (Deep Forensics format) ─────────────────── */}
-      <div className="relative isolate flex items-center gap-2 overflow-x-auto overflow-y-hidden pb-4 mb-3 scrollbar-none border-b border-gray-200 dark:border-zinc-800/50 touch-scroll touch-pan-x overscroll-x-contain">
-        {/* Smooth sliding indicator pill */}
-        <div
-          className="absolute z-0 pointer-events-none rounded-xl bg-cyan-500/15 dark:bg-cyan-500/20 border border-cyan-400/50 dark:border-cyan-500/40 shadow-sm "
-          style={{
-            transform: `translate3d(${reportIndicatorStyle.left}px, ${reportIndicatorStyle.top}px, 0)`,
-            width: reportIndicatorStyle.width,
-            height: reportIndicatorStyle.height,
-            opacity: reportIndicatorStyle.opacity,
-            transition: 'transform 300ms cubic-bezier(0.25, 1, 0.5, 1), width 300ms cubic-bezier(0.25, 1, 0.5, 1), height 300ms cubic-bezier(0.25, 1, 0.5, 1), opacity 150ms ease',
-            left: 0,
-            top: 0,
-            zIndex: 0 }}
-        />
+      {/* ── Quick Navigation Tabs (Capsule format) ─────────────────── */}
+      <div className="flex items-center gap-1 p-1 rounded-2xl bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm mb-4 overflow-x-auto scrollbar-none select-none max-w-full">
         {[
           { id: 'all', label: 'Complete Forensic Report', icon: Shield },
           { id: 'synthesis', label: 'Email Analyzer', icon: MailSearch },
@@ -908,16 +896,29 @@ function FullReportPreview({
           return (
             <button
               key={tab.id}
-              ref={(el) => { reportTabRefs.current[tab.id] = el; }}
+              type="button"
               onClick={() => setActiveTab(tab.id as ReportContentTab)}
-              style={{ zIndex: 10 }}
-              className={`relative z-10 flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-colors duration-200 cursor-pointer ${active
-                  ? 'text-cyan-950 dark:text-cyan-200 font-bold'
-                  : 'text-gray-600 dark:text-zinc-400 font-medium hover:bg-gray-100/80 dark:hover:bg-zinc-800/80'
+              className={`relative h-9 px-3.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-colors duration-200 cursor-pointer select-none shrink-0 ${
+                active
+                  ? 'text-white font-bold'
+                  : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/40'
               }`}
             >
-              <Icon className={`w-3.5 h-3.5 ${active ? 'text-cyan-700 dark:text-cyan-300' : 'text-gray-500 dark:text-gray-400'}`} />
-              {tab.label}
+              {active && (
+                <motion.div
+                  layoutId="activeReportsTab"
+                  className="absolute inset-0 rounded-xl bg-blue-600 shadow-sm"
+                  transition={{
+                    type: 'spring',
+                    stiffness: 450,
+                    damping: 32,
+                  }}
+                />
+              )}
+              <span className="relative z-10 flex items-center gap-2">
+                <Icon className="w-3.5 h-3.5" />
+                {tab.label}
+              </span>
             </button>
           );
         })}

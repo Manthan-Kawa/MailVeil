@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect, useLayoutEffect } from 'react';
+import { motion } from 'framer-motion';
 import {
   Upload,
   FileText,
@@ -944,29 +945,8 @@ function ResultsView({
           className="rounded-2xl p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm shadow-sm"
         >
           <div
-            className="relative isolate flex items-center gap-1 border-b border-gray-200 dark:border-zinc-800/50 mb-5 overflow-x-auto overflow-y-hidden scrollbar-none select-none touch-pan-x"
-            style={{
-              touchAction: 'pan-x',
-              WebkitOverflowScrolling: 'touch',
-              overscrollBehaviorY: 'none',
-              overscrollBehaviorX: 'contain',
-            }}
+            className="flex items-center gap-1 p-1 rounded-2xl bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm mb-5 overflow-x-auto scrollbar-none select-none max-w-full"
           >
-            {/* Smooth sliding indicator (slides left/right only, Y locked to 0) */}
-            <div
-              className="absolute z-0 pointer-events-none rounded-t-xl bg-purple-500/15 dark:bg-purple-500/20 border-b-2 border-purple-600 dark:border-purple-500 shadow-sm"
-              style={{
-                transform: `translate3d(${tabIndicatorStyle.left}px, 0, 0)`,
-                width: tabIndicatorStyle.width,
-                height: '100%',
-                bottom: 0,
-                opacity: tabIndicatorStyle.opacity,
-                transition: 'transform 300ms cubic-bezier(0.25, 1, 0.5, 1), width 300ms cubic-bezier(0.25, 1, 0.5, 1), opacity 150ms ease',
-                left: 0,
-                zIndex: 0,
-              }}
-            />
-
             {[
               { id: 'facts',     label: 'Observed Facts', icon: Eye },
               { id: 'inference', label: 'AI Inference',   icon: Brain },
@@ -978,24 +958,29 @@ function ResultsView({
               return (
                 <button
                   key={tab.id}
-                  ref={(el) => {
-                    tabRefs.current[tab.id] = el;
-                    if (tab.id === activeTab && el && tabIndicatorStyle.opacity === 0) {
-                      setTabIndicatorStyle({
-                        left: el.offsetLeft,
-                        width: el.offsetWidth,
-                        opacity: 1,
-                      });
-                    }
-                  }}
+                  type="button"
                   onClick={() => setActiveTab(tab.id as typeof activeTab)}
-                  style={{ zIndex: 10 }}
-                  className={`relative z-10 flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-colors duration-200 shrink-0 cursor-pointer ${
-                    isActive ? 'text-purple-900 dark:text-purple-300' : 'text-gray-500 dark:text-zinc-400 dark:text-gray-500 hover:text-gray-800 dark:text-zinc-200 dark:hover:text-gray-300'
+                  className={`relative h-9 px-4 rounded-xl text-xs sm:text-sm font-semibold transition-colors duration-200 shrink-0 whitespace-nowrap cursor-pointer select-none ${
+                    isActive
+                      ? 'text-white font-bold'
+                      : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/40'
                   }`}
                 >
-                  <Icon className="w-4 h-4" />
-                  {tab.label}
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeEmailAnalyzerTab"
+                      className="absolute inset-0 rounded-xl bg-blue-600 shadow-sm"
+                      transition={{
+                        type: 'spring',
+                        stiffness: 450,
+                        damping: 32,
+                      }}
+                    />
+                  )}
+                  <span className="relative z-10 flex items-center gap-2">
+                    <Icon className="w-4 h-4" />
+                    {tab.label}
+                  </span>
                 </button>
               );
             })}

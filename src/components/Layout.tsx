@@ -1375,35 +1375,38 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
 
               {/* Notification subheader / tab bar */}
               {isAnalyst ? (
-                <div className="relative isolate px-3 py-1.5 bg-white dark:bg-zinc-900/90 border-b border-gray-200 dark:border-zinc-800 flex items-center gap-1.5 overflow-x-auto scrollbar-none touch-scroll text-gray-500 dark:text-zinc-500">
-                  {/* Smooth sliding indicator pill */}
-                  <div
-                    className="absolute z-0 pointer-events-none rounded-lg bg-sky-500/15 border border-sky-400/50 dark:bg-purple-500/25 dark:border-purple-500/40 shadow-sm"
-                    style={{
-                      transform: `translate3d(${notifIndicatorStyle.left}px, ${notifIndicatorStyle.top}px, 0)`,
-                      width: notifIndicatorStyle.width,
-                      height: notifIndicatorStyle.height,
-                      opacity: notifIndicatorStyle.opacity,
-                      transition: 'transform 300ms cubic-bezier(0.25, 1, 0.5, 1), width 300ms cubic-bezier(0.25, 1, 0.5, 1), height 300ms cubic-bezier(0.25, 1, 0.5, 1), opacity 150ms ease',
-                      left: 0,
-                      top: 0,
-                      zIndex: 0 }}
-                  />
-                  {(['all', 'requests', 'alerts', 'intel', 'system'] as const).map((cat) => (
-                    <button
-                      key={cat}
-                      ref={(el) => { notifTabRefs.current[cat] = el; }}
-                      onClick={() => setNotifCategory(cat as any)}
-                      style={{ zIndex: 10 }}
-                      className={`relative z-10 px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold uppercase whitespace-nowrap shrink-0 transition-colors duration-200 ${
-                        notifCategory === cat
-                          ? 'text-sky-950 dark:text-purple-200'
-                          : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-zinc-100'
-                      }`}
-                    >
-                      {cat === 'requests' ? 'USER REQUESTS' : cat}
-                    </button>
-                  ))}
+                <div className="p-2 bg-white dark:bg-black border-b border-gray-200 dark:border-zinc-800">
+                  <div className="flex items-center gap-1 p-1 rounded-xl bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm overflow-x-auto scrollbar-none select-none max-w-full">
+                    {(['all', 'requests', 'alerts', 'intel', 'system'] as const).map((cat) => {
+                      const active = notifCategory === cat;
+                      const label = cat === 'requests' ? 'USER REQUESTS' : cat.toUpperCase();
+                      return (
+                        <button
+                          key={cat}
+                          type="button"
+                          onClick={() => setNotifCategory(cat as any)}
+                          className={`relative h-7 px-3 rounded-lg text-[10px] font-mono font-bold uppercase whitespace-nowrap shrink-0 transition-colors duration-200 cursor-pointer select-none ${
+                            active
+                              ? 'text-white font-bold'
+                              : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/40'
+                          }`}
+                        >
+                          {active && (
+                            <motion.div
+                              layoutId="activeNotifCategoryTab"
+                              className="absolute inset-0 rounded-lg bg-blue-600 shadow-sm"
+                              transition={{
+                                type: 'spring',
+                                stiffness: 450,
+                                damping: 32,
+                              }}
+                            />
+                          )}
+                          <span className="relative z-10">{label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               ) : (
                 <div className="px-4 py-1.5 bg-white dark:bg-zinc-900/90 border-b border-gray-200 dark:border-zinc-800 flex items-center justify-between text-gray-500 dark:text-zinc-500">

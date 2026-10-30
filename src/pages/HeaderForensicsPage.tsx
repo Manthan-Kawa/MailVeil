@@ -139,7 +139,7 @@ export function HeaderForensicsPage({ onNavigate }: { onNavigate?: (route: strin
             </div>
             <div className="hidden sm:flex items-center gap-2 shrink-0 self-start sm:self-center">
               <div className="flex items-center gap-2 px-3 py-1 rounded-full border border-purple-500/30 bg-purple-950/40 text-purple-300">
-                <span className="w-1.5 h-1.5 rounded-full bg-purple-400 shrink-0" />
+                <span className="w-1.5 h-1.5 rounded-full bg-purple-400 shrink-0 animate-pulse" />
                 <span className="text-[11px] font-bold text-purple-300 font-mono tracking-wider">LIVE FORENSICS ACTIVE</span>
               </div>
             </div>

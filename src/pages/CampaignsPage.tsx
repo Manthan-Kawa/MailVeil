@@ -1237,7 +1237,7 @@ function CampaignDetail({
               <span
                 className="flex-1 sm:flex-none inline-flex items-center justify-center sm:justify-start gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider font-mono bg-purple-50 text-purple-700 border border-purple-200 dark:bg-purple-500/15 dark:border-purple-500/30 dark:text-purple-300 whitespace-nowrap min-w-0"
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-purple-500 dark:bg-purple-400 shrink-0" />
+                <span className="w-1.5 h-1.5 rounded-full bg-purple-500 dark:bg-purple-400 shrink-0 animate-pulse" />
                 {campaign.id}
               </span>
               <SeverityPill severity={campaign.severity} className="flex-1 sm:flex-none justify-center sm:justify-start min-w-0" />

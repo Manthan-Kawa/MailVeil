@@ -230,7 +230,7 @@ export function OriginInvestigationPage({ onNavigate }: { onNavigate?: (route: s
       {/* ── Page Header ── */}
       <SlideIn delay={0} direction="down">
         <div className="space-y-4">
-          <div className="flex items-start gap-2.5 sm:gap-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="min-w-0 flex-1">
               <h2 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-zinc-100 tracking-tight leading-snug">
                 Origin Investigation
@@ -238,6 +238,12 @@ export function OriginInvestigationPage({ onNavigate }: { onNavigate?: (route: s
               <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-400 mt-0.5 leading-relaxed font-medium">
                 Geographic infrastructure triangulation, network session routing &amp; origin relay telemetry
               </p>
+            </div>
+            <div className="hidden sm:flex items-center gap-2 shrink-0 self-start sm:self-center">
+              <div className="flex items-center gap-2 px-3 py-1 rounded-full border border-purple-500/30 bg-purple-950/40 text-purple-300">
+                <span className="w-1.5 h-1.5 rounded-full bg-purple-400 shrink-0 animate-pulse" />
+                <span className="text-[11px] font-bold text-purple-300 font-mono tracking-wider">LIVE ORIGIN ACTIVE</span>
+              </div>
             </div>
           </div>
 
@@ -599,7 +605,7 @@ export function AttackGraphPage({ onNavigate }: { onNavigate?: (route: string) =
               <div
                 className="flex items-center gap-2 px-3 py-1 rounded-full border border-purple-500/30 bg-purple-950/40 text-purple-300"
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-purple-400 shrink-0" />
+                <span className="w-1.5 h-1.5 rounded-full bg-purple-400 shrink-0 animate-pulse" />
                 <span className="text-[11px] font-bold text-purple-300 font-mono tracking-wider">LIVE GRAPH ACTIVE</span>
               </div>
             </div>

@@ -426,7 +426,7 @@ export function DashboardPage({ onNavigate }: { onNavigate?: (route: string) => 
                         className={`relative px-3.5 py-1.5 rounded-lg text-xs font-bold transition-colors duration-200 cursor-pointer select-none ${
                           isSelected
                             ? 'text-white'
-                            : 'text-gray-500 hover:text-gray-900 dark:text-zinc-400 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/40'
+                            : 'text-gray-500 hover:text-gray-900 dark:text-zinc-400 dark:hover:text-white'
                         }`}
                       >
                         {isSelected && (

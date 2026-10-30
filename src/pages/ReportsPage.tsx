@@ -895,7 +895,7 @@ function FullReportPreview({
               className={`relative h-9 px-3.5 rounded-lg text-xs sm:text-sm font-semibold whitespace-nowrap transition-colors duration-200 cursor-pointer select-none shrink-0 ${
                 active
                   ? 'text-white font-bold'
-                  : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/40'
+                  : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white'
               }`}
             >
               {active && (

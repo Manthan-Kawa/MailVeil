@@ -776,7 +776,7 @@ export function CheckStatusPage({ onNavigate }: CheckStatusPageProps) {
                   className={`relative h-9 px-3.5 rounded-lg text-xs sm:text-sm font-semibold capitalize transition-colors duration-200 flex items-center justify-center shrink-0 whitespace-nowrap cursor-pointer select-none ${
                     active
                       ? 'text-white font-bold'
-                      : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/40'
+                      : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white'
                   }`}
                 >
                   {active && (

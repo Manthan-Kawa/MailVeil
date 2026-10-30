@@ -247,7 +247,7 @@ export function Sidebar({ activeId, onNavigate, onSignOut, mobileOpen, onMobileC
                 }}
                 className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors duration-200 text-left cursor-pointer group ${active
                   ? 'soc-nav-active !text-white'
-                  : 'text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-zinc-800/50'
+                  : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'
                   }`}
               >
                 {active && (
@@ -1366,7 +1366,7 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
                           title={cat === 'requests' ? 'User Requests' : label}
                           className={`relative h-6 w-full flex items-center justify-center rounded-md text-[10px] font-mono font-bold uppercase transition-colors duration-200 cursor-pointer select-none px-1 ${active
                             ? 'text-white font-bold'
-                            : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-zinc-800/40'
+                            : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white'
                             }`}
                         >
                           {active && (

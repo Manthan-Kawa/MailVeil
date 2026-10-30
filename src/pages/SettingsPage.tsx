@@ -456,7 +456,7 @@ export function SettingsPage({ userRole }: { onResetCache?: () => void; userRole
                     className={`relative z-10 shrink-0 lg:w-full flex items-center gap-3 px-3 py-2 lg:px-3.5 lg:py-2.5 rounded-xl transition-colors duration-200 group text-left whitespace-nowrap cursor-pointer ${
                       active
                         ? '!text-white font-bold'
-                        : 'text-gray-600 dark:text-zinc-400 font-medium hover:text-gray-900 dark:hover:text-white hover:bg-gray-100/80 dark:hover:bg-zinc-800/80'
+                        : 'text-gray-600 dark:text-zinc-400 font-medium hover:text-gray-900 dark:hover:text-white'
                     }`}
                   >
                     {active && (

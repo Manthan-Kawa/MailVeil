@@ -1098,7 +1098,7 @@ function ResultsView({
                   onClick={() => setActiveTab(tab.id as typeof activeTab)}
                   className={`relative h-9 px-4 rounded-lg text-xs sm:text-sm font-semibold transition-colors duration-200 shrink-0 whitespace-nowrap cursor-pointer select-none ${isActive
                       ? 'text-white font-bold'
-                      : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/40'
+                      : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white'
                     }`}
                 >
                   <span className="relative z-10 flex items-center gap-2">

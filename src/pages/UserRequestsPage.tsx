@@ -112,38 +112,34 @@ function StatusBadge({ status }: { status: TicketStatus }) {
     case 'closed':
       return (
         <span
-          className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold font-mono"
-          style={{ background: 'rgba(168,85,247,0.12)', border: '1px solid rgba(168,85,247,0.3)', color: '#c084fc' }}
+          className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold font-mono text-white bg-purple-600 shadow-xs"
         >
-          <CheckCircle2 className="w-2.5 h-2.5" /> Resolved
+          <CheckCircle2 className="w-2.5 h-2.5 text-white" /> Resolved
         </span>
       );
     case 'analyzed':
       return (
         <span
-          className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold font-mono"
-          style={{ background: 'rgba(34,197,94,0.12)', border: '1px solid rgba(34,197,94,0.3)', color: '#4ade80' }}
+          className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold font-mono text-white bg-emerald-600 shadow-xs"
         >
-          <CheckCircle2 className="w-2.5 h-2.5" /> Analyzed
+          <CheckCircle2 className="w-2.5 h-2.5 text-white" /> Analyzed
         </span>
       );
     case 'in_review':
       return (
         <span
-          className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold font-mono"
-          style={{ background: 'rgba(6,182,212,0.12)', border: '1px solid rgba(6,182,212,0.3)', color: '#22d3ee' }}
+          className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold font-mono text-white bg-cyan-600 shadow-xs"
         >
-          <Clock className="w-2.5 h-2.5 animate-spin" /> In Investigation
+          <Clock className="w-2.5 h-2.5 animate-spin text-white" /> In Investigation
         </span>
       );
     case 'pending':
     default:
       return (
         <span
-          className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold font-mono"
-          style={{ background: 'rgba(245,158,11,0.12)', border: '1px solid rgba(245,158,11,0.3)', color: '#fbbf24' }}
+          className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold font-mono text-white bg-amber-600 shadow-xs"
         >
-          <Clock className="w-2.5 h-2.5 animate-pulse" /> Pending
+          <Clock className="w-2.5 h-2.5 animate-pulse text-white" /> Pending
         </span>
       );
   }
@@ -444,7 +440,7 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
                 onChange={(e) => setAnalystComment(e.target.value)}
                 rows={4}
                 placeholder={`Provide your forensic findings, header analysis, and security advice for ${ticket.userEmail}...`}
-                className="w-full text-xs rounded-xl p-3 text-gray-900 dark:text-gray-100 placeholder-slate-400 dark:placeholder-gray-500 bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 focus:outline-none focus:ring-1 focus:ring-violet-500 resize-none font-mono"
+                className="w-full text-xs rounded-xl p-3 text-gray-900 dark:text-gray-100 placeholder-slate-400 dark:placeholder-gray-500 bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 focus:outline-none focus:ring-1 focus:ring-violet-500 resize-none font-mono"
               />
             </div>
 
@@ -603,7 +599,7 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
                     onChange={(e) => setChatMessage(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleSendChatMessage()}
                     placeholder="Post quick update in user's ticket thread..."
-                    className="flex-1 text-xs rounded-xl px-3 py-2 text-gray-900 dark:text-gray-100 placeholder-slate-400 dark:placeholder-gray-500 font-mono bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
+                    className="flex-1 text-xs rounded-xl px-3 py-2 text-gray-900 dark:text-gray-100 placeholder-slate-400 dark:placeholder-gray-500 font-mono bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80"
                   />
                   <button
                     type="button"
@@ -663,7 +659,7 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
 
             {/* Dispatch Gmail / Portal Notification Checkbox */}
             {status === 'analyzed' && (
-              <label className="flex items-center gap-3 p-3 rounded-xl cursor-pointer select-none transition-all duration-150 border bg-white dark:bg-zinc-900/50 border-gray-200 dark:border-zinc-800/50 hover:bg-gray-50 dark:hover:bg-zinc-700/50 hover:border-purple-500/40">
+              <label className="flex items-center gap-3 p-3 rounded-xl cursor-pointer select-none transition-all duration-150 border bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 hover:bg-gray-50 dark:hover:bg-black/50 hover:border-purple-500/40">
                 <input
                   type="checkbox"
                   checked={sendEmail}
@@ -733,6 +729,20 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
   const { tickets, respondToTicket, clearAllTickets, deleteTicket } = useTickets();
   const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
   const [filterStatus, setFilterStatus] = useState<'all' | 'pending' | 'in_review' | 'analyzed' | 'resolved'>('all');
+  const [tabIndicator, setTabIndicator] = useState<{ left: number; width: number; ready: boolean }>({ left: 0, width: 0, ready: false });
+  const tabButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+
+  useLayoutEffect(() => {
+    const el = tabButtonRefs.current[filterStatus];
+    if (el) {
+      setTabIndicator({
+        left: el.offsetLeft,
+        width: el.offsetWidth,
+        ready: true,
+      });
+    }
+  }, [filterStatus]);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
@@ -831,7 +841,7 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
       {/* ── Page Header (Responsive Mobile + Desktop) ── */}
       <SlideIn delay={0} direction="down">
         {/* Mobile Card Header (Phone only: block md:hidden) */}
-        <div className="block md:hidden rounded-2xl p-4 sm:p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm dark:shadow-2xl space-y-4">
+        <div className="block md:hidden rounded-2xl p-4 sm:p-5 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm space-y-4">
           {/* Row 1: Title + Pending Count Badge */}
           <div className="flex items-center justify-between gap-3">
             <h1 className="text-lg sm:text-xl font-bold tracking-tight text-gray-900 dark:text-zinc-100 whitespace-nowrap">
@@ -839,11 +849,10 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
             </h1>
 
             <div
-              className="flex items-center gap-1.5 px-3 py-1 rounded-full shrink-0"
-              style={{ background: 'rgba(245,158,11,0.15)', border: '1px solid rgba(245,158,11,0.35)' }}
+              className="flex items-center gap-1.5 px-3 py-1 rounded-full shrink-0 text-white bg-amber-500 shadow-sm"
             >
-              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-              <span className="text-xs font-bold text-amber-500 dark:text-amber-300 font-mono">{pending}</span>
+              <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+              <span className="text-xs font-bold text-white font-mono">{pending}</span>
             </div>
           </div>
 
@@ -855,17 +864,17 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
           {/* Row 3: Meta badges (Sandbox, Avg SLA, High Priority) */}
           <div className="flex items-center justify-between gap-1.5 sm:gap-2 flex-nowrap overflow-x-auto scrollbar-none">
             <div className="flex items-center gap-1.5 sm:gap-2 flex-nowrap shrink-0">
-              <div className="inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/25 text-emerald-600 dark:text-emerald-400 text-[11px] sm:text-xs font-medium shrink-0 whitespace-nowrap">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 sm:py-1 rounded-lg bg-emerald-600 text-white shadow-xs text-[11px] sm:text-xs font-bold shrink-0 whitespace-nowrap">
+                <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse shrink-0" />
                 <span>Sandbox: Active</span>
               </div>
-              <div className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 text-[11px] sm:text-xs text-gray-500 dark:text-gray-400 shrink-0 whitespace-nowrap">
+              <div className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 text-[11px] sm:text-xs text-gray-500 dark:text-gray-400 shrink-0 whitespace-nowrap">
                 <span>Avg SLA:</span>
                 <span className="text-gray-900 dark:text-zinc-100 font-mono font-bold">12m</span>
               </div>
             </div>
 
-            <span className="px-2 py-0.5 sm:py-1 rounded bg-rose-500/10 border border-rose-500/25 text-[10px] font-mono font-bold text-rose-600 dark:text-rose-400 tracking-wider uppercase shrink-0 whitespace-nowrap">
+            <span className="px-2.5 py-0.5 sm:py-1 rounded bg-rose-600 text-white shadow-xs text-[10px] font-mono font-bold tracking-wider uppercase shrink-0 whitespace-nowrap">
               HIGH PRIORITY
             </span>
           </div>
@@ -874,7 +883,7 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
           {currentPendingTicket ? (
             <div
               onClick={() => setSelectedTicket(currentPendingTicket)}
-              className="rounded-xl p-3 bg-white hover:bg-gray-50 dark:bg-zinc-800 dark:hover:bg-gray-50 dark:bg-zinc-800 border-none border border-gray-200 dark:border-zinc-800/50 hover:border-amber-500/40 flex items-center justify-between gap-3 transition-all cursor-pointer active:scale-[0.99] group shadow-inner"
+              className="rounded-xl p-3 bg-white hover:bg-gray-100 dark:bg-black/30 dark:hover:bg-black/50 border border-gray-200 dark:border-zinc-800/80 hover:border-amber-500/40 flex items-center justify-between gap-3 transition-all cursor-pointer active:scale-[0.99] group shadow-sm"
             >
               <div className={`min-w-0 flex-1 space-y-0.5 transition-opacity duration-200 ${pendingFade === 'in' ? 'opacity-100' : 'opacity-0'}`}>
                 <div className="flex items-center gap-2 flex-wrap">
@@ -894,12 +903,12 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
                 </p>
               </div>
 
-              <div className="w-8 h-8 rounded-xl bg-gray-200/60 dark:bg-white/5 border border-gray-200 dark:border-zinc-800/50 text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white flex items-center justify-center shrink-0">
+              <div className="w-8 h-8 rounded-xl bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-zinc-800/80 text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white flex items-center justify-center shrink-0">
                 <ChevronRight className="w-4 h-4" />
               </div>
             </div>
           ) : (
-            <div className="rounded-xl p-3 bg-white/60 dark:bg-zinc-800 border-none/50 border border-gray-200 dark:border-zinc-800/50 text-center text-xs text-gray-500 dark:text-gray-500 font-mono">
+            <div className="rounded-xl p-3 bg-white/60 dark:bg-black/20 border border-gray-200 dark:border-zinc-800/80 text-center text-xs text-gray-500 dark:text-gray-500 font-mono">
               No pending cases in queue · All caught up
             </div>
           )}
@@ -958,31 +967,31 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
             {
               label: 'Total In Queue',
               value: tickets.length,
-              dotColor: 'bg-[#3b82f6] dark:bg-zinc-800 shadow-sm ',
+              dotColor: 'bg-blue-500 shadow-sm',
               numColor: 'text-[#2563eb] dark:text-[#60a5fa]',
             },
             {
               label: 'Pending Review',
               value: pending,
-              dotColor: 'bg-[#f59e0b] dark:bg-zinc-800 shadow-sm ',
+              dotColor: 'bg-amber-500 shadow-sm',
               numColor: 'text-[#d97706] dark:text-[#fbbf24]',
             },
             {
               label: 'In Investigation',
               value: inReview,
-              dotColor: 'bg-white dark:bg-zinc-800 dark:bg-zinc-800 shadow-sm ',
+              dotColor: 'bg-cyan-500 shadow-sm',
               numColor: 'text-[#0891b2] dark:text-[#22d3ee]',
             },
             {
               label: 'Resolved / Closed',
               value: resolved,
-              dotColor: 'bg-white dark:bg-zinc-800 dark:bg-zinc-800 shadow-sm ',
+              dotColor: 'bg-emerald-500 shadow-sm',
               numColor: 'text-[#059669] dark:text-[#4ade80]',
             },
           ].map((stat) => (
             <div
               key={stat.label}
-              className="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 transition-all flex flex-col justify-between min-h-[82px] sm:min-h-[92px]"
+              className="p-3.5 sm:p-4 rounded-2xl bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm transition-all flex flex-col justify-between min-h-[82px] sm:min-h-[92px]"
             >
               <div className="flex items-center justify-between mb-2">
                 <span className="font-mono text-[11px] sm:text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -1002,8 +1011,18 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
       <SlideIn delay={100} direction="up">
         <div className="flex items-center gap-3 flex-wrap">
           <div
-            className="h-11 flex items-center gap-1 p-1 rounded-2xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm overflow-x-auto scrollbar-none"
+            className="relative h-11 inline-flex w-fit max-w-full items-center gap-1 p-1 rounded-xl bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm overflow-x-auto scrollbar-none select-none"
           >
+            {/* Smooth Left-Right Sliding Indicator Pill */}
+            {tabIndicator.ready && (
+              <div
+                className="absolute top-1 bottom-1 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20 pointer-events-none transition-all duration-200 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+                style={{
+                  left: `${tabIndicator.left}px`,
+                  width: `${tabIndicator.width}px`,
+                }}
+              />
+            )}
             {(['all', 'pending', 'in_review', 'analyzed', 'resolved'] as const).map((s) => {
               const active = filterStatus === s;
               const label = s === 'all'
@@ -1018,25 +1037,15 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
               return (
                 <button
                   key={s}
+                  ref={(el) => { tabButtonRefs.current[s] = el; }}
                   type="button"
                   onClick={() => setFilterStatus(s)}
-                  className={`relative h-9 px-4 rounded-xl text-xs sm:text-sm font-semibold capitalize transition-colors duration-200 shrink-0 whitespace-nowrap cursor-pointer select-none ${
+                  className={`relative h-9 px-4 rounded-lg text-xs sm:text-sm font-semibold capitalize transition-colors duration-200 shrink-0 whitespace-nowrap cursor-pointer select-none ${
                     active
                       ? 'text-white font-bold'
                       : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100/60 dark:hover:bg-zinc-800/40'
                   }`}
                 >
-                  {active && (
-                    <motion.div
-                      layoutId="activeUserRequestsFilterTab"
-                      className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
-                      transition={{
-                        type: 'spring',
-                        stiffness: 450,
-                        damping: 32,
-                      }}
-                    />
-                  )}
                   <span className="relative z-10">{label}</span>
                 </button>
               );
@@ -1044,18 +1053,18 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
           </div>
 
           <div
-            className="h-11 flex-1 min-w-[200px] flex items-center gap-2.5 px-3.5 rounded-2xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm"
+            className="h-11 flex-1 min-w-[200px] flex items-center gap-2.5 px-3.5 rounded-xl bg-gray-50 dark:bg-white border border-gray-200 dark:border-gray-200 shadow-sm"
           >
-            <Search className="w-4 h-4 text-gray-400 dark:text-zinc-500 shrink-0" />
+            <Search className="w-4 h-4 text-gray-500 dark:text-gray-500 shrink-0" />
             <input
               type="text"
               placeholder="Search by case ID, user email, filename, or verdict..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full text-xs text-gray-900 dark:text-zinc-100 bg-transparent placeholder-gray-400 dark:placeholder-zinc-500 focus:outline-none"
+              className="w-full text-xs text-gray-900 dark:text-gray-900 bg-transparent placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none font-medium"
             />
             {searchQuery && (
-              <button onClick={() => setSearchQuery('')} className="text-gray-400 hover:text-gray-900 dark:text-zinc-500 dark:hover:text-white cursor-pointer">
+              <button onClick={() => setSearchQuery('')} className="text-gray-500 hover:text-gray-900 dark:text-gray-500 dark:hover:text-black cursor-pointer">
                 <X className="w-3.5 h-3.5" />
               </button>
             )}
@@ -1067,11 +1076,11 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
       <SlideIn delay={140} direction="up">
         {filtered.length === 0 ? (
           <div
-            className="rounded-2xl p-12 text-center bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 shadow-sm"
+            className="rounded-2xl p-12 text-center bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
           >
-            <Inbox className="w-12 h-12 text-gray-200 dark:text-gray-600 mx-auto mb-3" />
-            <p className="text-sm font-bold text-gray-900 dark:text-gray-400">No requests found</p>
-            <p className="text-xs text-gray-500 dark:text-gray-600 mt-1">No user requests match the active filter.</p>
+            <Inbox className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-3" />
+            <p className="text-sm font-bold text-gray-900 dark:text-zinc-200">No requests found</p>
+            <p className="text-xs text-gray-500 dark:text-zinc-400 mt-1">No user requests match the active filter.</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -1079,7 +1088,7 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
               <div
                 key={ticket.id}
                 onClick={() => setSelectedTicket(ticket)}
-                className="rounded-2xl p-4 transition-all duration-200 hover:scale-[1.005] cursor-pointer group bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm "
+                className="rounded-2xl p-4 transition-all duration-200 hover:scale-[1.005] cursor-pointer group bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="flex items-start gap-3 flex-1 min-w-0">
@@ -1118,7 +1127,13 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
                         <span className="text-xs font-mono font-bold text-gray-900 dark:text-zinc-100 whitespace-nowrap">{ticket.id}</span>
                         <StatusBadge status={ticket.status} />
                         {ticket.verdict && (
-                          <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-zinc-800/50 text-gray-900 dark:text-zinc-100">
+                          <span className={`text-[10px] px-2.5 py-0.5 rounded font-bold uppercase text-white shadow-xs ${
+                            ticket.verdict.toLowerCase().includes('malicious') || ticket.verdict.toLowerCase().includes('phish')
+                              ? 'bg-red-600'
+                              : ticket.verdict.toLowerCase().includes('suspect') || ticket.verdict.toLowerCase().includes('suspicious')
+                              ? 'bg-amber-600'
+                              : 'bg-emerald-600'
+                          }`}>
                             {ticket.verdict}
                           </span>
                         )}

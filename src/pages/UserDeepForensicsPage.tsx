@@ -658,7 +658,7 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
 
  {/* ── Quick Navigation Tabs ─────────────────────────────────────────── */}
  <SlideIn delay={60} direction="up">
- <div className="flex items-center gap-1 p-1 rounded-2xl bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm mb-4 overflow-x-auto scrollbar-none select-none max-w-full">
+ <div className="inline-flex w-fit max-w-full items-center gap-1 p-1 rounded-xl bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 shadow-sm mb-4 overflow-x-auto scrollbar-none select-none">
  {[
  { id: 'all', label: 'Complete Forensic Report', icon: Shield },
  { id: 'synthesis', label: 'PCAP Analyzer', icon: MailSearch },
@@ -666,8 +666,6 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  { id: 'threat-intel', label: 'Certificate Vault', icon: ShieldCheck },
  { id: 'origin', label: 'Session Mapping', icon: MapPin },
  { id: 'attack-graph', label: 'Attack Graph', icon: Share2 },
- { id: 'campaigns', label: 'TLS Campaigns', icon: Network },
- { id: 'alerts', label: 'Crypto Alerts', icon: Bell },
  ].map((tab) => {
  const Icon = tab.icon;
  const active = activeTab === tab.id;
@@ -676,7 +674,7 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  key={tab.id}
  type="button"
  onClick={() => setActiveTab(tab.id as any)}
- className={`relative h-9 px-3.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-colors duration-200 cursor-pointer select-none shrink-0 ${
+ className={`relative h-9 px-3.5 rounded-lg text-xs sm:text-sm font-semibold whitespace-nowrap transition-colors duration-200 cursor-pointer select-none shrink-0 ${
  active
  ? 'text-white font-bold'
  : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/40'
@@ -685,11 +683,11 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  {active && (
  <motion.div
  layoutId="activeUserDeepForensicsTab"
- className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
+ className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
  transition={{
- type: 'spring',
- stiffness: 450,
- damping: 32,
+   type: 'tween',
+   ease: [0.25, 0.1, 0.25, 1],
+   duration: 0.22,
  }}
  />
  )}

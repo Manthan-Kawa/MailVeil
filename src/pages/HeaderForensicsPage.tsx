@@ -212,7 +212,7 @@ export function HeaderForensicsPage({ onNavigate }: { onNavigate?: (route: strin
       {!currentResult ? (
         <SlideIn delay={60} direction="up">
           <div
-            className="rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-6 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm border dark:border-white/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+            className="rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-6 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
           >
             <FileSearch className="w-12 h-12 text-blue-500 dark:text-blue-400" />
 
@@ -306,7 +306,7 @@ function EmailSummary({ result }: { result: EmailAnalysisResult | null }) {
 
   return (
     <div
-      className="rounded-2xl p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm border dark:border-white/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+      className="rounded-2xl p-5 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
     >
       <div className="mb-4">
         <h3 className="text-sm font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
@@ -321,7 +321,7 @@ function EmailSummary({ result }: { result: EmailAnalysisResult | null }) {
           return (
             <div
               key={f.label}
-              className="rounded-xl p-3.5 transition-all duration-200 hover:border-zinc-700/80 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 flex flex-col justify-between min-h-[76px]"
+              className="rounded-xl p-3.5 transition-all duration-200 hover:border-zinc-700/80 bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 flex flex-col justify-between min-h-[76px]"
             >
               <div className="flex items-center justify-between gap-1.5 text-xs text-gray-500 dark:text-zinc-400 font-medium mb-1.5">
                 <div className="flex items-center gap-1.5 min-w-0">
@@ -406,7 +406,7 @@ function AuthCards({ result }: { result: EmailAnalysisResult | null }) {
         return (
           <div
             key={auth.name}
-            className="rounded-2xl p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm border dark:border-white/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] flex flex-col justify-between transition-all duration-200 hover:border-zinc-700/80"
+            className="rounded-2xl p-5 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm flex flex-col justify-between transition-all duration-200 hover:border-zinc-700/80"
           >
             <div className="flex items-center justify-between mb-3">
               <span className="text-sm font-bold text-gray-900 dark:text-zinc-100 tracking-wider font-mono">{auth.name}</span>
@@ -460,7 +460,7 @@ function SmtpRelayTimeline({ result }: { result: EmailAnalysisResult | null }) {
 
   return (
     <div
-      className="rounded-2xl p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm border dark:border-white/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+      className="rounded-2xl p-5 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
     >
       <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
         <div>
@@ -494,7 +494,7 @@ function SmtpRelayTimeline({ result }: { result: EmailAnalysisResult | null }) {
           return (
             <div
               key={relay.id}
-              className="rounded-xl p-3.5 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 transition-all duration-200 hover:border-zinc-700/80"
+              className="rounded-xl p-3.5 bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 transition-all duration-200 hover:border-zinc-700/80"
             >
               <div className="flex items-center justify-between gap-2 flex-wrap mb-1.5">
                 <div className="flex items-center gap-2.5 min-w-0 flex-1 flex-wrap">
@@ -517,7 +517,7 @@ function SmtpRelayTimeline({ result }: { result: EmailAnalysisResult | null }) {
 
                 <div className="flex items-center gap-2 shrink-0">
                   <CopyButton value={`${relay.hostname} (${relay.ip})`} />
-                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/30">
+                  <span className="px-2.5 py-0.5 rounded text-[10px] font-mono font-bold text-white bg-emerald-600 shadow-sm">
                     {relay.confidence}% confidence
                   </span>
                 </div>
@@ -602,7 +602,7 @@ function ExpandableHeaders({ result }: { result: EmailAnalysisResult | null }) {
 
   return (
     <div
-      className="rounded-2xl p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm border dark:border-white/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+      className="rounded-2xl p-5 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
     >
       <div className="flex items-center justify-between mb-4">
         <div>
@@ -626,7 +626,7 @@ function ExpandableHeaders({ result }: { result: EmailAnalysisResult | null }) {
           return (
             <div
               key={h.key}
-              className="rounded-xl overflow-hidden transition-all duration-150 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/60 hover:border-zinc-700/80"
+              className="rounded-xl overflow-hidden transition-all duration-150 bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 hover:border-zinc-700/80"
             >
               <button
                 onClick={() => toggle(h.key)}
@@ -643,7 +643,7 @@ function ExpandableHeaders({ result }: { result: EmailAnalysisResult | null }) {
               </button>
               {isOpen && (
                 <div className="px-3.5 pb-3.5 pt-1">
-                  <div className="flex items-center justify-between gap-3 rounded-xl p-3 bg-gray-100 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800/80">
+                  <div className="flex items-center justify-between gap-3 rounded-xl p-3 bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-zinc-800/80">
                     <span className="text-xs font-mono text-gray-900 dark:text-zinc-200 break-all flex-1 leading-relaxed">{h.value}</span>
                     <CopyButton value={h.value} />
                   </div>
@@ -673,7 +673,7 @@ function ObservedFactsPanel({ result }: { result: EmailAnalysisResult | null }) 
 
   return (
     <div
-      className="rounded-2xl p-5 h-full bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm border dark:border-white/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+      className="rounded-2xl p-5 h-full bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
     >
       <div className="mb-4">
         <h3 className="text-sm font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
@@ -689,7 +689,7 @@ function ObservedFactsPanel({ result }: { result: EmailAnalysisResult | null }) 
           return (
             <div
               key={fact.id}
-              className="rounded-xl p-3.5 transition-all duration-200 hover:border-zinc-700/80 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
+              className="rounded-xl p-3.5 transition-all duration-200 hover:border-zinc-700/80 bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80"
             >
               <div className="flex items-start gap-2.5 min-w-0">
                 <Icon className={`w-4 h-4 shrink-0 mt-0.5 ${color}`} />
@@ -717,7 +717,7 @@ function AIInferencePanel({ result }: { result: EmailAnalysisResult | null }) {
 
   return (
     <div
-      className="rounded-2xl p-5 h-full bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm border dark:border-white/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+      className="rounded-2xl p-5 h-full bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
     >
       <div className="mb-4">
         <h3 className="text-sm font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
@@ -740,7 +740,7 @@ function AIInferencePanel({ result }: { result: EmailAnalysisResult | null }) {
         {infList.map((inf) => (
           <div
             key={inf.id || inf.inference}
-            className="rounded-xl p-3.5 transition-all duration-200 hover:border-zinc-700/80 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
+            className="rounded-xl p-3.5 transition-all duration-200 hover:border-zinc-700/80 bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80"
           >
             <div className="flex items-start justify-between gap-3 mb-1.5">
               <p className="text-xs font-bold text-gray-900 dark:text-zinc-100 flex-1">{inf.inference}</p>

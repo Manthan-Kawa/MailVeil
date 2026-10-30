@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import L from 'leaflet';
-import { Crosshair } from 'lucide-react';
 
 // Fix Leaflet's default icon asset path issue with bundlers
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -198,9 +197,17 @@ export function DarkCyberMap({
       });
     }
 
+    const resizeObserver = new ResizeObserver(() => {
+      map.invalidateSize();
+    });
+    if (mapContainerRef.current) {
+      resizeObserver.observe(mapContainerRef.current);
+    }
+
     mapRef.current = map;
 
     return () => {
+      resizeObserver.disconnect();
       map.remove();
       mapRef.current = null;
       markersRef.current.clear();
@@ -290,7 +297,7 @@ export function DarkCyberMap({
 
   return (
     <div
-      className={`relative w-full ${height} bg-white dark:bg-zinc-800 rounded-2xl border border-white/10 overflow-hidden select-none shadow-2xl isolate`}
+      className={`relative w-full ${height} bg-gray-50 dark:bg-zinc-900/60 rounded-2xl border border-gray-200 dark:border-zinc-800/80 overflow-hidden select-none shadow-sm isolate`}
       style={{ minHeight: '400px', isolation: 'isolate' }}
     >
       {/* ── Real Leaflet map fills the entire card ── */}
@@ -309,22 +316,6 @@ export function DarkCyberMap({
           </span>
         </div>
       )}
-
-      {/* ── Map Footer Info Bar ── */}
-      <div className="absolute bottom-3 left-4 right-4 z-[1000] flex items-center justify-between bg-white dark:bg-zinc-800/95 backdrop-blur-md border border-white/10 rounded-xl px-4 py-2 text-xs font-mono text-gray-300 pointer-events-none">
-        <div className="flex items-center gap-2">
-          <Crosshair className="w-4 h-4 text-red-400 animate-spin" style={{ animationDuration: '8s' }} />
-          <span>
-            ORIGIN RELAY LOCATED:{' '}
-            <strong className="text-white font-bold">{primaryMarker?.ip}</strong>
-            {primaryMarker && ` (${primaryMarker.city}, ${primaryMarker.countryCode ?? primaryMarker.country})`}
-          </span>
-        </div>
-        <div className="hidden sm:flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
-          <span className="text-red-400 font-bold">LIVE SIGNAL TRACE</span>
-        </div>
-      </div>
     </div>
   );
 }

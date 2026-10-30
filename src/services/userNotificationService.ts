@@ -11,7 +11,7 @@ export interface UserActivityNotification {
   time: string;
   timestamp: number;
   sev: 'critical' | 'high' | 'medium' | 'info';
-  category: 'alerts' | 'intel' | 'auth' | 'system' | 'ticket';
+  category: 'intel' | 'auth' | 'system' | 'ticket';
   route: string;
   read?: boolean;
 }

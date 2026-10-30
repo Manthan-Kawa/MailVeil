@@ -62,23 +62,23 @@ function SolidBadge({
   label: string;
   variant: 'critical' | 'high' | 'medium' | 'low' | 'info' | 'open' | 'investigating' | 'resolved' | 'contained' | string;
 }) {
-  const textColors: Record<string, string> = {
-    critical:      'text-red-600 dark:text-red-400',
-    high:          'text-orange-600 dark:text-orange-400',
-    medium:        'text-amber-600 dark:text-amber-400',
-    low:           'text-emerald-600 dark:text-emerald-400',
-    info:          'text-blue-600 dark:text-blue-400',
-    open:          'text-red-600 dark:text-red-400',
-    investigating: 'text-indigo-600 dark:text-indigo-400',
-    resolved:      'text-emerald-600 dark:text-emerald-400',
-    contained:     'text-amber-600 dark:text-amber-400',
+  const badgeColors: Record<string, string> = {
+    critical:      'bg-red-600 text-white',
+    high:          'bg-orange-600 text-white',
+    medium:        'bg-amber-600 text-white',
+    low:           'bg-emerald-600 text-white',
+    info:          'bg-blue-600 text-white',
+    open:          'bg-red-600 text-white',
+    investigating: 'bg-indigo-600 text-white',
+    resolved:      'bg-emerald-600 text-white',
+    contained:     'bg-amber-600 text-white',
   };
 
-  const style = textColors[variant.toLowerCase()] || 'text-gray-500 dark:text-gray-400';
+  const style = badgeColors[variant.toLowerCase()] || 'bg-gray-600 text-white';
 
   return (
     <span
-      className={`inline-flex items-center text-[10px] font-black font-mono uppercase tracking-wider select-none ${style}`}
+      className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black font-mono uppercase tracking-wider select-none shadow-xs ${style}`}
     >
       {label}
     </span>
@@ -335,7 +335,7 @@ export function DashboardPage({ onNavigate }: { onNavigate?: (route: string) => 
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm text-gray-600 dark:text-gray-300">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm text-gray-600 dark:text-gray-300">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
@@ -353,7 +353,7 @@ export function DashboardPage({ onNavigate }: { onNavigate?: (route: string) => 
 
           return (
             <SlideIn key={kpi.label} delay={80 + i * 50} direction="up">
-              <div className="rounded-2xl p-4 sm:p-5 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm transition-all duration-200 flex flex-col justify-between h-full overflow-hidden">
+              <div className="rounded-2xl p-4 sm:p-5 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm transition-all duration-200 flex flex-col justify-between h-full overflow-hidden">
                 <div className="min-w-0">
                   <div className="flex items-center justify-between gap-2 mb-3">
                     {/* Squircle icon container (Sentinel-X signature design) */}
@@ -391,7 +391,7 @@ export function DashboardPage({ onNavigate }: { onNavigate?: (route: string) => 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
         {/* Left: Email Threat Activity Area Chart */}
         <SlideIn delay={300} direction="left" className="lg:col-span-3">
-          <div className="rounded-2xl p-5 sm:p-6 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm flex flex-col justify-between h-full">
+          <div className="rounded-2xl p-5 sm:p-6 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm flex flex-col justify-between h-full">
             <div>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                 <div>
@@ -413,7 +413,7 @@ export function DashboardPage({ onNavigate }: { onNavigate?: (route: string) => 
                 </div>
 
                 {/* Range Toggle with smooth sliding animation */}
-                <div className="relative flex items-center rounded-2xl p-1 bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm self-start sm:self-auto select-none">
+                <div className="relative inline-flex items-center rounded-xl p-1 bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 shadow-sm self-start sm:self-auto select-none">
                   {(['24H', '7D'] as const).map((tab) => {
                     const isSelected = activeTab === tab;
                     return (
@@ -421,7 +421,7 @@ export function DashboardPage({ onNavigate }: { onNavigate?: (route: string) => 
                         key={tab}
                         type="button"
                         onClick={() => setActiveTab(tab)}
-                        className={`relative px-3.5 py-1.5 rounded-xl text-xs font-bold transition-colors duration-200 cursor-pointer select-none ${
+                        className={`relative px-3.5 py-1.5 rounded-lg text-xs font-bold transition-colors duration-200 cursor-pointer select-none ${
                           isSelected
                             ? 'text-white'
                             : 'text-gray-500 hover:text-gray-900 dark:text-zinc-400 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/40'
@@ -430,11 +430,11 @@ export function DashboardPage({ onNavigate }: { onNavigate?: (route: string) => 
                         {isSelected && (
                           <motion.div
                             layoutId="activeTrafficRangeTab"
-                            className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
+                            className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
                             transition={{
-                              type: 'spring',
-                              stiffness: 450,
-                              damping: 32,
+                              type: 'tween',
+                              ease: [0.25, 0.1, 0.25, 1],
+                              duration: 0.22,
                             }}
                           />
                         )}
@@ -510,7 +510,7 @@ export function DashboardPage({ onNavigate }: { onNavigate?: (route: string) => 
 
         {/* Right: Threat Category Distribution Donut */}
         <SlideIn delay={400} direction="right" className="lg:col-span-2">
-          <div className="rounded-2xl p-5 sm:p-6 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm flex flex-col justify-between h-full">
+          <div className="rounded-2xl p-5 sm:p-6 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm flex flex-col justify-between h-full">
             <div>
               <div className="flex items-center justify-between mb-2">
                 <h2 className="text-sm sm:text-base font-bold text-gray-900 dark:text-zinc-100">
@@ -572,7 +572,7 @@ export function DashboardPage({ onNavigate }: { onNavigate?: (route: string) => 
 
       {/* ── 4. Recent Detections Table ── */}
       <SlideIn delay={520} direction="up">
-        <div className="rounded-2xl p-5 sm:p-6 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm">
+        <div className="rounded-2xl p-5 sm:p-6 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="text-sm sm:text-base font-bold text-gray-900 dark:text-zinc-100">
@@ -593,7 +593,7 @@ export function DashboardPage({ onNavigate }: { onNavigate?: (route: string) => 
           <div className="overflow-x-auto scrollbar-thin">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-gray-200 dark:border-zinc-800 text-[10px] font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-wider">
+                <tr className="border-b border-gray-200 dark:border-zinc-800/80 text-[10px] font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-wider">
                   <th className="py-3 px-3.5">Threat ID</th>
                   <th className="py-3 px-3.5">Sender / Domain</th>
                   <th className="py-3 px-3.5">Threat Classification</th>
@@ -602,7 +602,7 @@ export function DashboardPage({ onNavigate }: { onNavigate?: (route: string) => 
                   <th className="py-3 px-3.5 text-right">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100 dark:divide-zinc-800/60 text-xs">
+              <tbody className="divide-y divide-gray-200/60 dark:divide-zinc-800/60 text-xs">
                 {analyzedReports.length > 0 ? (
                   analyzedReports.slice(0, 8).map((r) => {
                     const fromHdr =

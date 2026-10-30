@@ -30,6 +30,7 @@ import { UserNotificationService } from '@/services/userNotificationService';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTickets } from '@/contexts/TicketContext';
 import { SlideIn } from '@/components/SlideIn';
+import { motion } from 'framer-motion';
 
 interface EmailsPageProps {
   onNavigate: (route: string, opts?: { role?: 'analyst' | 'user' }) => void;
@@ -68,49 +69,6 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
   const itemsPerPage = 8;
   const [syncNotice, setSyncNotice] = useState<string | null>(null);
   const [isGoogleModalOpen, setIsGoogleModalOpen] = useState(false);
-
-  // Smooth sliding filter indicator pill
-  const filterRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-  const [filterIndicatorStyle, setFilterIndicatorStyle] = useState<{
-    left: number;
-    top: number;
-    width: number;
-    height: number;
-    opacity: number;
-  }>({ left: 0, top: 0, width: 0, height: 0, opacity: 0 });
-
-  useLayoutEffect(() => {
-    const updateIndicator = () => {
-      const currentEl = filterRefs.current[filterState.threatLevel];
-      if (currentEl) {
-        setFilterIndicatorStyle((prev) => {
-          if (
-            prev.left === currentEl.offsetLeft &&
-            prev.top === currentEl.offsetTop &&
-            prev.width === currentEl.offsetWidth &&
-            prev.height === currentEl.offsetHeight &&
-            prev.opacity === 1
-          ) {
-            return prev;
-          }
-          return {
-            left: currentEl.offsetLeft,
-            top: currentEl.offsetTop,
-            width: currentEl.offsetWidth,
-            height: currentEl.offsetHeight,
-            opacity: 1,
-          };
-        });
-      }
-    };
-    updateIndicator();
-    const rafId = requestAnimationFrame(updateIndicator);
-    window.addEventListener('resize', updateIndicator);
-    return () => {
-      cancelAnimationFrame(rafId);
-      window.removeEventListener('resize', updateIndicator);
-    };
-  }, [filterState.threatLevel]);
 
   const handleDisconnectGmail = () => {
     disconnectGoogle();
@@ -246,7 +204,7 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
       {/* ── Header Card (Responsive Desktop + Mobile) ── */}
       <SlideIn delay={0} direction="down">
         {/* ── Desktop Card (PC only: md:flex) Matching Screenshot ── */}
-        <div className="hidden md:flex items-center justify-between gap-4 p-4 lg:p-5 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 relative overflow-hidden shadow-sm dark:shadow-2xl">
+        <div className="hidden md:flex items-center justify-between gap-4 p-4 lg:p-5 rounded-2xl bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 relative overflow-hidden shadow-sm">
           {/* Left: Icon + Title & Badges + Connected Account */}
           <div className="flex items-center gap-4 min-w-0">
             <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shrink-0 shadow-lg shadow-cyan-500/10">
@@ -352,7 +310,7 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
       </div>
 
       {/* ── Mobile Card (Phone only: block md:hidden) ── */}
-      <div className="block md:hidden rounded-2xl p-4 bg-white dark:bg-[#11121b] border border-gray-200 dark:border-zinc-800/50 shadow-sm dark:shadow-xl space-y-3.5">
+      <div className="block md:hidden rounded-2xl p-4 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm space-y-3.5">
         {/* Row 1: Icon + Title + Subtitle */}
         <div className="flex items-start gap-3">
           <div className="w-10 h-10 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-600 dark:text-cyan-400 flex items-center justify-center shrink-0 shadow-lg shadow-cyan-500/10 mt-0.5">
@@ -625,7 +583,7 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
             return (
               <div
                 key={stat.label}
-                className="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-[#0c0e18] border border-gray-200 dark:border-white/[0.08] transition-all flex flex-col justify-between min-h-[92px] sm:min-h-[102px] shadow-none"
+                className="p-3.5 sm:p-4 rounded-2xl bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm transition-all flex flex-col justify-between min-h-[92px] sm:min-h-[102px]"
               >
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-mono text-[11px] sm:text-xs font-semibold text-gray-500 dark:text-zinc-400 dark:text-gray-400 uppercase tracking-wider">
@@ -649,10 +607,10 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
 
       {/* Filters and Search Bar */}
       <SlideIn delay={120} direction="up">
-        <div className="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-[#11121b] border border-gray-200 dark:border-zinc-800/50 flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 shadow-sm">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
           {/* Search input */}
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-zinc-500 dark:text-gray-400" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 dark:text-gray-500" />
             <input
               type="text"
               value={filterState.searchQuery}
@@ -661,104 +619,59 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
                 setCurrentPage(1);
               }}
               placeholder="Search by sender, subject, or AI summary..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 text-xs text-gray-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white dark:bg-white border border-gray-200 dark:border-white/20 text-xs text-gray-900 dark:text-gray-900 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500 shadow-sm transition-colors"
             />
           </div>
 
           {/* Filter pills */}
-          <div className="flex items-center gap-1.5 overflow-x-auto overflow-y-hidden scrollbar-none touch-scroll touch-pan-x overscroll-x-contain pb-1 md:pb-0">
-            <span className="text-xs text-gray-500 dark:text-zinc-400 dark:text-gray-400 mr-1 flex items-center gap-1 shrink-0 font-medium">
-              <Filter className="w-3.5 h-3.5" />
-              Filter:
-            </span>
-            <div className="relative isolate flex items-center gap-1 p-1 rounded-xl bg-gray-100/80 dark:bg-zinc-800/50 border border-gray-200/80 dark:border-zinc-800/50 select-none">
-              {/* Smooth sliding indicator pill */}
-              <div
-                className={`absolute pointer-events-none rounded-xl border transition-all duration-300 ease-out shadow-sm ${
-                  filterState.threatLevel === 'malicious'
-                    ? 'bg-red-500/15 dark:bg-red-500/20 border-red-400/60 dark:border-red-500/40 shadow-red-900/10'
-                    : filterState.threatLevel === 'suspicious'
-                      ? 'bg-amber-500/15 dark:bg-amber-500/20 border-amber-400/60 dark:border-amber-500/40 shadow-amber-900/10'
-                      : filterState.threatLevel === 'clean'
-                        ? 'bg-emerald-500/15 dark:bg-emerald-500/20 border-emerald-400/60 dark:border-emerald-500/40 shadow-emerald-900/10'
-                        : 'bg-cyan-500/15 dark:bg-cyan-500/20 border-cyan-400/60 dark:border-cyan-500/40 shadow-cyan-900/10'
-                }`}
-                style={{
-                  top: 0,
-                  left: 0,
-                  transform: `translate3d(${filterIndicatorStyle.left}px, ${filterIndicatorStyle.top}px, 0)`,
-                  width: filterIndicatorStyle.width,
-                  height: filterIndicatorStyle.height,
-                  opacity: filterIndicatorStyle.opacity,
-                  transition: 'transform 300ms cubic-bezier(0.25, 1, 0.5, 1), width 300ms cubic-bezier(0.25, 1, 0.5, 1), height 300ms cubic-bezier(0.25, 1, 0.5, 1), opacity 150ms ease',
-                  zIndex: 0,
-                }}
-              />
-              {[
-                { id: 'all' as const, label: 'All Emails', icon: Inbox },
-                { id: 'malicious' as const, label: 'Malicious', icon: ShieldAlert },
-                { id: 'suspicious' as const, label: 'Suspicious', icon: AlertTriangle },
-                { id: 'clean' as const, label: 'Clean', icon: ShieldCheck },
-              ].map((tab) => {
-                const Icon = tab.icon;
-                const isActive = filterState.threatLevel === tab.id;
-                return (
-                  <button
-                    key={tab.id}
-                    ref={(el) => {
-                      filterRefs.current[tab.id] = el;
-                      if (tab.id === filterState.threatLevel && el && filterIndicatorStyle.opacity === 0) {
-                        setFilterIndicatorStyle({
-                          left: el.offsetLeft,
-                          top: el.offsetTop,
-                          width: el.offsetWidth,
-                          height: el.offsetHeight,
-                          opacity: 1,
-                        });
-                      }
-                    }}
-                    onClick={() => {
-                      setFilterState((prev) => ({ ...prev, threatLevel: tab.id }));
-                      setCurrentPage(1);
-                    }}
-                    style={{ zIndex: 10 }}
-                    className={`relative z-10 flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors duration-200 cursor-pointer shrink-0 ${
-                      isActive
-                        ? tab.id === 'malicious'
-                          ? 'text-red-950 dark:text-red-200 font-bold'
-                          : tab.id === 'suspicious'
-                            ? 'text-amber-950 dark:text-amber-200 font-bold'
-                            : tab.id === 'clean'
-                              ? 'text-emerald-950 dark:text-emerald-200 font-bold'
-                              : 'text-cyan-950 dark:text-cyan-200 font-bold'
-                        : 'text-gray-600 dark:text-zinc-400 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-                    }`}
-                  >
-                    <Icon
-                      className={`w-3.5 h-3.5 shrink-0 ${
-                        isActive
-                          ? tab.id === 'malicious'
-                            ? 'text-red-700 dark:text-red-300'
-                            : tab.id === 'suspicious'
-                              ? 'text-amber-700 dark:text-amber-300'
-                              : tab.id === 'clean'
-                                ? 'text-emerald-700 dark:text-emerald-300'
-                                : 'text-cyan-700 dark:text-cyan-300'
-                          : 'text-gray-500 dark:text-zinc-400 dark:text-gray-400'
-                      }`}
+          <div className="inline-flex w-fit max-w-full items-center gap-1 p-1 rounded-xl bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 shadow-sm overflow-x-auto scrollbar-none select-none">
+            {[
+              { id: 'all' as const, label: 'All Emails', icon: Inbox },
+              { id: 'malicious' as const, label: 'Malicious', icon: ShieldAlert },
+              { id: 'suspicious' as const, label: 'Suspicious', icon: AlertTriangle },
+              { id: 'clean' as const, label: 'Clean', icon: ShieldCheck },
+            ].map((tab) => {
+              const Icon = tab.icon;
+              const isActive = filterState.threatLevel === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => {
+                    setFilterState((prev) => ({ ...prev, threatLevel: tab.id }));
+                    setCurrentPage(1);
+                  }}
+                  className={`relative h-9 px-3.5 rounded-lg text-xs sm:text-sm font-semibold transition-colors duration-200 flex items-center justify-center shrink-0 whitespace-nowrap cursor-pointer select-none ${
+                    isActive
+                      ? 'text-white font-bold'
+                      : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/40'
+                  }`}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeEmailsFilterTab"
+                      className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
+                      transition={{
+                        type: 'tween',
+                        ease: [0.25, 0.1, 0.25, 1],
+                        duration: 0.22,
+                      }}
                     />
-                    <span>{tab.label}</span>
-                  </button>
-                );
-              })}
-            </div>
+                  )}
+                  <span className="relative z-10 flex items-center gap-1.5">
+                    <Icon className="w-3.5 h-3.5" />
+                    {tab.label}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
       </SlideIn>
 
       {/* Main Paginated Emails: Mobile Cards + Desktop Table */}
       <SlideIn delay={160} direction="up">
-        <div className="rounded-2xl border border-gray-200 dark:border-zinc-800/50 bg-white dark:bg-[#11121b] overflow-hidden shadow-sm dark:shadow-xl">
+        <div className="rounded-2xl border border-gray-200 dark:border-zinc-800/80 bg-gray-50 dark:bg-zinc-900/60 overflow-hidden shadow-sm">
         {/* ── Mobile Card View (md:hidden) ── */}
         <div className="block md:hidden divide-y divide-gray-100 dark:divide-zinc-800/60">
           {isLoading ? (

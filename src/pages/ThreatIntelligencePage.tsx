@@ -54,12 +54,12 @@ const SEVERITY_BADGE: Record<Severity, string> = {
   info: 'badge-info',
 };
 
-const LEVEL_COLORS: Record<string, { bg: string; border: string; text: string; glow: string }> = {
-  critical: { bg: 'rgba(239,68,68,0.08)',   border: 'rgba(239,68,68,0.35)',   text: 'text-red-600 dark:text-red-400',    glow: 'none' },
-  high:     { bg: 'rgba(249,115,22,0.08)',  border: 'rgba(249,115,22,0.35)',  text: 'text-orange-600 dark:text-orange-400', glow: 'none' },
-  medium:   { bg: 'rgba(245,158,11,0.08)',  border: 'rgba(245,158,11,0.35)',  text: 'text-amber-600 dark:text-amber-400',  glow: 'none' },
-  low:      { bg: 'rgba(59,130,246,0.08)',  border: 'rgba(59,130,246,0.35)',  text: 'text-blue-600 dark:text-blue-400',   glow: 'none' },
-  info:     { bg: 'rgba(107,114,128,0.08)', border: 'rgba(107,114,128,0.35)', text: 'text-gray-600 dark:text-zinc-400 dark:text-gray-400',   glow: 'none' },
+const LEVEL_COLORS: Record<string, { bg: string; text: string }> = {
+  critical: { bg: 'bg-red-600', text: 'text-white font-bold' },
+  high:     { bg: 'bg-orange-600', text: 'text-white font-bold' },
+  medium:   { bg: 'bg-amber-600', text: 'text-white font-bold' },
+  low:      { bg: 'bg-emerald-600', text: 'text-white font-bold' },
+  info:     { bg: 'bg-blue-600', text: 'text-white font-bold' },
 };
 
 /* ─── Slide-in entrance wrapper ─── */
@@ -145,7 +145,7 @@ export function ThreatIntelligencePage({ onNavigate }: { onNavigate?: (route: st
           {/* ── Synced Analysis Banner ── */}
           {hasLive && currentResult && (
             <div
-              className="rounded-2xl p-3.5 sm:p-4 overflow-hidden max-w-full bg-white dark:bg-zinc-800 border border-gray-200 dark:border-white/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+              className="rounded-2xl p-3.5 sm:p-4 overflow-hidden max-w-full bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
             >
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3">
                 <div className="flex items-center gap-2 min-w-0 flex-1">
@@ -165,18 +165,17 @@ export function ThreatIntelligencePage({ onNavigate }: { onNavigate?: (route: st
 
                 <div className="flex items-center gap-1.5 flex-wrap min-w-0">
                   <span
-                    className={`px-2.5 py-0.5 rounded text-[10px] sm:text-[11px] font-bold uppercase shrink-0 whitespace-nowrap ${lc.text}`}
-                    style={{ background: lc.bg, border: `1px solid ${lc.border}` }}
+                    className={`px-2.5 py-0.5 rounded text-[10px] sm:text-[11px] font-bold uppercase shrink-0 whitespace-nowrap text-white shadow-sm ${lc.bg}`}
                   >
                     {currentResult.alert_level || 'INFO'}
                   </span>
                   {typeof currentResult.threat_score === 'number' && (
-                    <span className="px-2.5 py-0.5 rounded text-[10px] sm:text-[11px] font-bold text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-500/20 border border-purple-300 dark:border-purple-500/30 shrink-0 whitespace-nowrap">
+                    <span className="px-2.5 py-0.5 rounded text-[10px] sm:text-[11px] font-bold text-white bg-purple-600 shadow-sm shrink-0 whitespace-nowrap">
                       Score: {currentResult.threat_score}/100
                     </span>
                   )}
                   {currentResult.threat_intel?.sending_ip && (
-                    <span className="px-2.5 py-0.5 rounded text-[10px] sm:text-[11px] font-mono font-bold text-cyan-700 dark:text-cyan-300 bg-cyan-100 dark:bg-cyan-500/15 border border-cyan-300 dark:border-cyan-500/25 shrink-0 truncate max-w-[170px] whitespace-nowrap">
+                    <span className="px-2.5 py-0.5 rounded text-[10px] sm:text-[11px] font-mono font-bold text-white bg-cyan-600 shadow-sm shrink-0 truncate max-w-[170px] whitespace-nowrap">
                       IP: {currentResult.threat_intel.sending_ip}
                     </span>
                   )}
@@ -185,18 +184,16 @@ export function ThreatIntelligencePage({ onNavigate }: { onNavigate?: (route: st
 
               {/* Auth badges */}
               <div className="flex items-center gap-1.5 sm:gap-2 mt-2.5 pt-2.5 border-t border-gray-200 dark:border-zinc-800/50 flex-wrap min-w-0">
-                <span className="text-[10px] text-gray-500 dark:text-zinc-300 font-mono uppercase mr-1 shrink-0">Auth:</span>
+                <span className="text-[10px] text-gray-500 dark:text-zinc-300 font-mono uppercase mr-1 shrink-0 font-bold">Auth:</span>
                 {(['spf', 'dkim', 'dmarc'] as const).map((k) => {
                   const val = currentResult.threat_intel?.[k] || 'UNKNOWN';
                   const isPass = val === 'PASS';
                   return (
                     <span
                       key={k}
-                      className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold shrink-0 whitespace-nowrap ${
-                        isPass
-                          ? 'text-emerald-700 dark:text-green-400 bg-emerald-100 dark:bg-green-500/10 border-emerald-300 dark:border-green-500/20'
-                          : 'text-red-700 dark:text-red-400 bg-red-100 dark:bg-red-500/10 border-red-300 dark:border-red-500/20'
-                      } border`}
+                      className={`px-2.5 py-0.5 rounded text-[10px] font-mono font-bold shrink-0 whitespace-nowrap text-white shadow-sm ${
+                        isPass ? 'bg-emerald-600' : 'bg-red-600'
+                      }`}
                     >
                       {k.toUpperCase()} {val}
                     </span>
@@ -211,7 +208,7 @@ export function ThreatIntelligencePage({ onNavigate }: { onNavigate?: (route: st
       {!currentResult ? (
         <SlideIn delay={60} direction="up">
           <div
-            className="rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-6 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-white/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+            className="rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-6 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
           >
             <Globe2 className="w-12 h-12 text-blue-500 dark:text-blue-400" />
 
@@ -246,11 +243,11 @@ export function ThreatIntelligencePage({ onNavigate }: { onNavigate?: (route: st
           {/* ── Interactive Tabbed Container ── */}
           <SlideIn delay={100} direction="up">
             <div
-              className="rounded-2xl overflow-hidden bg-white dark:bg-zinc-800 border border-gray-200 dark:border-white/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+              className="rounded-2xl overflow-hidden bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
             >
               {/* Tabs header with smooth sliding indicator pill */}
               <div className="p-2 sm:p-2.5 border-b border-gray-200 dark:border-zinc-800/50">
-                <div className="flex items-center gap-1 p-1 rounded-2xl bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm overflow-x-auto scrollbar-none select-none max-w-full">
+                <div className="inline-flex w-fit max-w-full items-center gap-1 p-1 rounded-xl bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 shadow-sm overflow-x-auto scrollbar-none select-none">
                   {TABS.map((t) => {
                     const Icon = t.icon;
                     const isActive = tab === t.id;
@@ -259,7 +256,7 @@ export function ThreatIntelligencePage({ onNavigate }: { onNavigate?: (route: st
                         key={t.id}
                         type="button"
                         onClick={() => setTab(t.id)}
-                        className={`relative z-10 shrink-0 flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs font-bold transition-colors duration-200 whitespace-nowrap cursor-pointer select-none ${
+                        className={`relative shrink-0 flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-4 py-2 sm:py-2 rounded-lg text-xs font-bold transition-colors duration-200 whitespace-nowrap cursor-pointer select-none ${
                           isActive
                             ? 'text-white font-bold'
                             : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/40'
@@ -268,11 +265,11 @@ export function ThreatIntelligencePage({ onNavigate }: { onNavigate?: (route: st
                         {isActive && (
                           <motion.div
                             layoutId="activeThreatIntelTab"
-                            className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
+                            className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
                             transition={{
-                              type: 'spring',
-                              stiffness: 450,
-                              damping: 32,
+                              type: 'tween',
+                              ease: [0.25, 0.1, 0.25, 1],
+                              duration: 0.22,
                             }}
                           />
                         )}
@@ -327,15 +324,15 @@ function ReputationBadge({ reputation, score }: { reputation: string; score: num
   return (
     <div className="flex items-center gap-2">
       <span
-        className={`px-2.5 py-0.5 rounded text-[11px] font-bold flex items-center gap-1.5 uppercase ${
+        className={`px-2.5 py-0.5 rounded text-[11px] font-bold flex items-center gap-1.5 uppercase text-white shadow-sm ${
           isMalicious
-            ? 'text-red-400 bg-red-500/20 border border-red-500/30'
+            ? 'bg-red-600'
             : isSuspicious
-            ? 'text-orange-400 bg-orange-500/20 border border-orange-500/30'
-            : 'text-green-400 bg-green-500/20 border border-green-500/30'
+            ? 'bg-amber-600'
+            : 'bg-emerald-600'
         }`}
       >
-        <Icon className="w-3.5 h-3.5" />
+        <Icon className="w-3.5 h-3.5 text-white" />
         {reputation}
       </span>
       <span className="text-xs text-gray-500 dark:text-zinc-300 font-mono font-semibold">Score: {score}/100</span>
@@ -362,10 +359,9 @@ function IPTab({ result }: { result: EmailAnalysisResult | null }) {
       <div className="lg:col-span-2 space-y-4">
         <div className="flex items-center gap-3 mb-2">
           <div
-            className="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0"
-            style={{ background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.3)' }}
+            className="w-11 h-11 rounded-2xl bg-white dark:bg-white flex items-center justify-center shrink-0 shadow-sm border border-gray-200/50 dark:border-white/10"
           >
-            <Server className="w-5 h-5 text-red-500 dark:text-red-400" />
+            <Server className="w-5 h-5 text-blue-600 dark:text-blue-600" />
           </div>
           <div>
             <h3 className="text-base font-bold text-gray-900 dark:text-white font-mono">{ip}</h3>
@@ -374,7 +370,7 @@ function IPTab({ result }: { result: EmailAnalysisResult | null }) {
         </div>
 
         <div
-          className="rounded-xl p-4 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
+          className="rounded-xl p-4 bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80"
         >
           <InfoRow label="IP Address" value={ip} />
           <InfoRow label="ASN" value={asn} />
@@ -386,7 +382,7 @@ function IPTab({ result }: { result: EmailAnalysisResult | null }) {
         </div>
 
         <div
-          className="rounded-xl p-4 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
+          className="rounded-xl p-4 bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80"
         >
           <h4 className="text-[10px] font-bold text-gray-500 dark:text-zinc-300 uppercase tracking-widest mb-3 font-mono">
             Blocklist Appearances
@@ -395,7 +391,7 @@ function IPTab({ result }: { result: EmailAnalysisResult | null }) {
             {blocklists.map((bl) => (
               <span
                 key={bl}
-                className="px-2.5 py-1 rounded text-xs font-bold text-red-600 dark:text-red-400 bg-red-500/15 border border-red-500/30"
+                className="px-2.5 py-1 rounded text-xs font-bold text-white bg-red-600 shadow-sm"
               >
                 {bl}
               </span>
@@ -405,7 +401,7 @@ function IPTab({ result }: { result: EmailAnalysisResult | null }) {
       </div>
 
       <div
-        className="rounded-xl p-4 h-full bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
+        className="rounded-xl p-4 h-full bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80"
       >
         <h4 className="text-[10px] font-bold text-gray-500 dark:text-zinc-300 uppercase tracking-widest mb-3 font-mono">
           Related Indicators
@@ -422,7 +418,7 @@ function IPTab({ result }: { result: EmailAnalysisResult | null }) {
           ).map((ind) => (
             <div
               key={ind}
-              className="flex items-center gap-2 rounded-lg p-2.5 transition-colors bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
+              className="flex items-center gap-2 rounded-lg p-2.5 transition-colors bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80"
             >
               <ChevronRight className="w-3.5 h-3.5 text-gray-400 dark:text-zinc-400 shrink-0" />
               <span className="text-xs text-gray-900 dark:text-white font-mono break-all flex-1">{ind}</span>
@@ -526,7 +522,7 @@ function DomainTab({ result }: { result: EmailAnalysisResult | null }) {
               ).map((d) => (
                 <span
                   key={d}
-                  className="px-2.5 py-1 rounded text-xs font-bold text-orange-600 dark:text-orange-400 bg-orange-500/15 border border-orange-500/30"
+                  className="px-2.5 py-1 rounded text-xs font-bold text-white bg-orange-600 shadow-sm"
                 >
                   {d}
                 </span>
@@ -781,24 +777,24 @@ function IndicatorsTab({ result }: { result: EmailAnalysisResult | null }) {
     return matchesSearch && matchesType;
   });
 
-  const types = ['all', 'IP', 'Domain', 'URL', 'Email', 'Campaign'];
+  const types = ['all', 'IP', 'Domain', 'URL', 'Email'];
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-col sm:flex-row gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3">
         <div
-          className="flex items-center gap-2 rounded-xl px-3 py-2 flex-1 bg-gray-100 dark:bg-zinc-800/50 border border-gray-200 dark:border-white/[0.08]"
+          className="flex items-center gap-2 px-3 py-1.5 rounded-lg flex-1 bg-gray-50 dark:bg-white border border-gray-200 dark:border-gray-200 shadow-sm"
         >
-          <Search className="w-4 h-4 text-gray-400 dark:text-zinc-400" />
+          <Search className="w-3.5 h-3.5 text-gray-500 dark:text-gray-500 shrink-0" />
           <input
             type="text"
             placeholder="Search indicators..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="bg-transparent text-xs text-gray-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 focus:outline-none w-full"
+            className="bg-transparent text-xs text-gray-900 dark:text-gray-900 placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none w-full font-medium"
           />
         </div>
-        <div className="flex items-center gap-1 overflow-x-auto scrollbar-none p-1 rounded-2xl bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800">
+        <div className="inline-flex w-fit max-w-full items-center gap-1 overflow-x-auto scrollbar-none p-1 rounded-lg bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 shadow-sm self-start sm:self-auto shrink-0">
           {types.map((t) => {
             const active = typeFilter === t;
             return (
@@ -806,7 +802,7 @@ function IndicatorsTab({ result }: { result: EmailAnalysisResult | null }) {
                 key={t}
                 type="button"
                 onClick={() => setTypeFilter(t)}
-                className={`relative px-3.5 py-1.5 rounded-xl text-xs font-semibold capitalize transition-colors duration-200 shrink-0 whitespace-nowrap cursor-pointer select-none ${
+                className={`relative px-3 py-1 rounded-md text-xs font-semibold capitalize transition-colors duration-200 flex items-center justify-center shrink-0 whitespace-nowrap cursor-pointer select-none ${
                   active
                     ? 'text-white font-bold'
                     : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white'
@@ -815,11 +811,11 @@ function IndicatorsTab({ result }: { result: EmailAnalysisResult | null }) {
                 {active && (
                   <motion.div
                     layoutId="activeThreatIntelIndicatorTypeTab"
-                    className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
+                    className="absolute inset-0 rounded-md bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
                     transition={{
-                      type: 'spring',
-                      stiffness: 450,
-                      damping: 32,
+                      type: 'tween',
+                      ease: [0.25, 0.1, 0.25, 1],
+                      duration: 0.22,
                     }}
                   />
                 )}
@@ -854,7 +850,7 @@ function IndicatorsTab({ result }: { result: EmailAnalysisResult | null }) {
                     {ind.indicator}
                   </td>
                   <td className="py-3 px-3">
-                    <span className="px-2 py-0.5 rounded text-[10px] font-bold text-blue-600 dark:text-blue-400 bg-blue-500/15 border border-blue-500/30">
+                    <span className="px-2.5 py-0.5 rounded text-[10px] font-mono font-bold text-white bg-blue-600 shadow-sm">
                       {ind.type}
                     </span>
                   </td>
@@ -930,7 +926,7 @@ function RelationshipFlow({ result }: { result: EmailAnalysisResult | null }) {
 
   return (
     <div
-      className="rounded-2xl p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-white/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+      className="rounded-2xl p-5 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
     >
       <div className="mb-4">
         <h3 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
@@ -944,7 +940,7 @@ function RelationshipFlow({ result }: { result: EmailAnalysisResult | null }) {
         {flowNodes.map((node, i) => (
           <div key={node.label} className="flex flex-col items-center w-full max-w-md">
             <div
-              className="w-full rounded-xl p-3.5 transition-all duration-200 hover:scale-[1.01] bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
+              className="w-full rounded-xl p-3.5 transition-all duration-200 hover:scale-[1.01] bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80"
             >
               <span className="text-[10px] text-gray-500 dark:text-zinc-300 uppercase tracking-widest font-mono font-bold">{node.label}</span>
               <div className="flex items-center gap-2 mt-1">

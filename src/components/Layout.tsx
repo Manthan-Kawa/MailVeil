@@ -29,6 +29,7 @@ import {
   Moon,
 } from 'lucide-react';
 import { useState, useEffect, useLayoutEffect, useRef, useMemo, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { getNavItemsForRole, type NavRole } from '@/config/navigation';
 import type { LucideIcon } from 'lucide-react';
@@ -124,17 +125,6 @@ const SEARCHABLE_ITEMS: SearchableItem[] = [
     roles: ['analyst'],
   },
   {
-    id: 'campaigns',
-    title: 'Campaign Intelligence',
-    category: 'Module',
-    route: 'campaigns',
-    description: 'Correlated threat clusters, multi-vector campaign tracking & attack grouping',
-    keywords: ['campaigns', 'campaign intelligence', 'clusters', 'threat cluster', 'create campaign', 'active clusters'],
-    icon: Network,
-    badgeColor: 'text-pink-400 bg-pink-500/10 border-pink-500/30',
-    roles: ['analyst'],
-  },
-  {
     id: 'reports',
     title: 'Forensic Reports & Export',
     category: 'Module',
@@ -143,17 +133,6 @@ const SEARCHABLE_ITEMS: SearchableItem[] = [
     keywords: ['reports', 'forensic reports', 'pdf export', 'export', 'dossier', 'download', 'print report', 'summary report'],
     icon: FileText,
     badgeColor: 'text-teal-400 bg-teal-500/10 border-teal-500/30',
-    roles: ['analyst'],
-  },
-  {
-    id: 'alerts',
-    title: 'Security Alerts',
-    category: 'Module',
-    route: 'alerts',
-    description: 'Real-time threat detection feed, SOC triage queue & alert status management',
-    keywords: ['alerts', 'security alerts', 'notifications', 'soc triage', 'feed', 'new alerts', 'severity queue'],
-    icon: Bell,
-    badgeColor: 'text-red-400 bg-red-500/10 border-red-500/30',
     roles: ['analyst'],
   },
   {
@@ -266,11 +245,10 @@ export function Sidebar({ activeId, onNavigate, onSignOut, mobileOpen, onMobileC
                   onNavigate(item.id);
                   onMobileClose();
                 }}
-                className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors duration-200 text-left cursor-pointer group ${
-                  active
-                    ? 'soc-nav-active !text-white'
-                    : 'text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-zinc-800/50'
-                }`}
+                className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors duration-200 text-left cursor-pointer group ${active
+                  ? 'soc-nav-active !text-white'
+                  : 'text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-zinc-800/50'
+                  }`}
               >
                 {active && (
                   <motion.div
@@ -281,20 +259,18 @@ export function Sidebar({ activeId, onNavigate, onSignOut, mobileOpen, onMobileC
                   />
                 )}
                 <Icon
-                  className={`relative z-10 w-4 h-4 shrink-0 transition-colors duration-200 ${
-                    active ? '!text-white' : 'text-gray-900 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white'
-                  }`}
+                  className={`relative z-10 w-4 h-4 shrink-0 transition-colors duration-200 ${active ? '!text-white' : 'text-gray-900 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white'
+                    }`}
                 />
                 <span className={`relative z-10 truncate font-semibold transition-colors duration-200 ${active ? '!text-white' : 'dark:text-inherit'}`}>
                   {item.label}
                 </span>
                 {showBadge && (
                   <span
-                    className={`soc-badge-solid relative z-10 ml-auto min-w-[20px] h-[20px] px-1.5 rounded-full text-[10px] font-bold flex items-center justify-center shrink-0 transition-all duration-200 ${
-                      active
-                        ? 'bg-white text-blue-600 shadow-sm'
-                        : 'bg-blue-600 dark:bg-blue-600 !text-white'
-                    }`}
+                    className={`soc-badge-solid relative z-10 ml-auto min-w-[20px] h-[20px] px-1.5 rounded-full text-[10px] font-bold flex items-center justify-center shrink-0 transition-all duration-200 ${active
+                      ? 'bg-white text-blue-600 shadow-sm'
+                      : 'bg-blue-600 dark:bg-blue-600 !text-white'
+                      }`}
                   >
                     {pendingCount}
                   </span>
@@ -305,7 +281,7 @@ export function Sidebar({ activeId, onNavigate, onSignOut, mobileOpen, onMobileC
         </nav>
 
 
-                <div className="border-t border-gray-200 dark:border-zinc-800/50 p-3">
+        <div className="border-t border-gray-200 dark:border-zinc-800/50 p-3">
           <div className="flex items-center gap-3">
             <div
               className="w-9 h-9 rounded-full flex items-center justify-center text-white font-semibold text-sm shrink-0 overflow-hidden"
@@ -315,7 +291,8 @@ export function Sidebar({ activeId, onNavigate, onSignOut, mobileOpen, onMobileC
                   : 'linear-gradient(135deg, #3f3f46, #18181b)',
                 border: role === 'analyst'
                   ? '1px solid rgba(255,255,255,0.1)'
-                  : '1px solid rgba(255,255,255,0.1)' }}
+                  : '1px solid rgba(255,255,255,0.1)'
+              }}
             >
               {role === 'analyst' ? (
                 <img
@@ -362,11 +339,11 @@ interface TopBarProps {
 }
 
 const ALERT_SEVERITY_STYLES: Record<string, { bg: string; border: string; text: string; dot: string }> = {
-  critical: { bg: 'rgba(239,68,68,0.1)',   border: 'rgba(239,68,68,0.35)',   text: '#f87171', dot: '#ef4444' },
-  high:     { bg: 'rgba(249,115,22,0.1)',  border: 'rgba(249,115,22,0.35)',  text: '#fb923c', dot: '#f97316' },
-  medium:   { bg: 'rgba(245,158,11,0.1)',  border: 'rgba(245,158,11,0.35)',  text: '#fbbf24', dot: '#f59e0b' },
-  low:      { bg: 'rgba(59,130,246,0.1)',  border: 'rgba(59,130,246,0.35)',  text: '#60a5fa', dot: '#3b82f6' },
-  info:     { bg: 'rgba(34,211,238,0.1)',  border: 'rgba(34,211,238,0.35)',  text: '#67e8f9', dot: '#22d3ee' },
+  critical: { bg: 'rgba(239,68,68,0.1)', border: 'rgba(239,68,68,0.35)', text: '#f87171', dot: '#ef4444' },
+  high: { bg: 'rgba(249,115,22,0.1)', border: 'rgba(249,115,22,0.35)', text: '#fb923c', dot: '#f97316' },
+  medium: { bg: 'rgba(245,158,11,0.1)', border: 'rgba(245,158,11,0.35)', text: '#fbbf24', dot: '#f59e0b' },
+  low: { bg: 'rgba(59,130,246,0.1)', border: 'rgba(59,130,246,0.35)', text: '#60a5fa', dot: '#3b82f6' },
+  info: { bg: 'rgba(34,211,238,0.1)', border: 'rgba(34,211,238,0.35)', text: '#67e8f9', dot: '#22d3ee' },
 };
 
 export interface SystemNotification {
@@ -376,7 +353,7 @@ export interface SystemNotification {
   time: string;
   timestamp: number;
   sev: 'critical' | 'high' | 'medium' | 'info';
-  category: 'alerts' | 'intel' | 'auth' | 'system' | 'ticket';
+  category: 'intel' | 'auth' | 'system' | 'ticket';
   route: string;
   read: boolean;
   ticketId?: string;
@@ -689,8 +666,8 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
           time: 'Analyzed',
           timestamp: Date.now() - (idx + 1) * 30000,
           sev: isCrit ? 'critical' : 'high',
-          category: 'alerts',
-          route: 'alerts',
+          category: 'intel',
+          route: 'email-analyzer',
           read: readNotifIds.includes(repId),
         });
       });
@@ -719,7 +696,7 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
     isMountedRef.current = true;
   }, []);
 
-  const [notifCategory, setNotifCategory] = useState<'all' | 'requests' | 'alerts' | 'intel' | 'system' | 'ticket'>('all');
+  const [notifCategory, setNotifCategory] = useState<'all' | 'requests' | 'intel' | 'system' | 'ticket'>('all');
   const notifTabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const [notifIndicatorStyle, setNotifIndicatorStyle] = useState<{
     left: number;
@@ -848,7 +825,7 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
       fireToast(n);
     }
     prevUserMessagesRef.current = allUserMsgs.map((item) => item.msg.id);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tickets, isAnalyst]);
 
   // Standard user: toast when ticket is submitted, moved to in_review, analyst responds, or analyst sends message
@@ -951,7 +928,7 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
       fireToast(n);
     }
     prevAnalystMessagesRef.current = allAnalystMsgs.map((item) => item.msg.id);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tickets, currentUser?.email, isAnalyst]);
 
   // Analyst: new analysis report → notification + toast
@@ -976,8 +953,8 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
               time: 'Just now',
               timestamp: Date.now(),
               sev: isCrit ? 'critical' : 'high',
-              category: 'alerts',
-              route: 'alerts',
+              category: 'intel',
+              route: 'email-analyzer',
               read: false,
             };
             fireToast(newNotif);
@@ -993,7 +970,7 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
       }
     }
     prevReportsCountRef.current = analyzedReports.length;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [analyzedReports, currentUser?.email, isAnalyst]);
 
   function fireToast(n: SystemNotification) {
@@ -1041,7 +1018,8 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
         window.dispatchEvent(new CustomEvent('sentinel_open_settings_tab', { detail: targetTab }));
       } catch { /* ignore */ }
     }
-    onNavigate(n.route);
+    const targetRoute = (n.route === 'alerts' || n.route === 'campaigns') ? 'email-analyzer' : n.route;
+    onNavigate(targetRoute);
   };
 
   const dismissNotification = (id: string) => {
@@ -1063,7 +1041,6 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
     }
     let base = notifications;
     if (notifCategory === 'requests' || notifCategory === 'ticket') base = notifications.filter((n) => n.category === 'ticket');
-    else if (notifCategory === 'alerts') base = notifications.filter((n) => n.category === 'alerts');
     else if (notifCategory === 'intel') base = notifications.filter((n) => n.category === 'intel' || n.category === 'auth');
     else if (notifCategory === 'system') base = notifications.filter((n) => n.category === 'system');
     return base.filter(notDismissed);
@@ -1172,10 +1149,11 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
 
   return (
     <header
-      className="flex items-center justify-between gap-3 px-4 lg:px-5 shrink-0 bg-white dark:bg-black border-b border-gray-200 dark:border-zinc-800/50 shadow-sm transition-colors select-none touch-none lg:touch-auto z-20"
+      className="flex items-center justify-between gap-3 px-4 lg:px-5 shrink-0 bg-white dark:bg-black border-b border-gray-200 dark:border-zinc-800/50 shadow-sm transition-colors select-none touch-none lg:touch-auto relative z-40"
       style={{
         height: 'calc(4rem + env(safe-area-inset-top, 0px))',
-        paddingTop: 'env(safe-area-inset-top, 0px)' }}
+        paddingTop: 'env(safe-area-inset-top, 0px)'
+      }}
     >
       <div className="flex items-center gap-3 relative" ref={searchContainerRef}>
         <button
@@ -1278,11 +1256,10 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
                       key={item.id}
                       onClick={() => handleSelectSearchItem(item)}
                       onMouseEnter={() => setSelectedSearchIdx(idx)}
-                      className={`flex items-start gap-3 p-2.5 rounded-xl cursor-pointer transition-all duration-150 ${
-                        isSelected
-                          ? 'bg-sky-50 dark:bg-purple-500/15 border border-sky-200 dark:border-purple-500/35 shadow-sm'
-                          : 'border border-transparent hover:bg-gray-100 dark:hover:bg-zinc-800'
-                      }`}
+                      className={`flex items-start gap-3 p-2.5 rounded-xl cursor-pointer transition-all duration-150 ${isSelected
+                        ? 'bg-sky-50 dark:bg-purple-500/15 border border-sky-200 dark:border-purple-500/35 shadow-sm'
+                        : 'border border-transparent hover:bg-gray-100 dark:hover:bg-zinc-800'
+                        }`}
                     >
                       <div
                         className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-zinc-800/50"
@@ -1342,16 +1319,16 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
             {unreadCount > 0 && (
               <span
                 className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"
-                
+
               />
             )}
           </button>
 
           {/* Notif dropdown — exact Attendify notification specs */}
-          {notifOpen && (
+          {notifOpen && typeof document !== 'undefined' && createPortal(
             <div
               ref={notifDropdownRef}
-              className="fixed top-14 sm:top-[4.25rem] left-3 sm:left-auto right-3 sm:right-4 lg:right-6 w-auto sm:w-96 max-w-none sm:max-w-sm rounded-2xl z-50 overflow-hidden animate-fade-in bg-white dark:bg-black border border-gray-200 dark:border-zinc-800 text-gray-900 dark:text-zinc-100  touch-auto"
+              className="fixed top-14 sm:top-[4.25rem] left-3 sm:left-auto right-3 sm:right-4 lg:right-6 w-auto sm:w-96 max-w-none sm:max-w-sm rounded-2xl z-[9999] shadow-2xl overflow-hidden animate-fade-in bg-white dark:bg-black border border-gray-200 dark:border-zinc-800 text-gray-900 dark:text-zinc-100 touch-auto"
             >
               {/* Notification Header */}
               <div className="px-4 py-3 bg-white dark:bg-black border-b border-gray-200 dark:border-zinc-800 flex items-center justify-between">
@@ -1376,34 +1353,34 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
 
               {/* Notification subheader / tab bar */}
               {isAnalyst ? (
-                <div className="p-2 bg-white dark:bg-black border-b border-gray-200 dark:border-zinc-800">
-                  <div className="flex items-center gap-1 p-1 rounded-2xl bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm overflow-x-auto scrollbar-none select-none max-w-full">
-                    {(['all', 'requests', 'alerts', 'intel', 'system'] as const).map((cat) => {
+                <div className="px-3 py-2 bg-transparent border-b border-gray-200 dark:border-zinc-800">
+                  <div className="grid grid-cols-4 gap-1.5 w-full bg-transparent select-none">
+                    {(['all', 'requests', 'intel', 'system'] as const).map((cat) => {
                       const active = notifCategory === cat;
-                      const label = cat === 'requests' ? 'USER REQUESTS' : cat.toUpperCase();
+                      const label = cat === 'requests' ? 'REQUESTS' : cat.toUpperCase();
                       return (
                         <button
                           key={cat}
                           type="button"
                           onClick={() => setNotifCategory(cat as any)}
-                          className={`relative h-8 px-3.5 rounded-xl text-[11px] font-mono font-bold uppercase whitespace-nowrap shrink-0 transition-colors duration-200 cursor-pointer select-none ${
-                            active
-                              ? 'text-white font-bold'
-                              : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/40'
-                          }`}
+                          title={cat === 'requests' ? 'User Requests' : label}
+                          className={`relative h-6 w-full flex items-center justify-center rounded-md text-[10px] font-mono font-bold uppercase transition-colors duration-200 cursor-pointer select-none px-1 ${active
+                            ? 'text-white font-bold'
+                            : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-zinc-800/40'
+                            }`}
                         >
                           {active && (
                             <motion.div
                               layoutId="activeNotifCategoryTab"
-                              className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
+                              className="absolute inset-0 rounded-md bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
                               transition={{
-                                type: 'spring',
-                                stiffness: 450,
-                                damping: 32,
+                                type: 'tween',
+                                ease: [0.25, 0.1, 0.25, 1],
+                                duration: 0.22,
                               }}
                             />
                           )}
-                          <span className="relative z-10">{label}</span>
+                          <span className="relative z-10 truncate text-center">{label}</span>
                         </button>
                       );
                     })}
@@ -1434,17 +1411,17 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
                     return (
                       <div
                         key={n.id}
-                        className={`px-3.5 sm:px-4 py-3 flex items-start gap-2.5 sm:gap-3 transition-all duration-150 ${
-                          !n.read
-                            ? 'bg-emerald-50/70 border-b border-emerald-200/60 dark:bg-black dark:border-zinc-800'
-                            : 'bg-white border-b border-gray-100 dark:bg-zinc-900/40 dark:border-zinc-800'
-                      }`}
+                        className={`px-3.5 sm:px-4 py-3 flex items-start gap-2.5 sm:gap-3 transition-all duration-150 ${!n.read
+                          ? 'bg-emerald-50/70 border-b border-emerald-200/60 dark:bg-black dark:border-zinc-800'
+                          : 'bg-white border-b border-gray-100 dark:bg-zinc-900/40 dark:border-zinc-800'
+                          }`}
                       >
                         <div
                           className="w-2 h-2 rounded-full shrink-0 mt-1.5"
                           style={{
                             background: ns.dot,
-                            boxShadow: !n.read ? `0 0 6px ${ns.dot}` : undefined }}
+                            boxShadow: !n.read ? `0 0 6px ${ns.dot}` : undefined
+                          }}
                         />
                         <div
                           className="min-w-0 flex-1 cursor-pointer"
@@ -1484,7 +1461,8 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
                   })
                 )}
               </div>
-            </div>
+            </div>,
+            document.body
           )}
         </div>
 
@@ -1520,7 +1498,8 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
                 : 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
               border: isAnalyst
                 ? '1px solid rgba(255,255,255,0.12)'
-                : '1px solid rgba(34,197,94,0.25)' }}
+                : '1px solid rgba(34,197,94,0.25)'
+            }}
           >
             {isAnalyst ? (
               <img
@@ -1570,7 +1549,8 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
                 : 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
               border: isAnalyst
                 ? '1px solid rgba(255,255,255,0.12)'
-                : '1px solid rgba(34,197,94,0.25)' }}
+                : '1px solid rgba(34,197,94,0.25)'
+            }}
           >
             {isAnalyst ? (
               <img
@@ -1611,14 +1591,14 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
             setToastVisible(false);
             setTimeout(() => setActiveToast(null), 350);
           }}
-          className={`fixed top-3 left-3 right-3 sm:left-auto sm:right-6 z-50 max-w-sm w-auto sm:w-96 p-3.5 rounded-2xl cursor-pointer shadow-2xl transition-all duration-500 ease-out flex items-start gap-3 border bg-white dark:bg-black border-gray-200 dark:border-zinc-800 ${
-            toastVisible
-              ? 'translate-y-0 opacity-100 scale-100 pointer-events-auto'
-              : 'text-gray-900 dark:text-zinc-100'
-    }`}
+          className={`fixed top-3 left-3 right-3 sm:left-auto sm:right-6 z-50 max-w-sm w-auto sm:w-96 p-3.5 rounded-2xl cursor-pointer shadow-2xl transition-all duration-500 ease-out flex items-start gap-3 border bg-white dark:bg-black border-gray-200 dark:border-zinc-800 ${toastVisible
+            ? 'translate-y-0 opacity-100 scale-100 pointer-events-auto'
+            : 'text-gray-900 dark:text-zinc-100'
+            }`}
           style={{
             boxShadow: 'none',
-            backdropFilter: 'blur(16px)' }}
+            backdropFilter: 'blur(16px)'
+          }}
         >
           <div
             className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 mt-0.5"
@@ -1627,19 +1607,19 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
                 activeToast.title.includes('Investigation')
                   ? 'rgba(6,182,212,0.18)'
                   : activeToast.sev === 'critical'
-                  ? 'rgba(239,68,68,0.18)'
-                  : activeToast.sev === 'high'
-                  ? 'rgba(249,115,22,0.18)'
-                  : 'rgba(245,158,11,0.18)',
-              border: `1px solid ${
-                activeToast.title.includes('Investigation')
-                  ? 'rgba(6,182,212,0.4)'
-                  : activeToast.sev === 'critical'
+                    ? 'rgba(239,68,68,0.18)'
+                    : activeToast.sev === 'high'
+                      ? 'rgba(249,115,22,0.18)'
+                      : 'rgba(245,158,11,0.18)',
+              border: `1px solid ${activeToast.title.includes('Investigation')
+                ? 'rgba(6,182,212,0.4)'
+                : activeToast.sev === 'critical'
                   ? 'rgba(239,68,68,0.35)'
                   : activeToast.sev === 'high'
-                  ? 'rgba(249,115,22,0.35)'
-                  : 'rgba(245,158,11,0.35)'
-    }` }}
+                    ? 'rgba(249,115,22,0.35)'
+                    : 'rgba(245,158,11,0.35)'
+                }`
+            }}
           >
             {activeToast.title.includes('Investigation') ? (
               <Clock className="w-4 h-4 text-cyan-500 animate-spin" />
@@ -1663,17 +1643,16 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
             <div className="flex items-center justify-between gap-2">
               <span className="text-xs font-bold text-gray-900 dark:text-zinc-100 font-mono flex items-center gap-1.5">
                 <span
-                  className={`w-1.5 h-1.5 rounded-full ${
-                    activeToast.title.includes('Investigation')
-                      ? 'bg-cyan-500 animate-pulse'
-                      : activeToast.title.includes('Message')
+                  className={`w-1.5 h-1.5 rounded-full ${activeToast.title.includes('Investigation')
+                    ? 'bg-cyan-500 animate-pulse'
+                    : activeToast.title.includes('Message')
                       ? 'bg-purple-500 animate-ping'
                       : activeToast.sev === 'critical'
-                      ? 'bg-red-500 animate-ping'
-                      : activeToast.sev === 'high'
-                      ? 'bg-orange-500 animate-ping'
-                      : 'text-gray-900 dark:text-zinc-100'
-    }`}
+                        ? 'bg-red-500 animate-ping'
+                        : activeToast.sev === 'high'
+                          ? 'bg-orange-500 animate-ping'
+                          : 'text-gray-900 dark:text-zinc-100'
+                    }`}
                 />
                 {activeToast.title}
               </span>
@@ -1687,16 +1666,16 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
                 {activeToast.title.includes('Message') && activeToast.route === 'user-requests'
                   ? 'Reply to User'
                   : activeToast.title.includes('Message') && activeToast.route === 'check-status'
-                  ? 'Reply to Analyst'
-                  : activeToast.route === 'emails'
-                  ? 'View in Emails'
-                  : activeToast.route === 'settings'
-                  ? 'View in Settings'
-                  : activeToast.route === 'check-status'
-                  ? 'View in Check Status'
-                  : activeToast.route === 'user-requests'
-                  ? 'View User Requests'
-                  : 'Open module'}
+                    ? 'Reply to Analyst'
+                    : activeToast.route === 'emails'
+                      ? 'View in Emails'
+                      : activeToast.route === 'settings'
+                        ? 'View in Settings'
+                        : activeToast.route === 'check-status'
+                          ? 'View in Check Status'
+                          : activeToast.route === 'user-requests'
+                            ? 'View User Requests'
+                            : 'Open module'}
               </span>
               <ArrowRight className="w-3 h-3" />
             </div>

@@ -202,6 +202,7 @@ export function EmailAnalyzerPage({ onNavigate }: { onNavigate?: (route: string)
   const [pastedEmail, setPastedEmail] = useState('');
   const [uploadedFile, setUploadedFile] = useState<{ name: string; size: number; text: string } | null>(null);
   const [activeTab, setActiveTab] = useState<'facts' | 'inference' | 'headers' | 'raw'>('facts');
+
   const [result, setResult] = useState<EmailAnalysisResult | null>(() => currentResult ?? null);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -331,7 +332,7 @@ export function EmailAnalyzerPage({ onNavigate }: { onNavigate?: (route: string)
       {/* Workflow indicator matching Sentinel-X PCAP Analyzer */}
       {state !== 'idle' && state !== 'error' && (
         <SlideIn delay={100} direction="down">
-          <div className="rounded-2xl p-2.5 sm:p-3 bg-white dark:bg-[#1b1c21] border border-gray-200 dark:border-zinc-800/80 shadow-xs">
+          <div className="rounded-2xl p-2.5 sm:p-3 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-xs">
             <div className="flex items-center gap-2 overflow-x-auto no-scrollbar scrollbar-none">
               {ANALYSIS_STEPS.map((s, i, arr) => {
                 const isAnalyzing = state === 'analyzing';
@@ -491,11 +492,11 @@ function IdleView({
                 className={`relative rounded-2xl flex-1 min-h-[220px] p-6 text-center cursor-pointer transition-all duration-300 border border-dashed flex flex-col items-center justify-center ${
                   dragOver
                     ? 'bg-blue-500/10 border-blue-500 ring-2 ring-blue-500/20'
-                    : 'bg-white dark:bg-[#121316] border-gray-300 dark:border-zinc-800 hover:border-blue-400 dark:hover:border-zinc-700'
+                    : 'bg-gray-50 dark:bg-zinc-900/60 border-gray-200 dark:border-zinc-800/80 hover:border-blue-400 dark:hover:border-zinc-700'
                 }`}
               >
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500/15 to-indigo-500/15 border border-blue-500/25 rounded-2xl flex items-center justify-center mb-3">
-                  <Upload className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-[#edf5ff] dark:bg-white border border-blue-100 dark:border-white text-blue-600 dark:text-blue-600 shadow-sm transition-colors mb-3">
+                  <Upload className="w-5 h-5 text-blue-600 dark:text-blue-600 stroke-[2.2]" />
                 </div>
                 <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-1">
                   Drag &amp; drop .EML or .MSG here
@@ -505,7 +506,7 @@ function IdleView({
                 </p>
               </div>
             ) : (
-              <div className="relative rounded-2xl flex-1 min-h-[220px] p-5 border border-emerald-500/40 bg-gradient-to-br from-emerald-500/15 via-emerald-500/5 to-transparent dark:from-emerald-950/40 dark:via-emerald-900/15 dark:to-[#121316] shadow-lg shadow-emerald-950/20 flex flex-col justify-between overflow-hidden">
+              <div className="relative rounded-2xl flex-1 min-h-[220px] p-5 border border-emerald-500/40 bg-gradient-to-br from-emerald-500/15 via-emerald-500/5 to-gray-50 dark:from-emerald-950/40 dark:via-emerald-900/15 dark:to-zinc-900/60 shadow-lg shadow-emerald-950/20 flex flex-col justify-between overflow-hidden">
                 <div>
                   <div className="flex items-center justify-between mb-3">
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-[11px] font-black font-mono tracking-wider text-white bg-emerald-500 shadow-md shadow-emerald-500/35 border border-emerald-400/40 select-none">
@@ -569,7 +570,7 @@ function IdleView({
             <p className="text-[11px] font-mono font-bold text-gray-500 dark:text-zinc-500 uppercase tracking-wider">
               PASTE RAW EMAIL / RFC-5322 SESSION TRANSCRIPT
             </p>
-            <div className="bg-white dark:bg-[#121316] border border-gray-200 dark:border-zinc-800/80 rounded-2xl shadow-sm p-1 overflow-hidden flex-1 flex flex-col min-h-[220px]">
+            <div className="bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 rounded-2xl shadow-sm p-1 overflow-hidden flex-1 flex flex-col min-h-[220px]">
               <textarea
                 value={pastedEmail}
                 onChange={(e) => setPastedEmail(e.target.value)}
@@ -590,7 +591,7 @@ function IdleView({
             <button
               disabled
               type="button"
-              className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-xs font-bold font-mono text-zinc-400 dark:text-zinc-600 bg-gray-100 dark:bg-[#16171a] border border-gray-200 dark:border-zinc-800/80 opacity-50 cursor-not-allowed select-none pointer-events-none"
+              className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-xs font-bold font-mono text-zinc-400 dark:text-zinc-600 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 opacity-50 cursor-not-allowed select-none pointer-events-none"
             >
               <Sparkles className="w-4 h-4 text-zinc-400 dark:text-zinc-600" />
               Load Demo Email Session
@@ -623,7 +624,7 @@ function IdleView({
             <button
               disabled
               type="button"
-              className="flex items-center justify-center gap-2.5 px-6 py-2.5 rounded-full text-xs font-bold font-mono text-zinc-400 dark:text-zinc-600 bg-gray-100 dark:bg-[#16171a] border border-gray-200 dark:border-zinc-800/80 opacity-40 cursor-not-allowed select-none pointer-events-none"
+              className="flex items-center justify-center gap-2.5 px-6 py-2.5 rounded-full text-xs font-bold font-mono text-zinc-400 dark:text-zinc-600 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 opacity-40 cursor-not-allowed select-none pointer-events-none"
             >
               <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 bg-transparent">
                 <Zap className="w-3.5 h-3.5 text-zinc-500 dark:text-zinc-600" />
@@ -645,7 +646,7 @@ function AnalyzingView({ step }: { step: number }) {
   const progressPercent = Math.round(((step + 1) / ANALYSIS_STEPS.length) * 100);
 
   return (
-    <div className="rounded-2xl p-8 sm:p-14 flex flex-col items-center justify-center text-center bg-white dark:bg-[#18181b] border border-gray-200 dark:border-zinc-800/80 shadow-sm space-y-6">
+    <div className="rounded-2xl p-8 sm:p-14 flex flex-col items-center justify-center text-center bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm space-y-6">
       <div className="my-2">
         <GradientLiveProgressRing
           progress={progressPercent}
@@ -777,13 +778,13 @@ function ResultsView({
       {/* ── Risk Summary Banner ── */}
       <SlideIn delay={80} direction="up">
         <div
-          className="rounded-2xl overflow-hidden bg-white dark:bg-[#18181b] border border-gray-200 dark:border-zinc-800 shadow-sm"
+          className="rounded-2xl overflow-hidden bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
         >
           <div className="grid grid-cols-1 lg:grid-cols-12">
 
             {/* Score Gauge */}
             <div
-              className="lg:col-span-3 p-6 flex flex-col items-center justify-center border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-zinc-800 bg-gray-50/60 dark:bg-transparent"
+              className="lg:col-span-3 p-6 flex flex-col items-center justify-center border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-zinc-800/80 bg-gray-100/40 dark:bg-white/[0.02]"
             >
               <AnimatedCircleGauge
                 score={result.threat_score}
@@ -837,7 +838,7 @@ function ResultsView({
 
             {/* Actions Stack matching Sentinel-X PCAP Analyzer */}
             <div
-              className="lg:col-span-3 p-6 flex flex-col justify-center gap-3 border-t lg:border-t-0 lg:border-l border-gray-200 dark:border-zinc-800"
+              className="lg:col-span-3 p-6 flex flex-col justify-center gap-3 border-t lg:border-t-0 lg:border-l border-gray-200 dark:border-zinc-800/80"
             >
               <button
                 onClick={() => onNavigate?.('reports')}
@@ -852,7 +853,7 @@ function ResultsView({
               {onNavigate && (
                 <button
                   onClick={() => onNavigate('header-forensics')}
-                  className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs font-semibold text-gray-700 dark:text-zinc-200 bg-gray-100 dark:bg-[#18181b] hover:dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800 transition-all cursor-pointer active:scale-98"
+                  className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs font-semibold text-gray-700 dark:text-zinc-200 bg-gray-100 dark:bg-zinc-800/60 hover:dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/80 transition-all cursor-pointer active:scale-98"
                 >
                   <ArrowRight className="w-4 h-4 text-zinc-400" />
                   Header Forensics
@@ -873,7 +874,7 @@ function ResultsView({
 
       {/* ── X.509 Certificate Profile Card matching Sentinel-X ── */}
       <SlideIn delay={120} direction="up">
-        <div className="rounded-2xl p-6 bg-white dark:bg-[#18181b] border border-gray-200 dark:border-zinc-800 space-y-4">
+        <div className="rounded-2xl p-6 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 space-y-4">
           <div className="flex items-center justify-between flex-wrap gap-2">
             <div className="flex items-center gap-2.5">
               <ShieldCheck className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />
@@ -890,7 +891,7 @@ function ResultsView({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
             {/* Card 1: ISSUER / SUBJECT */}
-            <div className="rounded-xl p-4 bg-gray-50 dark:bg-[#121316] border border-gray-200 dark:border-zinc-800/80 space-y-2">
+            <div className="rounded-xl p-4 bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 space-y-2">
               <div className="flex items-center gap-2 text-xs font-mono font-bold text-gray-500 dark:text-zinc-400 uppercase tracking-wider">
                 <AlertTriangle className="w-4 h-4 text-red-500" />
                 ISSUER / SUBJECT
@@ -904,7 +905,7 @@ function ResultsView({
             </div>
 
             {/* Card 2: PUBLIC KEY ALGORITHM */}
-            <div className="rounded-xl p-4 bg-gray-50 dark:bg-[#121316] border border-gray-200 dark:border-zinc-800/80 space-y-2">
+            <div className="rounded-xl p-4 bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 space-y-2">
               <div className="flex items-center gap-2 text-xs font-mono font-bold text-gray-500 dark:text-zinc-400 uppercase tracking-wider">
                 <Lock className="w-4 h-4 text-amber-500" />
                 PUBLIC KEY ALGORITHM
@@ -924,7 +925,7 @@ function ResultsView({
       {(result.risk_factors || []).length > 0 && (
         <SlideIn delay={160} direction="up">
           <div
-            className="rounded-2xl p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm shadow-sm"
+            className="rounded-2xl p-5 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
           >
             <div className="mb-4">
               <h3 className="text-sm font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
@@ -937,7 +938,7 @@ function ResultsView({
               {(result.risk_factors || []).map((rf, i) => (
                 <div
                   key={i}
-                  className="rounded-xl p-3.5 transition-all duration-200 hover:scale-[1.01] bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
+                  className="rounded-xl p-3.5 transition-all duration-200 hover:scale-[1.01] bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80"
                 >
                   <div className="flex items-start justify-between gap-2 mb-1.5">
                     <span className="text-xs font-bold text-gray-900 dark:text-zinc-100">{rf.label}</span>
@@ -955,7 +956,7 @@ function ResultsView({
       {(result.recommended_actions || []).length > 0 && (
         <SlideIn delay={220} direction="up">
           <div
-            className="rounded-2xl p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm shadow-sm"
+            className="rounded-2xl p-5 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
           >
             <div className="mb-4">
               <h3 className="text-sm font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
@@ -966,11 +967,11 @@ function ResultsView({
             </div>
             <div className="space-y-2">
               {(result.recommended_actions || []).map((a, i) => {
-                const colors: Record<string, { bg: string; border: string; text: string }> = {
-                  immediate: { bg: 'bg-red-50 dark:bg-red-500/[0.08]', border: 'border-red-200 dark:border-red-500/30', text: 'text-red-700 dark:text-red-400' },
-                  high: { bg: 'bg-orange-50 dark:bg-orange-500/[0.08]', border: 'border-orange-200 dark:border-orange-500/30', text: 'text-orange-700 dark:text-orange-400' },
-                  medium: { bg: 'bg-amber-50 dark:bg-amber-500/[0.08]', border: 'border-amber-200 dark:border-amber-500/30', text: 'text-amber-700 dark:text-amber-400' },
-                  low: { bg: 'bg-gray-50 dark:bg-gray-500/[0.08]', border: 'border-gray-200 dark:border-gray-500/20', text: 'text-gray-700 dark:text-zinc-300 dark:text-gray-400' },
+                const colors: Record<string, { bg: string; border: string; badgeBg: string }> = {
+                  immediate: { bg: 'bg-red-50 dark:bg-red-500/[0.08]', border: 'border-red-200 dark:border-red-500/30', badgeBg: 'bg-red-600' },
+                  high: { bg: 'bg-orange-50 dark:bg-orange-500/[0.08]', border: 'border-orange-200 dark:border-orange-500/30', badgeBg: 'bg-orange-600' },
+                  medium: { bg: 'bg-amber-50 dark:bg-amber-500/[0.08]', border: 'border-amber-200 dark:border-amber-500/30', badgeBg: 'bg-amber-600' },
+                  low: { bg: 'bg-gray-50 dark:bg-gray-500/[0.08]', border: 'border-gray-200 dark:border-gray-500/20', badgeBg: 'bg-emerald-600' },
                 };
                 const c = colors[a.priority] ?? colors.low;
                 return (
@@ -978,7 +979,7 @@ function ResultsView({
                     key={i}
                     className={`rounded-xl p-3.5 flex items-start gap-3 ${c.bg} border ${c.border}`}
                   >
-                    <span className={`text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded mt-0.5 shrink-0 ${c.text} bg-white dark:bg-black/30 border border-current/20 shadow-xs`}>
+                    <span className={`text-[10px] font-mono font-bold uppercase px-2.5 py-0.5 rounded text-white shadow-xs shrink-0 mt-0.5 ${c.badgeBg}`}>
                       {a.priority}
                     </span>
                     <div>
@@ -997,7 +998,7 @@ function ResultsView({
       {(result.origin?.relay_hops || []).length > 0 && (
         <SlideIn delay={280} direction="up">
           <div
-            className="rounded-2xl p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm shadow-sm"
+            className="rounded-2xl p-5 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
           >
             <div className="mb-4">
               <h3 className="text-sm font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
@@ -1012,10 +1013,10 @@ function ResultsView({
               {(result.origin?.relay_hops || []).map((hop) => (
                 <div
                   key={hop.hop}
-                  className="flex items-start gap-3 rounded-xl px-4 py-3 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-white/[0.05]"
+                  className="flex items-start gap-3 rounded-xl px-4 py-3 bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80"
                 >
                   <span
-                    className="w-6 h-6 rounded-lg flex items-center justify-center text-[10px] font-mono font-bold text-teal-700 dark:text-teal-400 bg-teal-50 dark:bg-teal-500/10 border border-teal-200 dark:border-teal-500/20 shrink-0"
+                    className="w-6 h-6 rounded-lg flex items-center justify-center text-[11px] font-mono font-bold text-white bg-teal-600 shrink-0 shadow-sm"
                   >
                     {hop.hop}
                   </span>
@@ -1038,7 +1039,7 @@ function ResultsView({
       {(result.evidence || []).length > 0 && (
         <SlideIn delay={340} direction="up">
           <div
-            className="rounded-2xl p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm shadow-sm"
+            className="rounded-2xl p-5 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
           >
             <div className="mb-4">
               <h3 className="text-sm font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
@@ -1051,7 +1052,7 @@ function ResultsView({
               {(result.evidence || []).map((ev) => (
                 <div
                   key={ev.id}
-                  className="rounded-xl px-4 py-2.5 flex items-start gap-3 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-white/[0.05]"
+                  className="rounded-xl px-4 py-2.5 flex items-start gap-3 bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80"
                 >
                   <span className="text-[10px] font-mono font-bold text-blue-600 dark:text-blue-400 uppercase w-24 shrink-0 mt-0.5">{ev.type}</span>
                   <span className="text-xs font-mono text-gray-800 dark:text-zinc-200 dark:text-gray-300 break-all flex-1">{ev.value}</span>
@@ -1066,11 +1067,21 @@ function ResultsView({
       {/* ── Interactive Tabs ── */}
       <SlideIn delay={400} direction="up">
         <div
-          className="rounded-2xl p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm shadow-sm"
+          className="rounded-2xl p-5 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
         >
           <div
-            className="flex items-center gap-1 p-1 rounded-2xl bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm mb-5 overflow-x-auto scrollbar-none select-none max-w-full"
+            className="relative inline-flex w-fit max-w-full items-center gap-1 p-1 rounded-xl bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 shadow-sm mb-5 overflow-x-auto scrollbar-none select-none"
           >
+            {/* Smooth Left-Right Sliding Indicator Pill */}
+            {tabIndicatorStyle.opacity > 0 && (
+              <div
+                className="absolute top-1 bottom-1 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20 pointer-events-none transition-all duration-200 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+                style={{
+                  left: `${tabIndicatorStyle.left}px`,
+                  width: `${tabIndicatorStyle.width}px`,
+                }}
+              />
+            )}
             {[
               { id: 'facts', label: 'Observed Facts', icon: Eye },
               { id: 'inference', label: 'AI Inference', icon: Brain },
@@ -1082,24 +1093,14 @@ function ResultsView({
               return (
                 <button
                   key={tab.id}
+                  ref={(el) => { tabRefs.current[tab.id] = el; }}
                   type="button"
                   onClick={() => setActiveTab(tab.id as typeof activeTab)}
-                  className={`relative h-9 px-4 rounded-xl text-xs sm:text-sm font-semibold transition-colors duration-200 shrink-0 whitespace-nowrap cursor-pointer select-none ${isActive
+                  className={`relative h-9 px-4 rounded-lg text-xs sm:text-sm font-semibold transition-colors duration-200 shrink-0 whitespace-nowrap cursor-pointer select-none ${isActive
                       ? 'text-white font-bold'
                       : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/40'
                     }`}
                 >
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeEmailAnalyzerTab"
-                      className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
-                      transition={{
-                        type: 'spring',
-                        stiffness: 450,
-                        damping: 32,
-                      }}
-                    />
-                  )}
                   <span className="relative z-10 flex items-center gap-2">
                     <Icon className="w-4 h-4" />
                     {tab.label}
@@ -1147,7 +1148,7 @@ function ObservedFactsTab({ facts = [] }: { facts?: EmailAnalysisResult['observe
               return (
                 <div
                   key={fact.id}
-                  className="flex items-center gap-3 rounded-xl px-3.5 py-2.5 transition-colors duration-150 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-white/[0.05]"
+                  className="flex items-center gap-3 rounded-xl px-3.5 py-2.5 transition-colors duration-150 bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80"
                 >
                   <Icon className={`w-4 h-4 shrink-0 ${color}`} />
                   <span className="text-xs text-gray-600 dark:text-zinc-400 dark:text-gray-400 w-36 shrink-0 font-medium">{fact.field}</span>
@@ -1179,7 +1180,7 @@ function AIInferenceTab({ inferences = [] }: { inferences?: EmailAnalysisResult[
       {safeInferences.map((inf) => (
         <div
           key={inf.id}
-          className="rounded-xl p-4 transition-all duration-200 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
+          className="rounded-xl p-4 transition-all duration-200 bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80"
         >
           <div className="flex items-start justify-between gap-3 mb-2">
             <p className="text-xs font-semibold text-gray-900 dark:text-zinc-100 flex-1">{inf.inference}</p>
@@ -1211,7 +1212,7 @@ function HeadersTab({ headers = [] }: { headers?: EmailAnalysisResult['headers']
   if (safeHeaders.length === 0) return <EmptyTabPlaceholder message="No headers parsed from this email." />;
   return (
     <div
-      className="rounded-xl overflow-hidden font-mono text-xs bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
+      className="rounded-xl overflow-hidden font-mono text-xs bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80"
     >
       {safeHeaders.map((h, i) => (
         <div key={i} className="flex border-b border-gray-200 dark:border-zinc-800/50 last:border-0 hover:bg-gray-100 dark:hover:bg-white/[0.03] transition-colors">
@@ -1226,7 +1227,7 @@ function HeadersTab({ headers = [] }: { headers?: EmailAnalysisResult['headers']
 function RawEmailTab({ raw }: { raw: string }) {
   return (
     <div
-      className="rounded-xl p-4 overflow-x-auto scrollbar-thin font-mono text-xs text-gray-800 dark:text-zinc-200 dark:text-gray-300 leading-relaxed bg-gray-50 dark:bg-[#06070a] border border-gray-200 dark:border-zinc-800/50"
+      className="rounded-xl p-4 overflow-x-auto scrollbar-thin font-mono text-xs text-gray-800 dark:text-zinc-200 dark:text-gray-300 leading-relaxed bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80"
     >
       <pre className="whitespace-pre-wrap">{raw || '(no raw email content stored)'}</pre>
     </div>

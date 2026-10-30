@@ -227,8 +227,8 @@ export class NotificationRulesService {
       title: 'Critical Threat Push Alert (Test)',
       msg: 'High-confidence phishing indicator intercepted (Score: 92/100). Real-time dispatch verified.',
       sev: 'critical',
-      category: 'alerts',
-      route: 'alerts',
+      category: 'intel',
+      route: 'email-analyzer',
     });
 
     return { nativeSent };

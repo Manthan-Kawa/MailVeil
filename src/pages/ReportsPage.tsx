@@ -228,7 +228,7 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
       {analyzedReports.length === 0 ? (
         <SlideIn delay={60} direction="up">
           <div
-            className="rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-6 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm "
+            className="rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-6 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm backdrop-blur-sm"
           >
             <div
               className="w-16 h-16 rounded-2xl flex items-center justify-center bg-blue-500/10 border border-blue-500/25 text-blue-600 dark:text-blue-400"
@@ -265,9 +265,9 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
       ) : (
         <>
           {/* ── Case Selector Bar ── */}
-          <SlideIn delay={30} direction="up">
+          <SlideIn delay={30} direction="up" className="relative z-50">
             <div
-              className="rounded-2xl p-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm"
+              className="relative z-50 rounded-2xl p-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm backdrop-blur-sm"
             >
               <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 sm:gap-3 flex-1 min-w-0 w-full">
                 <div className="flex items-center justify-between sm:justify-start gap-2 shrink-0">
@@ -278,11 +278,11 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
                   {/* Live indicator badge on mobile (placed on header line) */}
                   {currentResult && (
                     <span
-                      className={`sm:hidden px-2.5 py-0.5 rounded-lg text-[10px] font-mono font-bold shrink-0 ${currentResult.threat_score >= 80
-                          ? 'text-red-600 dark:text-red-400 bg-red-500/10 border border-red-500/25'
+                      className={`sm:hidden px-2.5 py-0.5 rounded-lg text-[10px] font-mono font-bold shrink-0 text-white shadow-xs ${currentResult.threat_score >= 80
+                          ? 'bg-red-600'
                           : currentResult.threat_score >= 50
-                            ? 'text-orange-600 dark:text-orange-400 bg-orange-500/10 border border-orange-500/25'
-                              : 'text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700'
+                            ? 'bg-orange-600'
+                            : 'bg-emerald-600'
                       }`}
                     >
                       {currentResult.alert_level.toUpperCase()} ({currentResult.threat_score}/100)
@@ -291,7 +291,7 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
                 </div>
 
                 {/* Integrated Case Search & Selector */}
-                <div className="relative flex-1 w-full min-w-0 max-w-xl" ref={searchContainerRef}>
+                <div className="relative z-50 flex-1 w-full min-w-0" ref={searchContainerRef}>
                   <div className="relative flex items-center">
                     <Search className="w-3.5 h-3.5 text-purple-600 dark:text-purple-600 absolute left-3 pointer-events-none" />
                     <input
@@ -345,8 +345,7 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
                   {/* Suggestions Dropdown */}
                   {searchFocused && (
                     <div
-                      className="absolute left-0 right-0 w-full mt-2 rounded-2xl p-2.5 z-50 shadow-2xl border backdrop-blur-xl animate-in fade-in zoom-in-95 duration-150 bg-white dark:bg-zinc-800 border-gray-200 dark:border-purple-500/35"
-                      
+                      className="absolute left-0 right-0 w-full mt-2 rounded-2xl p-2.5 z-[100] shadow-2xl border bg-white dark:bg-[#121316] border-gray-200 dark:border-zinc-800 animate-in fade-in zoom-in-95 duration-150"
                     >
                       <div className="flex items-center justify-between px-2.5 py-1.5 border-b border-gray-200 dark:border-zinc-800/50 text-[10px] font-mono font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                         <span className="flex items-center gap-1.5">
@@ -394,7 +393,9 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
                                       <Shield className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400 shrink-0" />
                                       {c.case_id}
                                     </span>
-                                    <span className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold border ${scoreColor}`}>
+                                    <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold text-white shadow-xs ${
+                                      c.threat_score >= 80 ? 'bg-red-600' : c.threat_score >= 50 ? 'bg-orange-600' : 'bg-emerald-600'
+                                    }`}>
                                       {c.threat_score}/100 ({c.alert_level.toUpperCase()})
                                     </span>
                                   </div>
@@ -436,11 +437,11 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
                 {/* Live indicator badge for desktop */}
                 {currentResult && (
                   <span
-                    className={`hidden sm:inline-flex px-2.5 py-1 rounded-xl text-xs font-mono font-bold shrink-0 ${currentResult.threat_score >= 80
-                        ? 'text-red-400 bg-red-500/10 border border-red-500/25'
+                    className={`hidden sm:inline-flex sm:ml-auto px-3 py-1 rounded-xl text-xs font-mono font-bold shrink-0 text-white shadow-sm ${currentResult.threat_score >= 80
+                        ? 'bg-red-600'
                         : currentResult.threat_score >= 50
-                          ? 'text-orange-400 bg-orange-500/10 border border-orange-500/25'
-                          : 'text-gray-900 dark:text-zinc-100'
+                          ? 'bg-orange-600'
+                          : 'bg-emerald-600'
     }`}
                   >
                     {currentResult.alert_level.toUpperCase()} ({currentResult.threat_score}/100)
@@ -454,7 +455,7 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
           {reportData && (
             <SlideIn delay={60} direction="up">
               <div
-                className="rounded-2xl p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm "
+                className="rounded-2xl p-5 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm backdrop-blur-sm"
               >
                 <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 pb-4 border-b border-gray-200 dark:border-zinc-800/50">
                   <div className="min-w-0 flex-1">
@@ -470,7 +471,7 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
                   </div>
 
                   {/* Threat Score & Verdict Badge (1st Image Element) */}
-                  <div className="flex items-center justify-between sm:justify-start gap-3 px-4 py-2 rounded-2xl bg-white dark:bg-black/60 border border-gray-200 dark:border-zinc-800/50 shrink-0 shadow-sm dark:shadow-lg w-full md:w-auto">
+                  <div className="flex items-center justify-between sm:justify-start gap-3 px-4 py-2 rounded-2xl bg-white dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 shrink-0 shadow-sm dark:shadow-lg w-full md:w-auto">
                     <div className="text-left sm:text-right">
                       <div
                         className={`text-xl font-bold font-mono leading-tight ${(currentResult?.threat_score ?? reportData.riskScore) >= 75 || currentResult?.alert_level === 'critical'
@@ -546,7 +547,7 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
                   {/* Toggle Preview Button */}
                   <button
                     onClick={() => setShowPreview(!showPreview)}
-                    className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-gray-900 dark:text-zinc-100 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 transition-transform duration-150 ease-out active:scale-95 w-full sm:w-auto cursor-pointer"
+                    className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-gray-900 dark:text-zinc-100 bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 transition-transform duration-150 ease-out active:scale-95 w-full sm:w-auto cursor-pointer shadow-sm hover:brightness-105"
                   >
                     <Eye className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
                     <span>{showPreview ? 'Hide Report Preview' : 'Show Report Preview'}</span>
@@ -873,9 +874,9 @@ function FullReportPreview({
   const emailSender = decodeMimeHeader(result?.headers.find((h) => h.key.toLowerCase() === 'from')?.value || 'security-update@corporate-portal.com');
 
   return (
-    <div className="rounded-2xl p-6 space-y-6 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-cyan-500/20 shadow-sm dark:shadow-2xl">
+    <div className="rounded-2xl p-6 space-y-6 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm backdrop-blur-sm">
       {/* ── Quick Navigation Tabs (Capsule format) ─────────────────── */}
-      <div className="flex items-center gap-1 p-1 rounded-2xl bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm mb-4 overflow-x-auto scrollbar-none select-none max-w-full">
+      <div className="inline-flex w-fit max-w-full items-center gap-1 p-1 rounded-xl bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 shadow-sm mb-4 overflow-x-auto scrollbar-none select-none">
         {[
           { id: 'all', label: 'Complete Forensic Report', icon: Shield },
           { id: 'synthesis', label: 'Email Analyzer', icon: MailSearch },
@@ -891,7 +892,7 @@ function FullReportPreview({
               key={tab.id}
               type="button"
               onClick={() => setActiveTab(tab.id as ReportContentTab)}
-              className={`relative h-9 px-3.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-colors duration-200 cursor-pointer select-none shrink-0 ${
+              className={`relative h-9 px-3.5 rounded-lg text-xs sm:text-sm font-semibold whitespace-nowrap transition-colors duration-200 cursor-pointer select-none shrink-0 ${
                 active
                   ? 'text-white font-bold'
                   : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/40'
@@ -900,11 +901,11 @@ function FullReportPreview({
               {active && (
                 <motion.div
                   layoutId="activeReportsTab"
-                  className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
+                  className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
                   transition={{
-                    type: 'spring',
-                    stiffness: 450,
-                    damping: 32,
+                    type: 'tween',
+                    ease: [0.25, 0.1, 0.25, 1],
+                    duration: 0.22,
                   }}
                 />
               )}
@@ -934,7 +935,7 @@ function FullReportPreview({
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Executive Summary & Narrative */}
-            <div className="lg:col-span-2 p-5 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm dark:shadow-none space-y-4">
+            <div className="lg:col-span-2 p-5 rounded-2xl bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 shadow-sm space-y-4">
               <div>
                 <div className="text-[11px] text-cyan-600 dark:text-cyan-400 uppercase tracking-wider font-semibold mb-1">
                   Executive AI Summary
@@ -950,7 +951,7 @@ function FullReportPreview({
                 </p>
               </div>
 
-              <div className="p-4 rounded-xl bg-white dark:bg-black/40 border border-gray-200 dark:border-zinc-800/50 space-y-2">
+              <div className="p-4 rounded-xl bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 space-y-2">
                 <div className="text-xs font-bold text-purple-700 dark:text-purple-300 flex items-center gap-1.5">
                   <Eye className="w-4 h-4" />
                   Plain-Language Risk Explanation
@@ -971,7 +972,7 @@ function FullReportPreview({
                   {data.keyFindings.map((f, i) => (
                     <div
                       key={i}
-                      className="flex items-start gap-2.5 p-2.5 rounded-xl text-xs text-gray-900 dark:text-zinc-100 bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
+                      className="flex items-start gap-2.5 p-2.5 rounded-xl text-xs text-gray-900 dark:text-zinc-100 bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80"
                     >
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400 shrink-0 mt-0.5" />
                       <span>{f}</span>
@@ -982,7 +983,7 @@ function FullReportPreview({
             </div>
 
             {/* Mitigation Checklist */}
-            <div className="p-5 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm dark:shadow-none space-y-3">
+            <div className="p-5 rounded-2xl bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 shadow-sm space-y-3">
               <div className="text-xs font-bold text-gray-900 dark:text-zinc-100 uppercase tracking-wider flex items-center gap-2">
                 <Shield className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
                 SOC Incident Mitigation Checklist
@@ -991,7 +992,7 @@ function FullReportPreview({
                 {mitigationChecklist.map((item, idx) => (
                   <div
                     key={idx}
-                    className="p-3 rounded-xl bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 space-y-1"
+                    className="p-3 rounded-xl bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 space-y-1"
                   >
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-xs font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-1.5">
@@ -999,11 +1000,11 @@ function FullReportPreview({
                         {item.action}
                       </span>
                       <span
-                        className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded ${item.urgency === 'immediate'
-                            ? 'bg-red-500/20 text-red-700 dark:text-red-300 border border-red-500/30'
+                        className={`text-[10px] uppercase font-bold px-2.5 py-0.5 rounded text-white shadow-xs ${item.urgency === 'immediate'
+                            ? 'bg-red-600'
                             : item.urgency === 'recommended'
-                              ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30'
-                              : 'bg-green-500/20 text-green-700 dark:text-green-300 border border-green-500/30'
+                              ? 'bg-amber-600'
+                              : 'bg-emerald-600'
                         }`}
                       >
                         {item.urgency}
@@ -1054,7 +1055,7 @@ function FullReportPreview({
             ].map((auth, i) => {
               const pass = auth.val === 'PASS' || auth.val === 'ALIGNED';
               return (
-                <div key={i} className="p-4 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm dark:shadow-none space-y-1.5">
+                <div key={i} className="p-4 rounded-2xl bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 shadow-sm space-y-1.5">
                   <div className="text-xs text-gray-500 dark:text-gray-400">{auth.title}</div>
                   <div className="flex items-center gap-2">
                     {pass ? (
@@ -1076,7 +1077,7 @@ function FullReportPreview({
           </div>
 
           {/* Hop-by-Hop Relay Route Table */}
-          <div className="p-5 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm dark:shadow-none space-y-3">
+          <div className="p-5 rounded-2xl bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 shadow-sm space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-zinc-100 flex items-center gap-2">
                 <Server className="w-4 h-4 text-purple-600 dark:text-purple-400" />
@@ -1108,13 +1109,13 @@ function FullReportPreview({
                       <td className="py-3 px-3 text-gray-500 dark:text-gray-400">{hop.delay}</td>
                       <td className="py-3 px-3">
                         <span
-                          className={`text-[10px] px-2 py-0.5 rounded font-bold uppercase ${hop.status === 'malicious'
-                              ? 'bg-red-500/20 text-red-700 dark:text-red-300 border border-red-500/30'
+                          className={`text-[10px] px-2.5 py-0.5 rounded font-bold uppercase text-white shadow-xs ${hop.status === 'malicious'
+                              ? 'bg-red-600'
                               : hop.status === 'suspicious'
-                                ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30'
+                                ? 'bg-amber-600'
                                 : hop.status === 'internal'
-                                  ? 'bg-blue-500/20 text-blue-700 dark:text-blue-300 border border-blue-500/30'
-                                  : 'bg-green-500/20 text-green-700 dark:text-green-300 border border-green-500/30'
+                                  ? 'bg-blue-600'
+                                  : 'bg-emerald-600'
                             }`}
                         >
                           {hop.status}
@@ -1129,7 +1130,7 @@ function FullReportPreview({
 
           {/* Captured RFC-822 / SMTP Headers */}
           {result?.headers && result.headers.length > 0 && (
-            <div className="rounded-2xl overflow-hidden border border-gray-200 dark:border-zinc-800/50 bg-white dark:bg-zinc-800">
+            <div className="rounded-2xl overflow-hidden border border-gray-200 dark:border-zinc-800/80 bg-white dark:bg-black/30">
               <div className="px-4 py-3 bg-white dark:bg-white/5 border-b border-gray-200 dark:border-zinc-800/50 text-xs font-mono font-bold text-cyan-700 dark:text-cyan-300 uppercase flex items-center justify-between">
                 <span>Captured RFC-822 / MIME Email Headers</span>
                 <span className="text-[11px] text-gray-500 dark:text-gray-500">{result.headers.length} headers extracted</span>
@@ -1159,30 +1160,30 @@ function FullReportPreview({
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Reputation Overview */}
-            <div className="p-5 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm dark:shadow-none space-y-4">
+            <div className="p-5 rounded-2xl bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 shadow-sm space-y-4">
               <h3 className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-zinc-100">
                 Entity Reputation Assessment
               </h3>
 
               <div className="space-y-3">
-                <div className="p-3.5 rounded-xl bg-white dark:bg-black/40 border border-gray-200 dark:border-zinc-800/50 flex items-center justify-between">
+                <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 flex items-center justify-between">
                   <div>
                     <div className="text-[11px] text-gray-500 dark:text-gray-400">Sending IP Reputation</div>
                     <div className="text-xs font-mono font-bold text-gray-900 dark:text-zinc-100">{originIp}</div>
                   </div>
                   <span
-                    className={`text-xs uppercase font-bold px-2.5 py-1 rounded ${isMalicious
-                        ? 'bg-red-500/20 text-red-700 dark:text-red-300 border border-red-500/30'
+                    className={`text-xs uppercase font-bold px-2.5 py-1 rounded text-white shadow-sm ${isMalicious
+                        ? 'bg-red-600'
                           : isSuspicious
-                            ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30'
-                            : 'bg-green-500/20 text-green-700 dark:text-green-300 border border-green-500/30'
+                            ? 'bg-amber-600'
+                            : 'bg-emerald-600'
                     }`}
                   >
                     {result?.threat_intel.ip_reputation || (isMalicious ? 'malicious' : 'suspicious')}
                   </span>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-white dark:bg-black/40 border border-gray-200 dark:border-zinc-800/50 flex items-center justify-between">
+                <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 flex items-center justify-between">
                   <div>
                     <div className="text-[11px] text-gray-500 dark:text-gray-400">Sender Domain Age</div>
                     <div className="text-xs font-semibold text-gray-900 dark:text-zinc-100">
@@ -1218,7 +1219,7 @@ function FullReportPreview({
             </div>
 
             {/* Blacklists Grid */}
-            <div className="lg:col-span-2 p-5 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm dark:shadow-none space-y-3">
+            <div className="lg:col-span-2 p-5 rounded-2xl bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 shadow-sm space-y-3">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-zinc-100">
                   6-Engine Reputation & Blacklist Scanner
@@ -1232,18 +1233,18 @@ function FullReportPreview({
                   return (
                     <div
                       key={i}
-                      className="p-3 rounded-xl bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/50 flex items-start justify-between gap-3"
+                      className="p-3 rounded-xl bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 flex items-start justify-between gap-3"
                     >
                       <div className="space-y-0.5">
                         <div className="text-xs font-bold text-gray-900 dark:text-zinc-100">{bl.engine}</div>
                         <div className="text-[11px] text-gray-500 dark:text-gray-400">{bl.detail}</div>
                       </div>
                       <span
-                        className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded shrink-0 ${isClean
-                            ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30'
+                        className={`text-[10px] uppercase font-bold px-2.5 py-0.5 rounded shrink-0 text-white shadow-xs ${isClean
+                            ? 'bg-emerald-600'
                             : bl.status === 'warning'
-                              ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30'
-                              : 'bg-red-500/20 text-red-700 dark:text-red-300 border border-red-500/30'
+                              ? 'bg-amber-600'
+                              : 'bg-red-600'
                     }`}
                       >
                         {bl.status}
@@ -1256,7 +1257,7 @@ function FullReportPreview({
           </div>
 
           {/* IOC Badges Row */}
-          <div className="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm dark:shadow-none space-y-2 overflow-hidden max-w-full">
+          <div className="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 shadow-sm space-y-2 overflow-hidden max-w-full">
             <div className="text-xs font-bold text-gray-900 dark:text-zinc-100 uppercase tracking-wider flex flex-wrap items-center justify-between gap-1">
               <span>Captured Indicators of Compromise (IOCs)</span>
               <span className="text-[10px] text-gray-500 dark:text-gray-500 shrink-0">{data.indicators.length} IOCs cataloged</span>
@@ -1265,7 +1266,7 @@ function FullReportPreview({
               {data.indicators.map((ind, i) => (
                 <div
                   key={`${ind.value}-${i}`}
-                  className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-mono bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 text-gray-900 dark:text-zinc-100 max-w-full min-w-0"
+                  className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-mono bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 text-gray-900 dark:text-zinc-100 max-w-full min-w-0"
                 >
                   <span className="text-cyan-600 dark:text-cyan-400 font-bold shrink-0">{ind.type}:</span>
                   <span className="text-gray-900 dark:text-zinc-100 truncate max-w-[190px] xs:max-w-[240px] sm:max-w-xs md:max-w-md break-all" title={ind.value}>
@@ -1306,13 +1307,13 @@ function FullReportPreview({
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Telemetry info card */}
-            <div className="p-5 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm dark:shadow-none space-y-4">
+            <div className="p-5 rounded-2xl bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 shadow-sm space-y-4">
               <h3 className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-zinc-100">
                 Physical & Autonomous Origin
               </h3>
 
               <div className="space-y-3 text-xs">
-                <div className="p-3.5 rounded-xl bg-white dark:bg-black/40 border border-gray-200 dark:border-zinc-800/50">
+                <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80">
                   <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-mono">Originating Location</div>
                   <div className="font-bold text-gray-900 dark:text-zinc-100 text-sm mt-0.5">
                     {originCity}, {originCountry}
@@ -1322,17 +1323,17 @@ function FullReportPreview({
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-white dark:bg-black/40 border border-gray-200 dark:border-zinc-800/50">
+                <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80">
                   <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-mono">Routing Autonomous System</div>
                   <div className="font-bold text-gray-900 dark:text-zinc-100 truncate mt-0.5">{originAsn}</div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-white dark:bg-black/40 border border-gray-200 dark:border-zinc-800/50">
+                <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80">
                   <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-mono">Hosting Infrastructure</div>
                   <div className="font-bold text-gray-900 dark:text-zinc-100 mt-0.5">{originHosting}</div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-white dark:bg-black/40 border border-gray-200 dark:border-zinc-800/50">
+                <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80">
                   <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-mono">Originating IP Address</div>
                   <div className="font-mono font-bold text-red-500 dark:text-red-400 mt-0.5">{originIp}</div>
                 </div>
@@ -1340,7 +1341,7 @@ function FullReportPreview({
             </div>
 
             {/* Dark Cyber Map */}
-            <div className="lg:col-span-2 rounded-2xl border border-gray-200 dark:border-zinc-800/50 overflow-hidden bg-white dark:bg-zinc-800 flex flex-col justify-between">
+            <div className="lg:col-span-2 rounded-2xl border border-gray-200 dark:border-zinc-800/80 overflow-hidden bg-white dark:bg-black/30 flex flex-col justify-between">
               <DarkCyberMap
                 markers={liveMarkers}
                 selectedId={liveMarkers[0]?.id}
@@ -1385,7 +1386,7 @@ function FullReportPreview({
             <span className="text-[11px] text-gray-500 dark:text-gray-500 font-mono">Attacker → Relays → Gateway → Target</span>
           </div>
 
-          <div className="lg:rounded-2xl lg:border lg:border-gray-200 dark:lg:border-white/10 lg:bg-white dark:lg:bg-white dark:bg-zinc-800 lg:overflow-hidden lg:shadow-none dark:lg:shadow-xl">
+          <div className="lg:rounded-2xl lg:border lg:border-gray-200 dark:lg:border-zinc-800/80 lg:bg-white dark:lg:bg-zinc-900/60 lg:overflow-hidden lg:shadow-none dark:lg:shadow-xl">
             <AttackGraphCanvas
               result={result}
               height={460}
@@ -1700,7 +1701,7 @@ function SentinelAI({ currentResult }: { currentResult: EmailAnalysisResult }) {
 
   return (
     <div
-      className="rounded-2xl p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm "
+      className="rounded-2xl p-5 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm backdrop-blur-sm"
     >
       <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
         <div>
@@ -1740,7 +1741,7 @@ function SentinelAI({ currentResult }: { currentResult: EmailAnalysisResult }) {
             <button
               key={q.id}
               onClick={() => askQuestion(q.question)}
-              className="px-3 py-1.5 rounded-xl text-xs font-mono text-gray-900 dark:text-zinc-100 hover:text-gray-900 dark:hover:text-white bg-white hover:bg-gray-50 dark:bg-zinc-900/50 dark:hover:bg-zinc-700/50 border border-gray-200 dark:border-zinc-800/50 transition-all hover:scale-[1.02] text-left cursor-pointer"
+              className="px-3 py-1.5 rounded-xl text-xs font-mono text-gray-900 dark:text-zinc-100 hover:text-gray-900 dark:hover:text-white bg-white hover:bg-gray-100 dark:bg-black/30 dark:hover:bg-black/50 border border-gray-200 dark:border-zinc-800/80 transition-all hover:scale-[1.02] text-left cursor-pointer shadow-sm"
             >
               {q.question}
             </button>
@@ -1750,7 +1751,7 @@ function SentinelAI({ currentResult }: { currentResult: EmailAnalysisResult }) {
 
       {/* Chat Window */}
       <div
-        className="rounded-xl p-4 max-h-96 overflow-y-auto scrollbar-thin space-y-3 min-h-[160px] bg-white dark:bg-black/40 border border-gray-200 dark:border-zinc-800/50"
+        className="rounded-xl p-4 max-h-96 overflow-y-auto scrollbar-thin space-y-3 min-h-[160px] bg-white dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80"
       >
         {messages.length === 0 && !thinking && (
           <div className="flex flex-col items-center justify-center text-center py-8">
@@ -1768,7 +1769,7 @@ function SentinelAI({ currentResult }: { currentResult: EmailAnalysisResult }) {
             <div
               className={`max-w-[85%] rounded-xl p-3.5 text-xs leading-relaxed ${msg.role === 'user'
                 ? 'bg-blue-500/10 dark:bg-blue-500/15 border border-blue-500/30 text-blue-900 dark:text-white font-mono'
-                : 'bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 text-gray-800 dark:text-zinc-300'
+                : 'bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 text-gray-800 dark:text-zinc-300'
             }`}
             >
               {msg.role === 'ai' && (
@@ -1800,7 +1801,7 @@ function SentinelAI({ currentResult }: { currentResult: EmailAnalysisResult }) {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSend()}
           placeholder={`Ask SENTINEL AI anything about case ${currentResult.case_id}...`}
-          className="w-full rounded-xl pl-3.5 pr-20 sm:pr-24 py-2.5 text-xs text-gray-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-gray-600 bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 focus:outline-none font-mono transition-all focus:border-purple-500/40 focus:ring-1 focus:ring-purple-500/30"
+          className="w-full rounded-xl pl-3.5 pr-20 sm:pr-24 py-2.5 text-xs text-gray-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-gray-500 bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 focus:outline-none font-mono transition-all focus:border-purple-500/40 focus:ring-1 focus:ring-purple-500/30"
         />
         <button
           onClick={handleSend}

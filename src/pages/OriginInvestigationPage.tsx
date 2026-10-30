@@ -62,12 +62,12 @@ function SlideIn({ children, delay = 0, direction = 'up', className = '' }: {
   );
 }
 
-const LEVEL_COLORS: Record<string, { bg: string; border: string; text: string; glow: string }> = {
-  critical: { bg: 'rgba(239,68,68,0.08)', border: 'rgba(239,68,68,0.35)', text: 'text-red-600 dark:text-red-400', glow: 'none' },
-  high: { bg: 'rgba(249,115,22,0.08)', border: 'rgba(249,115,22,0.35)', text: 'text-orange-600 dark:text-orange-400', glow: 'none' },
-  medium: { bg: 'rgba(245,158,11,0.08)', border: 'rgba(245,158,11,0.35)', text: 'text-amber-600 dark:text-amber-400', glow: 'none' },
-  low: { bg: 'rgba(59,130,246,0.08)', border: 'rgba(59,130,246,0.35)', text: 'text-blue-600 dark:text-blue-400', glow: 'none' },
-  info: { bg: 'rgba(107,114,128,0.08)', border: 'rgba(107,114,128,0.35)', text: 'text-gray-600 dark:text-zinc-400 dark:text-gray-400', glow: 'none' },
+const LEVEL_COLORS: Record<string, { bg: string; text: string }> = {
+  critical: { bg: 'bg-red-600', text: 'text-white font-bold' },
+  high:     { bg: 'bg-orange-600', text: 'text-white font-bold' },
+  medium:   { bg: 'bg-amber-600', text: 'text-white font-bold' },
+  low:      { bg: 'bg-emerald-600', text: 'text-white font-bold' },
+  info:     { bg: 'bg-blue-600', text: 'text-white font-bold' },
 };
 
 export function OriginInvestigationPage({ onNavigate }: { onNavigate?: (route: string) => void }) {
@@ -316,7 +316,7 @@ export function OriginInvestigationPage({ onNavigate }: { onNavigate?: (route: s
       {!currentResult ? (
         <SlideIn delay={60} direction="up">
           <div
-            className="rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-6 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm border dark:border-white/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+            className="rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-6 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
           >
             <MapPin className="w-12 h-12 text-blue-500 dark:text-blue-400" />
 
@@ -349,12 +349,12 @@ export function OriginInvestigationPage({ onNavigate }: { onNavigate?: (route: s
       ) : (
         <>
           {/* ── Top Row: Infrastructure Map (2/3) | Details (1/3) ── */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <SlideIn delay={100} direction="left" className="lg:col-span-2">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+            <SlideIn delay={100} direction="left" className="lg:col-span-2 h-full flex flex-col">
               <div
-                className="rounded-2xl p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm border dark:border-white/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+                className="rounded-2xl p-5 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm h-full flex flex-col"
               >
-                <div className="mb-4">
+                <div className="mb-4 shrink-0">
                   <h3 className="text-sm font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
                     <Globe className="w-4 h-4 text-purple-500 dark:text-purple-400" />
                     Infrastructure Map
@@ -363,20 +363,22 @@ export function OriginInvestigationPage({ onNavigate }: { onNavigate?: (route: s
                     Suspected attacker origin relay pointer with real-time live pulse telemetry
                   </p>
                 </div>
-                <DarkCyberMap
-                  markers={liveMarkers}
-                  selectedId={selected?.id}
-                  singlePointerMode={true}
-                  onSelectMarker={(m) => {
-                    const found = liveMarkers.find((loc) => loc.id === m.id);
-                    if (found) setSelected(found);
-                  }}
-                  height="h-[300px] sm:h-[420px]"
-                />
+                <div className="flex-1 w-full min-h-[440px] flex flex-col">
+                  <DarkCyberMap
+                    markers={liveMarkers}
+                    selectedId={selected?.id}
+                    singlePointerMode={true}
+                    onSelectMarker={(m) => {
+                      const found = liveMarkers.find((loc) => loc.id === m.id);
+                      if (found) setSelected(found);
+                    }}
+                    height="h-full flex-1 min-h-[440px]"
+                  />
+                </div>
               </div>
             </SlideIn>
 
-            <SlideIn delay={160} direction="right" className="lg:col-span-1">
+            <SlideIn delay={160} direction="right" className="lg:col-span-1 h-full flex flex-col">
               <LocationDetailPanel location={selected} />
             </SlideIn>
           </div>
@@ -398,7 +400,7 @@ function LocationDetailPanel({ location }: { location: InfraLocation | null }) {
   if (!location) {
     return (
       <div
-        className="rounded-2xl p-5 flex flex-col items-center justify-center text-center py-10 h-full bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm border dark:border-white/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+        className="rounded-2xl p-5 flex flex-col items-center justify-center text-center py-10 h-full bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
       >
         <Crosshair className="w-8 h-8 text-gray-400 dark:text-zinc-500 mb-3" />
         <p className="text-xs text-gray-600 dark:text-zinc-400">Select a location on the map to view infrastructure details</p>
@@ -408,7 +410,7 @@ function LocationDetailPanel({ location }: { location: InfraLocation | null }) {
 
   return (
     <div
-      className="rounded-2xl p-5 h-full flex flex-col justify-between bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm border dark:border-white/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+      className="rounded-2xl p-5 h-full flex flex-col justify-between bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
     >
       <div>
         <div className="mb-4">
@@ -515,7 +517,7 @@ function OriginConfidenceEngine({ result }: { result: EmailAnalysisResult | null
 
   return (
     <div
-      className="rounded-2xl p-6 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm border dark:border-white/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+      className="rounded-2xl p-6 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
     >
       <div className="mb-4">
         <h3 className="text-sm font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
@@ -527,7 +529,7 @@ function OriginConfidenceEngine({ result }: { result: EmailAnalysisResult | null
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-4">
         <div
-          className="rounded-xl p-4 lg:col-span-1 flex flex-col justify-center bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50"
+          className="rounded-xl p-4 lg:col-span-1 flex flex-col justify-center bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80"
         >
           <span className="text-[10px] text-gray-500 dark:text-zinc-400 uppercase tracking-widest font-mono font-bold">Probable Source Infrastructure</span>
           <p className="text-sm text-gray-900 dark:text-zinc-100 font-bold mt-1 font-mono">{probableSource}</p>
@@ -550,7 +552,7 @@ function OriginConfidenceEngine({ result }: { result: EmailAnalysisResult | null
           {signals.map((s) => (
             <div
               key={s.signal}
-              className="rounded-xl p-3 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 hover:border-zinc-700/80 transition-all"
+              className="rounded-xl p-3 bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 hover:border-zinc-700/80 transition-all"
             >
               <div className="flex items-center justify-between mb-1">
                 <span className="text-xs text-gray-900 dark:text-zinc-100 font-semibold">{s.signal}</span>
@@ -664,7 +666,7 @@ export function AttackGraphPage({ onNavigate }: { onNavigate?: (route: string) =
       {!currentResult ? (
         <SlideIn delay={60} direction="up">
           <div
-            className="rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-6 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm border dark:border-white/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+            className="rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-6 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
           >
             <Share2 className="w-12 h-12 text-blue-500 dark:text-blue-400" />
 

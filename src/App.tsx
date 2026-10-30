@@ -7,9 +7,7 @@ import { EmailAnalyzerPage } from '@/pages/EmailAnalyzerPage';
 import { HeaderForensicsPage } from '@/pages/HeaderForensicsPage';
 import { ThreatIntelligencePage } from '@/pages/ThreatIntelligencePage';
 import { OriginInvestigationPage, AttackGraphPage } from '@/pages/OriginInvestigationPage';
-import { CampaignsPage } from '@/pages/CampaignsPage';
 import { ReportsPage } from '@/pages/ReportsPage';
-import { AlertsPage } from '@/pages/AlertsPage';
 import { SettingsPage } from '@/pages/SettingsPage';
 import { SubmitReportPage } from '@/pages/SubmitReportPage';
 import { CheckStatusPage } from '@/pages/CheckStatusPage';
@@ -84,8 +82,10 @@ function AppShell() {
     localStorage.setItem(KEY_USER_ROLE, effectiveRole);
 
     // If standard user attempts to access an analyst-only route, redirect to user emails view
-    const analystOnlyRoutes = ['dashboard', 'email-analyzer', 'header-forensics', 'threat-intelligence', 'origin-investigation', 'attack-graph', 'campaigns', 'reports', 'alerts', 'user-requests'];
-    const targetRoute = effectiveRole === 'user' && analystOnlyRoutes.includes(id) ? 'emails' : id;
+    const analystOnlyRoutes = ['dashboard', 'email-analyzer', 'header-forensics', 'threat-intelligence', 'origin-investigation', 'attack-graph', 'reports', 'user-requests'];
+    const targetRoute = (id === 'campaigns' || id === 'alerts')
+      ? (effectiveRole === 'user' ? 'emails' : 'dashboard')
+      : (effectiveRole === 'user' && analystOnlyRoutes.includes(id) ? 'emails' : id);
     setRoute(targetRoute);
 
     // Only update currentUser if not initialized or if account/role explicitly changed
@@ -104,7 +104,7 @@ function AppShell() {
 
   function renderPage() {
     // Security guard: Standard users can never view analyst-only screens
-    const analystOnlyRoutes = ['dashboard', 'email-analyzer', 'header-forensics', 'threat-intelligence', 'origin-investigation', 'attack-graph', 'campaigns', 'reports', 'alerts', 'user-requests'];
+    const analystOnlyRoutes = ['dashboard', 'email-analyzer', 'header-forensics', 'threat-intelligence', 'origin-investigation', 'attack-graph', 'reports', 'user-requests'];
     if (role === 'user' && analystOnlyRoutes.includes(route)) {
       return <EmailsPage onNavigate={handleNavigate} />;
     }
@@ -127,9 +127,7 @@ function AppShell() {
       case 'threat-intelligence': return <ThreatIntelligencePage onNavigate={handleNavigate} />;
       case 'origin-investigation': return <OriginInvestigationPage onNavigate={handleNavigate} />;
       case 'attack-graph':        return <AttackGraphPage onNavigate={handleNavigate} />;
-      case 'campaigns':           return <CampaignsPage onNavigate={handleNavigate} />;
       case 'reports':             return <ReportsPage onNavigate={handleNavigate} />;
-      case 'alerts':              return <AlertsPage onNavigate={handleNavigate} />;
       case 'settings':            return <SettingsPage onResetCache={handleResetCache} userRole={role} />;
       case 'emails':              return <EmailsPage onNavigate={handleNavigate} />;
       case 'submit-report':       return <SubmitReportPage onNavigate={handleNavigate} />;

@@ -591,31 +591,6 @@ export function CheckStatusPage({ onNavigate }: CheckStatusPageProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
 
-  const filterRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-  const [filterIndicatorStyle, setFilterIndicatorStyle] = useState({ left: 0, top: 0, width: 0, height: 0, opacity: 0 });
-
-  useLayoutEffect(() => {
-    const updateIndicator = () => {
-      const el = filterRefs.current[filterStatus];
-      if (el) {
-        setFilterIndicatorStyle({
-          left: el.offsetLeft,
-          top: el.offsetTop,
-          width: el.offsetWidth,
-          height: el.offsetHeight,
-          opacity: 1,
-        });
-      }
-    };
-    updateIndicator();
-    const rafId = requestAnimationFrame(updateIndicator);
-    window.addEventListener('resize', updateIndicator);
-    return () => {
-      cancelAnimationFrame(rafId);
-      window.removeEventListener('resize', updateIndicator);
-    };
-  }, [filterStatus]);
-
   const tickets = currentUser ? getTicketsForUser(currentUser.email) : [];
 
   // Auto-open ticket if directed from notification click
@@ -768,7 +743,7 @@ export function CheckStatusPage({ onNavigate }: CheckStatusPageProps) {
           ].map((stat) => (
             <div
               key={stat.label}
-              className="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 transition-all flex flex-col justify-between min-h-[82px] sm:min-h-[92px]"
+              className="p-3.5 sm:p-4 rounded-2xl bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm transition-all flex flex-col justify-between min-h-[82px] sm:min-h-[92px]"
             >
               <div className="flex items-center justify-between mb-2">
                 <span className="font-mono text-[11px] sm:text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -789,9 +764,8 @@ export function CheckStatusPage({ onNavigate }: CheckStatusPageProps) {
         <div className="flex items-center gap-3 flex-wrap">
           {/* Status  tabs */}
           <div
-            className="flex items-center gap-1 p-1 rounded-2xl bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm overflow-x-auto scrollbar-none select-none max-w-full"
+            className="h-11 inline-flex w-fit max-w-full items-center gap-1 p-1 rounded-xl bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 shadow-sm overflow-x-auto scrollbar-none select-none"
           >
-            <Filter className="w-3.5 h-3.5 text-gray-400 dark:text-zinc-500 ml-2 mr-1 shrink-0" />
             {(['all', 'pending', 'in_review', 'analyzed', 'resolved'] as const).map((s) => {
               const active = filterStatus === s;
               return (
@@ -799,7 +773,7 @@ export function CheckStatusPage({ onNavigate }: CheckStatusPageProps) {
                   key={s}
                   type="button"
                   onClick={() => setFilterStatus(s)}
-                  className={`relative h-9 px-3.5 rounded-xl text-xs sm:text-sm font-semibold capitalize transition-colors duration-200 flex items-center justify-center shrink-0 whitespace-nowrap cursor-pointer select-none ${
+                  className={`relative h-9 px-3.5 rounded-lg text-xs sm:text-sm font-semibold capitalize transition-colors duration-200 flex items-center justify-center shrink-0 whitespace-nowrap cursor-pointer select-none ${
                     active
                       ? 'text-white font-bold'
                       : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/40'
@@ -808,11 +782,11 @@ export function CheckStatusPage({ onNavigate }: CheckStatusPageProps) {
                   {active && (
                     <motion.div
                       layoutId="activeCheckStatusFilterTab"
-                      className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
+                      className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
                       transition={{
-                        type: 'spring',
-                        stiffness: 450,
-                        damping: 32,
+                        type: 'tween',
+                        ease: [0.25, 0.1, 0.25, 1],
+                        duration: 0.22,
                       }}
                     />
                   )}
@@ -824,7 +798,7 @@ export function CheckStatusPage({ onNavigate }: CheckStatusPageProps) {
 
           {/* Search */}
           <div
-            className="h-10 flex-1 min-w-[200px] flex items-center gap-2.5 px-3.5 rounded-xl bg-gray-50 dark:bg-white border border-gray-200 dark:border-gray-200 shadow-sm"
+            className="h-11 flex-1 min-w-[200px] flex items-center gap-2.5 px-3.5 rounded-xl bg-gray-50 dark:bg-white border border-gray-200 dark:border-gray-200 shadow-sm"
           >
             <Search className="w-4 h-4 text-gray-500 dark:text-gray-500 shrink-0" />
             <input
@@ -847,11 +821,7 @@ export function CheckStatusPage({ onNavigate }: CheckStatusPageProps) {
       <SlideIn delay={140} direction="up">
         {filtered.length === 0 ? (
           <div
-            className="rounded-2xl p-12 text-center"
-            style={{
-              background: isDark ? 'rgba(39,39,42,0.5)' : '#ffffff',
-              border: isDark ? '1px solid rgba(39,39,42,0.5)' : '1px solid #e2e8f0',
-              boxShadow: isDark ? 'none' : '0 1px 3px rgba(0,0,0,0.05)' }}
+            className="rounded-2xl p-12 text-center bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
           >
             <ClipboardList className="w-12 h-12 text-gray-500 dark:text-gray-600 mx-auto mb-3" />
             <p className="text-sm font-bold text-gray-900 dark:text-gray-400">No reports found</p>
@@ -876,11 +846,7 @@ export function CheckStatusPage({ onNavigate }: CheckStatusPageProps) {
               <div
                 key={ticket.id}
                 onClick={() => setSelectedTicket(ticket)}
-                className="rounded-2xl p-4 transition-all duration-200 hover:scale-[1.007] cursor-pointer group bg-white dark:bg-zinc-800"
-                style={{
-                  background: isDark ? 'linear-gradient(145deg, #0d1118, #0a0c14)' : '#ffffff',
-                  border: isDark ? '1px solid rgba(39,39,42,0.5)' : '1px solid #e2e8f0',
-                  boxShadow: isDark ? '0 4px 20px rgba(0,0,0,0.3)' : '0 1px 4px rgba(0,0,0,0.05)' }}
+                className="rounded-2xl p-4 transition-all duration-200 hover:scale-[1.007] cursor-pointer group bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="flex items-start gap-3 flex-1 min-w-0">

@@ -444,7 +444,7 @@ export function SettingsPage({ userRole }: { onResetCache?: () => void; userRole
           {/* ── Left Sidebar Navigation ── */}
           <div className="lg:col-span-1">
             <div
-              className="relative isolate rounded-2xl p-2 flex lg:flex-col overflow-x-auto overflow-y-hidden lg:overflow-visible scrollbar-none gap-1 lg:gap-1.5 touch-scroll touch-pan-x overscroll-x-contain bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm"
+              className="relative isolate rounded-2xl p-2 flex lg:flex-col overflow-x-auto overflow-y-hidden lg:overflow-visible scrollbar-none gap-1 lg:gap-1.5 touch-scroll touch-pan-x overscroll-x-contain bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
             >
               {visibleTabs.map((tab) => {
                 const Icon = tab.icon;
@@ -487,7 +487,7 @@ export function SettingsPage({ userRole }: { onResetCache?: () => void; userRole
           <div className="lg:col-span-3">
             <div
               key={activeTab}
-              className="rounded-2xl p-4 sm:p-7 min-h-[500px] bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm transition-all duration-300 animate-in fade-in-50 slide-in-from-bottom-2"
+              className="rounded-2xl p-4 sm:p-7 min-h-[500px] bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm transition-all duration-300 animate-in fade-in-50 slide-in-from-bottom-2"
             >
               {/* ── 1. Profile Tab ── */}
               {activeTab === 'profile' && (
@@ -907,7 +907,7 @@ export function SettingsPage({ userRole }: { onResetCache?: () => void; userRole
                     )}
                     <ToggleRow
                       label="Weekly Intelligence Digest"
-                      detail="Weekly summary report of top campaigns and IOCs"
+                      detail="Weekly summary report of top threats and IOCs"
                       checked={weeklyDigest}
                       onChange={() => {
                         const next = !weeklyDigest;
@@ -994,7 +994,7 @@ export function SettingsPage({ userRole }: { onResetCache?: () => void; userRole
                     >
                       <div>
                         <h4 className="text-xs font-bold text-gray-900 dark:text-zinc-100">Reload Synthetic Dataset</h4>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Reset demo cases, campaigns, and indicators</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Reset demo cases and threat indicators</p>
                       </div>
                       <button
                         onClick={() => window.location.reload()}

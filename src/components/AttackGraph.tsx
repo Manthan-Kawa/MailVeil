@@ -130,12 +130,41 @@ function AttackNode({ data, selected }: NodeProps) {
 
       {/* Detail Rows (High contrast) */}
       <div style={{ padding: '0 10px 8px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-        {nd.details.map((d) => (
-          <div key={d.key} style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-            <span style={{ color: '#9ca3af', fontSize: '10px', fontWeight: 600, fontFamily: "'Inter', sans-serif", whiteSpace: 'nowrap', flexShrink: 0 }}>{d.key}:</span>
-            <span style={{ color: '#f3f4f6', fontSize: '10px', fontWeight: 500, fontFamily: "'Inter', sans-serif", overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.value}</span>
-          </div>
-        ))}
+        {nd.details.map((d) => {
+          const valUpper = (d.value || '').toUpperCase();
+          const isBadge = ['Alert Level', 'Severity', 'SPF', 'DMARC', 'Integrity'].includes(d.key) || ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW', 'PASS', 'FAIL'].includes(valUpper);
+          const badgeBg = valUpper.includes('CRIT') || valUpper === 'FAIL' || valUpper.includes('HIGH')
+            ? '#dc2626'
+            : valUpper.includes('MED')
+            ? '#d97706'
+            : valUpper.includes('LOW') || valUpper === 'PASS'
+            ? '#16a34a'
+            : '#2563eb';
+
+          return (
+            <div key={d.key} style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+              <span style={{ color: '#9ca3af', fontSize: '10px', fontWeight: 600, fontFamily: "'Inter', sans-serif", whiteSpace: 'nowrap', flexShrink: 0 }}>{d.key}:</span>
+              {isBadge ? (
+                <span style={{
+                  background: badgeBg,
+                  color: '#ffffff',
+                  fontSize: '9px',
+                  fontWeight: 700,
+                  fontFamily: "'Inter', sans-serif",
+                  padding: '1px 6px',
+                  borderRadius: '4px',
+                  boxShadow: '0 1px 2px rgba(0,0,0,0.2)',
+                  letterSpacing: '0.02em',
+                  textTransform: 'uppercase',
+                }}>
+                  {d.value}
+                </span>
+              ) : (
+                <span style={{ color: '#f3f4f6', fontSize: '10px', fontWeight: 500, fontFamily: "'Inter', sans-serif", overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.value}</span>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -640,7 +669,7 @@ function AttackGraphCanvasInner({
 
           {/* Top-Left Segmented Controls: Fit View / Reset (Inside Graph Canvas) */}
           <div
-            className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20 inline-flex items-center gap-1 p-1 bg-gray-100 dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-zinc-800 select-none shadow-lg backdrop-blur-md"
+            className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20 inline-flex items-center gap-1 p-1 bg-gray-50 dark:bg-zinc-900/60 rounded-xl border border-gray-200 dark:border-zinc-800/80 select-none shadow-lg backdrop-blur-md"
           >
             {[
               { id: 'fit', label: 'Fit View', action: fitView },
@@ -655,7 +684,7 @@ function AttackGraphCanvasInner({
                     setActiveAction(btn.id as 'fit' | 'reset');
                     btn.action();
                   }}
-                  className={`relative px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-colors duration-200 cursor-pointer select-none ${
+                  className={`relative px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors duration-200 cursor-pointer select-none ${
                     isSelected
                       ? 'text-white font-bold'
                       : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/40'
@@ -664,11 +693,11 @@ function AttackGraphCanvasInner({
                   {isSelected && (
                     <motion.div
                       layoutId="activeAttackGraphActionTab"
-                      className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
+                      className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
                       transition={{
-                        type: 'spring',
-                        stiffness: 450,
-                        damping: 32,
+                        type: 'tween',
+                        ease: [0.25, 0.1, 0.25, 1],
+                        duration: 0.22,
                       }}
                     />
                   )}
@@ -678,8 +707,7 @@ function AttackGraphCanvasInner({
             })}
           </div>
 
-
-                    {/* Legend */}
+          {/* Legend */}
           <div
             className="absolute bottom-3 left-3 right-3 sm:right-auto sm:bottom-4 sm:left-4 z-20 flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2 rounded-xl backdrop-blur-md overflow-x-auto scrollbar-none max-w-[calc(100%-24px)]"
             style={{
@@ -710,7 +738,7 @@ function AttackGraphCanvasInner({
 
         {/* ── Node Details Panel (20%) ── */}
         <div
-          className="lg:col-span-1 rounded-2xl p-5 flex flex-col justify-between bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-none dark:shadow-none overflow-auto h-full"
+          className="lg:col-span-1 rounded-2xl p-5 flex flex-col justify-between bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm overflow-auto h-full backdrop-blur-sm"
         >
           {selectedNode ? (() => {
             const cfg = NODE_CFG[selectedNode.type];
@@ -726,15 +754,33 @@ function AttackGraphCanvasInner({
                 </div>
                 <div className="space-y-1">
                   <p className="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-widest font-mono font-bold mb-2">Entity Attributes</p>
-                  {selectedNode.details.map((d) => (
-                    <div key={d.key} className="flex items-center justify-between gap-2 py-2 border-b border-gray-200/60 dark:border-zinc-800/50 last:border-0">
-                      <span className="text-xs text-gray-500 dark:text-gray-400 font-mono capitalize shrink-0">{d.key}</span>
-                      <div className="flex items-center gap-1 min-w-0">
-                        <span className="text-xs text-gray-900 dark:text-zinc-100 font-mono font-semibold truncate">{d.value}</span>
-                        <CopyButton value={d.value} />
+                  {selectedNode.details.map((d) => {
+                    const valUpper = (d.value || '').toUpperCase();
+                    const isBadge = ['Alert Level', 'Severity', 'SPF', 'DMARC', 'Integrity'].includes(d.key) || ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW', 'PASS', 'FAIL'].includes(valUpper);
+                    const badgeClass = valUpper.includes('CRIT') || valUpper === 'FAIL' || valUpper.includes('HIGH')
+                      ? 'bg-red-600 text-white font-bold'
+                      : valUpper.includes('MED')
+                      ? 'bg-amber-600 text-white font-bold'
+                      : valUpper.includes('LOW') || valUpper === 'PASS'
+                      ? 'bg-emerald-600 text-white font-bold'
+                      : 'bg-blue-600 text-white font-bold';
+
+                    return (
+                      <div key={d.key} className="flex items-center justify-between gap-2 py-2 border-b border-gray-200/60 dark:border-zinc-800/50 last:border-0">
+                        <span className="text-xs text-gray-500 dark:text-gray-400 font-mono capitalize shrink-0">{d.key}</span>
+                        <div className="flex items-center gap-1 min-w-0">
+                          {isBadge ? (
+                            <span className={`px-2 py-0.5 rounded text-[10px] font-mono shadow-xs uppercase ${badgeClass}`}>
+                              {d.value}
+                            </span>
+                          ) : (
+                            <span className="text-xs text-gray-900 dark:text-zinc-100 font-mono font-semibold truncate">{d.value}</span>
+                          )}
+                          <CopyButton value={d.value} />
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             );

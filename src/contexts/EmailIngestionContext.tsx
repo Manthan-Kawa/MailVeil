@@ -198,7 +198,7 @@ export function EmailIngestionProvider({ children }: { children: React.ReactNode
               title: 'Critical Threat Detected',
               msg: `Urgent: "${critThreat.subject}" contains malicious indicators (Score: ${critThreat.analysis?.threat_score || 85}/100)`,
               sev: 'critical',
-              category: 'alerts',
+              category: 'intel',
               route: 'emails',
             });
           }

@@ -22,13 +22,14 @@ import {
   ExternalLink,
   Lock,
   Activity,
+  Inbox,
   type LucideIcon,
 } from 'lucide-react';
 import { type Severity } from '@/data/mockData';
 import { useRef, useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useAnalysis } from '@/contexts/AnalysisContext';
-import { useCampaigns } from '@/contexts/CampaignContext';
+import { useTickets } from '@/contexts/TicketContext';
 import { useEvidence } from '@/contexts/EvidenceContext';
 import { useTheme } from '@/context/ThemeContext';
 
@@ -45,6 +46,7 @@ const ICON_MAP: Record<string, LucideIcon> = {
   Search,
   Target,
   Network,
+  Inbox,
 };
 
 function now24h(): string {
@@ -192,7 +194,7 @@ export function DashboardPage({ onNavigate }: { onNavigate?: (route: string) => 
   const { isDark } = useTheme();
   const [activeTab, setActiveTab] = useState<'24H' | '7D'>('24H');
   const { analyzedReports } = useAnalysis();
-  const { campaigns } = useCampaigns();
+  const { tickets } = useTickets();
   const elapsed = useElapsed();
 
   // Dynamic KPI calculations from active data
@@ -206,7 +208,7 @@ export function DashboardPage({ onNavigate }: { onNavigate?: (route: string) => 
   ).length;
 
   const criticalCount = analyzedReports.filter((r) => r.alert_level === 'critical').length;
-  const campaignCount = campaigns.length;
+  const requestsCount = tickets.length;
 
   const KPI_DEFS = useMemo(
     () => [
@@ -235,15 +237,15 @@ export function DashboardPage({ onNavigate }: { onNavigate?: (route: string) => 
         fmt: (n: number) => Math.round(n).toLocaleString(),
       },
       {
-        label: 'Active Campaigns',
-        val: campaignCount > 0 ? campaignCount : 14,
+        label: 'User Requests',
+        val: requestsCount > 0 ? requestsCount : 19,
         delta: '+2.1%',
         isUp: true,
-        icon: 'Network',
+        icon: 'Inbox',
         fmt: (n: number) => Math.round(n).toLocaleString(),
       },
     ],
-    [emailCount, threatCount, criticalCount, campaignCount]
+    [emailCount, threatCount, criticalCount, requestsCount]
   );
 
   // Activity Area Chart (24H or 7D)
@@ -347,38 +349,38 @@ export function DashboardPage({ onNavigate }: { onNavigate?: (route: string) => 
       </SlideIn>
 
       {/* ── 2. KPI Cards ── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3.5">
         {KPI_DEFS.map((kpi, i) => {
           const Icon = ICON_MAP[kpi.icon];
 
           return (
             <SlideIn key={kpi.label} delay={80 + i * 50} direction="up">
-              <div className="rounded-2xl p-4 sm:p-5 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm transition-all duration-200 flex flex-col justify-between h-full overflow-hidden">
+              <div className="rounded-2xl p-3 sm:p-5 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm transition-all duration-200 flex flex-col justify-between h-full overflow-hidden">
                 <div className="min-w-0">
-                  <div className="flex items-center justify-between gap-2 mb-3">
+                  <div className="flex items-center justify-between gap-1.5 sm:gap-2 mb-2 sm:mb-3">
                     {/* Squircle icon container (Sentinel-X signature design) */}
-                    <div className="w-10 h-10 rounded-2xl flex items-center justify-center bg-[#edf5ff] dark:bg-white border border-blue-100 dark:border-white text-blue-600 dark:text-blue-600 shadow-sm transition-colors shrink-0">
-                      {Icon && <Icon className="w-5 h-5 stroke-[2.2]" />}
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl flex items-center justify-center bg-[#edf5ff] dark:bg-white border border-blue-100 dark:border-white text-blue-600 dark:text-blue-600 shadow-sm transition-colors shrink-0">
+                      {Icon && <Icon className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" />}
                     </div>
                     {/* Delta percentage indicator */}
                     <span
-                      className={`inline-flex items-center gap-0.5 text-xs font-bold font-mono shrink-0 ${
+                      className={`inline-flex items-center gap-0.5 text-[10px] sm:text-xs font-bold font-mono shrink-0 ${
                         kpi.isUp
                           ? 'text-emerald-600 dark:text-emerald-400'
                           : 'text-red-600 dark:text-red-400'
                       }`}
                     >
-                      {kpi.isUp ? <ArrowUpRight className="w-3.5 h-3.5" /> : <ArrowDownRight className="w-3.5 h-3.5" />}
+                      {kpi.isUp ? <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> : <ArrowDownRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />}
                       {kpi.delta}
                     </span>
                   </div>
 
-                  <p className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-zinc-100 tracking-tight truncate font-mono">
+                  <p className="text-xl sm:text-3xl font-black text-gray-900 dark:text-zinc-100 tracking-tight truncate font-mono">
                     <LiveNumber value={typeof kpi.val === 'number' ? kpi.val : 0} fmt={kpi.fmt} />
                   </p>
                 </div>
 
-                <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mt-2.5 truncate">
+                <p className="text-[10px] sm:text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mt-1.5 sm:mt-2.5 truncate" title={kpi.label}>
                   {kpi.label}
                 </p>
               </div>

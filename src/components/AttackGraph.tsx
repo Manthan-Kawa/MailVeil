@@ -5,6 +5,7 @@
  * node details panel and the same layout engine as the dedicated Attack Graph page.
  */
 import { useState, useEffect, useCallback, useMemo, useRef, useLayoutEffect } from 'react';
+import { motion } from 'framer-motion';
 import ReactFlow, {
   Background,
   
@@ -639,50 +640,42 @@ function AttackGraphCanvasInner({
 
           {/* Top-Left Segmented Controls: Fit View / Reset (Inside Graph Canvas) */}
           <div
-            className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20 inline-flex items-center gap-1 p-1 bg-zinc-900/90 rounded-xl border border-zinc-700/80 select-none shadow-lg backdrop-blur-md"
+            className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20 inline-flex items-center gap-1 p-1 bg-gray-100 dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-zinc-800 select-none shadow-lg backdrop-blur-md"
           >
-            {/* Solid blue sliding indicator with smooth transition */}
-            <div
-              className="absolute pointer-events-none rounded-lg bg-blue-600 shadow-sm"
-              style={{
-                transform: `translate3d(${indicatorStyle.left}px, 0, 0)`,
-                width: indicatorStyle.width,
-                height: 'calc(100% - 8px)',
-                top: '4px',
-                opacity: indicatorStyle.opacity,
-                transition: 'transform 250ms cubic-bezier(0.25, 1, 0.5, 1), width 250ms cubic-bezier(0.25, 1, 0.5, 1), opacity 150ms ease',
-                left: 0,
-              }}
-            />
-
-            <button
-              ref={(el) => { actionRefs.current['fit'] = el; }}
-              onClick={() => {
-                setActiveAction('fit');
-                fitView();
-              }}
-              className={`relative z-10 px-3 py-1 rounded-lg text-xs font-semibold transition-colors duration-200 cursor-pointer ${
-                activeAction === 'fit'
-                  ? 'text-white font-bold'
-                  : 'text-zinc-400 hover:text-zinc-200 font-medium'
-              }`}
-            >
-              Fit View
-            </button>
-            <button
-              ref={(el) => { actionRefs.current['reset'] = el; }}
-              onClick={() => {
-                setActiveAction('reset');
-                reset();
-              }}
-              className={`relative z-10 px-3 py-1 rounded-lg text-xs font-semibold transition-colors duration-200 cursor-pointer ${
-                activeAction === 'reset'
-                  ? 'text-white font-bold'
-                  : 'text-zinc-400 hover:text-zinc-200 font-medium'
-              }`}
-            >
-              Reset
-            </button>
+            {[
+              { id: 'fit', label: 'Fit View', action: fitView },
+              { id: 'reset', label: 'Reset', action: reset },
+            ].map((btn) => {
+              const isSelected = activeAction === btn.id;
+              return (
+                <button
+                  key={btn.id}
+                  type="button"
+                  onClick={() => {
+                    setActiveAction(btn.id as 'fit' | 'reset');
+                    btn.action();
+                  }}
+                  className={`relative px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-colors duration-200 cursor-pointer select-none ${
+                    isSelected
+                      ? 'text-white font-bold'
+                      : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/40'
+                  }`}
+                >
+                  {isSelected && (
+                    <motion.div
+                      layoutId="activeAttackGraphActionTab"
+                      className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
+                      transition={{
+                        type: 'spring',
+                        stiffness: 450,
+                        damping: 32,
+                      }}
+                    />
+                  )}
+                  <span className="relative z-10">{btn.label}</span>
+                </button>
+              );
+            })}
           </div>
 
 

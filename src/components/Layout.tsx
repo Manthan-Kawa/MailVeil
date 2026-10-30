@@ -1394,7 +1394,7 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
                           {active && (
                             <motion.div
                               layoutId="activeNotifCategoryTab"
-                              className="absolute inset-0 rounded-lg bg-blue-600 shadow-sm"
+                              className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
                               transition={{
                                 type: 'spring',
                                 stiffness: 450,

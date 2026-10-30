@@ -410,7 +410,7 @@ export function DashboardPage({ onNavigate }: { onNavigate?: (route: string) => 
                 </div>
 
                 {/* Range Toggle with smooth sliding animation */}
-                <div className="relative flex items-center rounded-xl p-1 bg-gray-100 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700/60 self-start sm:self-auto">
+                <div className="relative flex items-center rounded-2xl p-1 bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm self-start sm:self-auto select-none">
                   {(['24H', '7D'] as const).map((tab) => {
                     const isSelected = activeTab === tab;
                     return (
@@ -418,16 +418,16 @@ export function DashboardPage({ onNavigate }: { onNavigate?: (route: string) => 
                         key={tab}
                         type="button"
                         onClick={() => setActiveTab(tab)}
-                        className={`relative px-3 py-1 rounded-lg text-xs font-bold transition-colors duration-200 cursor-pointer ${
+                        className={`relative px-3.5 py-1.5 rounded-xl text-xs font-bold transition-colors duration-200 cursor-pointer select-none ${
                           isSelected
                             ? 'text-white'
-                            : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+                            : 'text-gray-500 hover:text-gray-900 dark:text-zinc-400 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/40'
                         }`}
                       >
                         {isSelected && (
                           <motion.div
                             layoutId="activeTrafficRangeTab"
-                            className="absolute inset-0 rounded-lg bg-blue-600 shadow-sm"
+                            className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
                             transition={{
                               type: 'spring',
                               stiffness: 450,

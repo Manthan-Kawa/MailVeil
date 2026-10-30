@@ -685,7 +685,7 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  {active && (
  <motion.div
  layoutId="activeUserDeepForensicsTab"
- className="absolute inset-0 rounded-xl bg-blue-600 shadow-sm"
+ className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
  transition={{
  type: 'spring',
  stiffness: 450,

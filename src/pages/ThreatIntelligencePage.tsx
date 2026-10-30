@@ -241,37 +241,39 @@ export function ThreatIntelligencePage({ onNavigate }: { onNavigate?: (route: st
               className="rounded-2xl overflow-hidden bg-white dark:bg-zinc-800 border border-gray-200 dark:border-white/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
             >
               {/* Tabs header with smooth sliding indicator pill */}
-              <div className="relative isolate flex items-center gap-1 border-b border-gray-200 dark:border-zinc-800/50 p-1.5 sm:p-2 overflow-x-auto scrollbar-none touch-scroll">
-                {TABS.map((t) => {
-                  const Icon = t.icon;
-                  const isActive = tab === t.id;
-                  return (
-                    <button
-                      key={t.id}
-                      type="button"
-                      onClick={() => setTab(t.id)}
-                      className={`relative z-10 shrink-0 flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs font-bold transition-colors duration-200 whitespace-nowrap cursor-pointer select-none ${
-                        isActive
-                          ? 'text-white font-bold'
-                          : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100/60 dark:hover:bg-zinc-800/40'
-                      }`}
-                    >
-                      {isActive && (
-                        <motion.div
-                          layoutId="activeThreatIntelTab"
-                          className="absolute inset-0 rounded-xl bg-blue-600"
-                          transition={{
-                            type: 'spring',
-                            stiffness: 450,
-                            damping: 32,
-                          }}
-                        />
-                      )}
-                      <Icon className={`relative z-10 w-4 h-4 transition-colors duration-200 ${isActive ? 'text-white' : 'text-gray-400 dark:text-zinc-400'}`} />
-                      <span className="relative z-10">{t.label}</span>
-                    </button>
-                  );
-                })}
+              <div className="p-2 sm:p-2.5 border-b border-gray-200 dark:border-zinc-800/50">
+                <div className="flex items-center gap-1 p-1 rounded-2xl bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm overflow-x-auto scrollbar-none select-none max-w-full">
+                  {TABS.map((t) => {
+                    const Icon = t.icon;
+                    const isActive = tab === t.id;
+                    return (
+                      <button
+                        key={t.id}
+                        type="button"
+                        onClick={() => setTab(t.id)}
+                        className={`relative z-10 shrink-0 flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs font-bold transition-colors duration-200 whitespace-nowrap cursor-pointer select-none ${
+                          isActive
+                            ? 'text-white font-bold'
+                            : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/40'
+                        }`}
+                      >
+                        {isActive && (
+                          <motion.div
+                            layoutId="activeThreatIntelTab"
+                            className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
+                            transition={{
+                              type: 'spring',
+                              stiffness: 450,
+                              damping: 32,
+                            }}
+                          />
+                        )}
+                        <Icon className={`relative z-10 w-4 h-4 transition-colors duration-200 ${isActive ? 'text-white' : 'text-gray-400 dark:text-zinc-400'}`} />
+                        <span className="relative z-10">{t.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Content area with smooth transition */}
@@ -805,7 +807,7 @@ function IndicatorsTab({ result }: { result: EmailAnalysisResult | null }) {
                 {active && (
                   <motion.div
                     layoutId="activeThreatIntelIndicatorTypeTab"
-                    className="absolute inset-0 rounded-xl bg-blue-600"
+                    className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
                     transition={{
                       type: 'spring',
                       stiffness: 450,

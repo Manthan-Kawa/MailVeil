@@ -220,10 +220,10 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <button
               onClick={() => onNavigate?.('email-analyzer')}
-              className="flex items-center justify-center gap-1.5 px-3.5 py-2 sm:py-1.5 rounded-xl text-xs font-bold text-white transition-all hover:scale-105 active:scale-95 shadow-md cursor-pointer w-full sm:w-auto"
+              className="flex items-center justify-center gap-1.5 px-3.5 py-2 sm:py-1.5 rounded-xl text-xs font-bold text-white transition-all hover:scale-105 active:scale-95 shadow-md shadow-blue-500/25 border border-blue-400/30 hover:brightness-110 cursor-pointer w-full sm:w-auto"
               style={{
-                background: 'linear-gradient(135deg, #3b82f6, #6366f1)',
-                border: '1px solid rgba(99,102,241,0.4)' }}
+                background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 45%, #6366f1 100%)',
+              }}
             >
               <MailSearch className="w-3.5 h-3.5" />
               Analyze New Email
@@ -254,7 +254,8 @@ export function ReportsPage({ onNavigate }: { onNavigate?: (route: string) => vo
             <div className="flex flex-wrap items-center justify-center gap-3">
               <button
                 onClick={() => onNavigate?.('email-analyzer')}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 font-mono transition-all hover:scale-105 active:scale-95 cursor-pointer"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white font-mono transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-md shadow-blue-500/25 border border-blue-400/30 hover:brightness-110"
+                style={{ background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 45%, #6366f1 100%)' }}
               >
                 <MailSearch className="w-4 h-4" />
                 Go to Email Analyzer

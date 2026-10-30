@@ -225,7 +225,8 @@ export function HeaderForensicsPage({ onNavigate }: { onNavigate?: (route: strin
             <div className="flex flex-wrap items-center justify-center gap-3">
               <button
                 onClick={() => onNavigate?.('email-analyzer')}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 transition-all hover:scale-105 active:scale-95 font-mono cursor-pointer"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white transition-all hover:scale-105 active:scale-95 font-mono cursor-pointer shadow-md shadow-blue-500/25 border border-blue-400/30 hover:brightness-110"
+                style={{ background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 45%, #6366f1 100%)' }}
               >
                 <Mail className="w-4 h-4" />
                 Go to Email Analyzer

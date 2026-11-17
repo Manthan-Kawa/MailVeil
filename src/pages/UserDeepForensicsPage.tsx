@@ -652,52 +652,52 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  </div>
  </SlideIn>
 
- {/* ── Quick Navigation Tabs ─────────────────────────────────────────── */}
- <SlideIn delay={60} direction="up">
- <div
-   ref={navContainerRef}
-   className="relative h-11 flex w-full items-center gap-1 p-1 rounded-xl bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 shadow-sm mb-4 select-none"
- >
-   {reportIndicatorStyle.opacity > 0 && (
-     <div
-       className="absolute top-1 bottom-1 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20 pointer-events-none transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
-       style={{
-         left: `${reportIndicatorStyle.left}px`,
-         width: `${reportIndicatorStyle.width}px`,
-       }}
-     />
-   )}
- {[
- { id: 'all', label: 'Complete Forensic Report', icon: Shield },
- { id: 'synthesis', label: 'PCAP Analyzer', icon: MailSearch },
- { id: 'headers', label: 'Crypto Forensics', icon: FileSearch },
- { id: 'threat-intel', label: 'Certificate Vault', icon: ShieldCheck },
- { id: 'origin', label: 'Session Mapping', icon: MapPin },
- { id: 'attack-graph', label: 'Attack Graph', icon: Share2 },
- ].map((tab) => {
- const Icon = tab.icon;
- const active = activeTab === tab.id;
- return (
- <button
- key={tab.id}
- ref={(el) => { reportTabRefs.current[tab.id] = el; }}
- type="button"
- onClick={() => setActiveTab(tab.id as any)}
- className={`relative flex-1 min-w-0 h-9 px-1.5 sm:px-3 rounded-lg text-xs sm:text-sm font-semibold whitespace-nowrap transition-colors duration-200 cursor-pointer select-none flex items-center justify-center ${
- active
- ? 'text-white font-bold'
- : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white'
- }`}
- >
- <span className="relative z-10 flex items-center justify-center gap-1.5 sm:gap-2 truncate max-w-full">
- <Icon className="w-3.5 h-3.5 shrink-0" />
- <span className="truncate">{tab.label}</span>
- </span>
- </button>
- );
- })}
- </div>
- </SlideIn>
+ {/* ── Main Forensic Dossier Card with Internal Navigation Tabs ── */}
+ <div className="rounded-2xl p-4 sm:p-6 space-y-6 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm backdrop-blur-sm">
+   {/* ── Quick Navigation Tabs (Capsule format) ─────────────────── */}
+   <div
+     ref={navContainerRef}
+     className="relative h-10 flex w-full items-center gap-1 p-1 rounded-xl bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 shadow-sm mb-4 select-none"
+   >
+     {reportIndicatorStyle.opacity > 0 && (
+       <div
+         className="absolute top-1 bottom-1 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20 pointer-events-none transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+         style={{
+           left: `${reportIndicatorStyle.left}px`,
+           width: `${reportIndicatorStyle.width}px`,
+         }}
+       />
+     )}
+     {[
+       { id: 'all',          label: 'Complete Forensic Report', icon: Shield },
+       { id: 'synthesis',    label: 'Email Analyzer',           icon: MailSearch },
+       { id: 'headers',      label: 'Header Forensics',         icon: FileSearch },
+       { id: 'threat-intel', label: 'Threat Intelligence',      icon: Globe },
+       { id: 'origin',       label: 'Origin Investigation',     icon: MapPin },
+       { id: 'attack-graph', label: 'Attack Graph',             icon: Share2 },
+     ].map((tab) => {
+       const Icon = tab.icon;
+       const active = activeTab === tab.id;
+       return (
+         <button
+           key={tab.id}
+           ref={(el) => { reportTabRefs.current[tab.id] = el; }}
+           type="button"
+           onClick={() => setActiveTab(tab.id as any)}
+           className={`relative flex-1 min-w-0 h-8 px-1.5 sm:px-2 rounded-lg text-[11px] sm:text-xs font-semibold whitespace-nowrap transition-colors duration-200 cursor-pointer select-none flex items-center justify-center ${
+             active
+               ? 'text-white font-bold'
+               : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white'
+           }`}
+         >
+           <span className="relative z-10 flex items-center justify-center gap-1.5 sm:gap-2 truncate max-w-full">
+             <Icon className="w-3.5 h-3.5 shrink-0" />
+             <span className="truncate">{tab.label}</span>
+           </span>
+         </button>
+       );
+     })}
+   </div>
 
  {/* ══════════════════════════════════════════════════════════════════════
  SECTION 1: AI SYNTHESIS & RISK NARRATIVE
@@ -1086,6 +1086,7 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  />
  </SlideIn>
  )}
+ </div>
  </div>
  );
 }

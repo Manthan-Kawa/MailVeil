@@ -396,7 +396,7 @@ export function EmailDetailDrawer({
           <div className="w-full pb-1">
             <div
               ref={navContainerRef}
-              className="relative isolate flex w-full items-center gap-1 p-1 rounded-xl bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 shadow-sm select-none"
+              className="relative isolate flex w-full items-center gap-1 select-none"
             >
               {/* Smooth sliding indicator pill */}
               {indicatorStyle.opacity > 0 && (
@@ -428,10 +428,10 @@ export function EmailDetailDrawer({
                       setActiveTab(tab.id);
                     }}
                     type="button"
-                    className={`relative z-10 flex-1 min-w-0 flex items-center justify-center gap-2 px-2 sm:px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors duration-200 cursor-pointer select-none ${
+                    className={`relative z-10 flex-1 min-w-0 flex items-center justify-center gap-2 px-2 sm:px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors duration-200 cursor-pointer select-none ${
                       active
                         ? 'text-white font-bold'
-                        : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white'
+                        : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100/40 dark:hover:bg-white/[0.04]'
                     }`}
                   >
                     <Icon className={`w-3.5 h-3.5 relative z-10 shrink-0 ${active ? 'text-white' : 'text-gray-500 dark:text-zinc-400'}`} />

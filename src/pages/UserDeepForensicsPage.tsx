@@ -991,62 +991,85 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  {(activeTab === 'all' || activeTab === 'origin') && (
  <SlideIn delay={220} direction="up">
  <div className="space-y-4">
- <h2 className="text-sm font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 flex items-center gap-2">
- <MapPin className="w-4 h-4 text-cyan-500 dark:text-cyan-400" />
- 4. Origin Investigation & Infrastructure Geolocation
+ <div className="flex items-center justify-between">
+ <h2 className="text-sm font-bold uppercase tracking-wider text-gray-900 dark:text-zinc-100 flex items-center gap-2">
+ <MapPin className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
+ 4. Origin Investigation &amp; Infrastructure Geolocation
  </h2>
+ <span className="text-[11px] font-mono text-gray-500 dark:text-gray-400">
+ Target: <span className="text-gray-900 dark:text-zinc-100 font-bold">{origin.city}, {origin.country}</span> ({origin.latitude.toFixed(4)}, {origin.longitude.toFixed(4)})
+ </span>
+ </div>
 
  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
  {/* Telemetry info */}
- <div className="p-5 bg-white dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 rounded-2xl shadow-sm space-y-4">
- <h3 className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-white">
- Physical & Autonomous Origin
+ <div className="p-5 rounded-2xl bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 shadow-sm space-y-4">
+ <h3 className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-zinc-100">
+ Physical &amp; Autonomous Origin
  </h3>
 
  <div className="space-y-3 text-xs">
- <div className="p-3 bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-zinc-800/60 rounded-xl">
- <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase">Originating Public IP</div>
- <div className="font-bold text-cyan-600 dark:text-cyan-300 font-mono text-sm tracking-wide">
- {origin.sendingIp}
- </div>
- </div>
-
- <div className="p-3 bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-zinc-800/60 rounded-xl">
- <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase">Originating Location</div>
- <div className="font-bold text-gray-900 dark:text-white text-sm">
+ <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80">
+ <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-mono">Originating Location</div>
+ <div className="font-bold text-gray-900 dark:text-zinc-100 text-sm mt-0.5">
  {origin.city}, {origin.country}
  </div>
- <div className="text-[11px] font-mono text-cyan-600 dark:text-cyan-400 mt-0.5">
- Lat: {origin.latitude.toFixed(4)}, Lng: {origin.longitude.toFixed(4)}
+ <div className="text-[11px] font-mono text-cyan-600 dark:text-cyan-400 mt-1">
+ Lat: {origin.latitude.toFixed(4)}° N, Lng: {origin.longitude.toFixed(4)}° E
  </div>
  </div>
 
- <div className="p-3 bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-zinc-800/60 rounded-xl">
- <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase">Routing Autonomous System</div>
- <div className="font-bold text-gray-900 dark:text-white truncate">{origin.asn}</div>
+ <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80">
+ <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-mono">Routing Autonomous System</div>
+ <div className="font-bold text-gray-900 dark:text-zinc-100 truncate mt-0.5">{origin.asn}</div>
  </div>
 
- <div className="p-3 bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-zinc-800/60 rounded-xl">
- <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase">Hosting Infrastructure</div>
- <div className="font-bold text-gray-900 dark:text-white">{origin.hostingProvider}</div>
+ <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80">
+ <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-mono">Hosting Infrastructure</div>
+ <div className="font-bold text-gray-900 dark:text-zinc-100 mt-0.5">{origin.hostingProvider}</div>
+ </div>
+
+ <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80">
+ <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-mono">Originating IP Address</div>
+ <div className="font-mono font-bold text-red-500 dark:text-red-400 mt-0.5">{origin.sendingIp}</div>
  </div>
  </div>
  </div>
 
  {/* Dark Cyber Map */}
- <div className="lg:col-span-2 bg-white dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 rounded-2xl shadow-sm overflow-hidden">
+ <div className="lg:col-span-2 rounded-2xl border border-gray-200 dark:border-zinc-800/80 overflow-hidden bg-white dark:bg-black/30 flex flex-col justify-between">
  <DarkCyberMap
  markers={[origin.mapMarker]}
- height="320px"
+ selectedId={origin.mapMarker.id}
  singlePointerMode={true}
  borderless={true}
+ height="340px"
  />
+
+ {/* Telemetry Footer Overlay */}
+ <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 p-3 bg-black/60 border-t border-white/10 text-[11px] font-mono">
+ <div>
+ <span className="text-gray-400 block">COORDINATES</span>
+ <span className="text-cyan-300 font-bold">{origin.latitude.toFixed(2)}°, {origin.longitude.toFixed(2)}°</span>
+ </div>
+ <div>
+ <span className="text-gray-400 block">LOCATION</span>
+ <span className="text-white font-bold truncate block">{origin.city}, {origin.country}</span>
+ </div>
+ <div>
+ <span className="text-gray-400 block">ORIGIN IP</span>
+ <span className="text-red-400 font-bold">{origin.sendingIp}</span>
+ </div>
+ <div>
+ <span className="text-gray-400 block">AUTONOMOUS SYS</span>
+ <span className="text-purple-300 font-bold truncate block">{origin.asn}</span>
+ </div>
+ </div>
  </div>
  </div>
  </div>
  </SlideIn>
  )}
-
  {/* ══════════════════════════════════════════════════════════════════════
  SECTION 5: ATTACK GRAPH (INTERACTIVE & READ-ONLY)
  ══════════════════════════════════════════════════════════════════════ */}

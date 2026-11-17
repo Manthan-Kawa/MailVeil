@@ -78,6 +78,7 @@ export function EmailDetailDrawer({
   const [isVisible, setIsVisible] = useState(false);
 
   // Smooth sliding tab indicator pill
+  const navContainerRef = useRef<HTMLDivElement | null>(null);
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const [indicatorStyle, setIndicatorStyle] = useState<{
     left: number;
@@ -113,10 +114,20 @@ export function EmailDetailDrawer({
     };
     updateIndicator();
     const rafId = requestAnimationFrame(updateIndicator);
+    const t1 = setTimeout(updateIndicator, 100);
+    const t2 = setTimeout(updateIndicator, 350);
     window.addEventListener('resize', updateIndicator);
+    let observer: ResizeObserver | null = null;
+    if (navContainerRef.current && typeof ResizeObserver !== 'undefined') {
+      observer = new ResizeObserver(updateIndicator);
+      observer.observe(navContainerRef.current);
+    }
     return () => {
       cancelAnimationFrame(rafId);
+      clearTimeout(t1);
+      clearTimeout(t2);
       window.removeEventListener('resize', updateIndicator);
+      observer?.disconnect();
     };
   }, [activeTab, isVisible]);
 
@@ -382,8 +393,11 @@ export function EmailDetailDrawer({
           </div>
 
           {/* Tab Navigation */}
-          <div className="flex items-center gap-2 pb-1 overflow-hidden">
-            <div className="relative isolate inline-flex w-fit max-w-full items-center gap-1 p-1 rounded-xl bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 shadow-sm overflow-x-auto overflow-y-hidden scrollbar-none touch-scroll touch-pan-x overscroll-x-contain select-none">
+          <div className="w-full pb-1">
+            <div
+              ref={navContainerRef}
+              className="relative isolate flex w-full items-center gap-1 p-1 rounded-xl bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 shadow-sm select-none"
+            >
               {/* Smooth sliding indicator pill */}
               {indicatorStyle.opacity > 0 && (
                 <div
@@ -412,17 +426,16 @@ export function EmailDetailDrawer({
                     ref={(el) => { tabRefs.current[tab.id] = el; }}
                     onClick={() => {
                       setActiveTab(tab.id);
-                      tabRefs.current[tab.id]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
                     }}
                     type="button"
-                    className={`relative z-10 flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors duration-200 cursor-pointer shrink-0 select-none ${
+                    className={`relative z-10 flex-1 min-w-0 flex items-center justify-center gap-2 px-2 sm:px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors duration-200 cursor-pointer select-none ${
                       active
                         ? 'text-white font-bold'
                         : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white'
                     }`}
                   >
-                    <Icon className={`w-3.5 h-3.5 relative z-10 ${active ? 'text-white' : 'text-gray-500 dark:text-zinc-400'}`} />
-                    <span className="relative z-10">{tab.label}</span>
+                    <Icon className={`w-3.5 h-3.5 relative z-10 shrink-0 ${active ? 'text-white' : 'text-gray-500 dark:text-zinc-400'}`} />
+                    <span className="relative z-10 truncate">{tab.label}</span>
                   </button>
                 );
               })}

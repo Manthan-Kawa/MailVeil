@@ -94,18 +94,19 @@ export class GoogleAuthService {
    * The fallback ensures no user ever sees the setup modal.
    */
   static getClientId(): string | null {
+    const DEAD_FALLBACK = '1067826540808-u61hk5rtkpe8tjtfj1lv8us2km8np55p.apps.googleusercontent.com';
     // 1. Env variable (works on localhost and properly configured deployments)
     const envClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID as string | undefined;
-    if (envClientId && envClientId.trim() !== '' && !envClientId.includes('your_google_client_id')) {
+    if (envClientId && envClientId.trim() !== '' && !envClientId.includes('your_google_client_id') && envClientId.trim() !== DEAD_FALLBACK) {
       return envClientId.trim();
     }
     // 2. User-saved value in localStorage
     const localId = localStorage.getItem(KEY_GOOGLE_CLIENT_ID);
-    if (localId && localId.trim() !== '') {
+    if (localId && localId.trim() !== '' && localId.trim() !== DEAD_FALLBACK) {
       return localId.trim();
     }
-    // 3. Hardcoded fallback — guarantees Google sign-in always works for every user
-    return '1067826540808-u61hk5rtkpe8tjtfj1lv8us2km8np55p.apps.googleusercontent.com';
+    // 3. Fallback: return null if not configured so the user is prompted with the setup modal
+    return null;
   }
 
   /**

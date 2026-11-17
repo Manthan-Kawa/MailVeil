@@ -292,7 +292,7 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
               )}
               <span className="text-gray-300 dark:text-zinc-600 dark:text-gray-600">|</span>
               <span className="text-gray-500 dark:text-zinc-400 dark:text-gray-500 text-xs">
-                Real-time Gemini security scoring &amp; phishing detection
+                Gemini-Powered Threat Analysis
               </span>
             </div>
           </div>

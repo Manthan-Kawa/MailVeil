@@ -428,10 +428,10 @@ export function EmailDetailDrawer({
                       setActiveTab(tab.id);
                     }}
                     type="button"
-                    className={`relative z-10 flex-1 min-w-0 flex items-center justify-center gap-2 px-2 sm:px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors duration-200 cursor-pointer select-none ${
+                    className={`relative z-10 flex-1 min-w-0 flex items-center justify-center gap-2 px-2 sm:px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors duration-200 cursor-pointer select-none outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 border-0 border-none ${
                       active
                         ? 'text-white font-bold'
-                        : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100/40 dark:hover:bg-white/[0.04]'
+                        : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white'
                     }`}
                   >
                     <Icon className={`w-3.5 h-3.5 relative z-10 shrink-0 ${active ? 'text-white' : 'text-gray-500 dark:text-zinc-400'}`} />

@@ -684,7 +684,7 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
            ref={(el) => { reportTabRefs.current[tab.id] = el; }}
            type="button"
            onClick={() => setActiveTab(tab.id as any)}
-           className={`relative flex-1 min-w-0 h-8 px-1.5 sm:px-2 rounded-lg text-[11px] sm:text-xs font-semibold whitespace-nowrap transition-colors duration-200 cursor-pointer select-none flex items-center justify-center ${
+           className={`relative flex-1 min-w-0 h-8 px-1.5 sm:px-2 rounded-lg text-[11px] sm:text-xs font-semibold whitespace-nowrap transition-colors duration-200 cursor-pointer select-none flex items-center justify-center outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 border-0 border-none ${
              active
                ? 'text-white font-bold'
                : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white'

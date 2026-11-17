@@ -88,7 +88,7 @@ export function SettingsPage({ userRole }: { onResetCache?: () => void; userRole
     return currentUser?.displayName || getSavedDisplayName(activeEmail) || activeEmail.split('@')[0] || 'User';
   });
   const [email, setEmail] = useState(() => currentUser?.email || localStorage.getItem('sentinel_user') || '');
-  const [bio, setBio] = useState(() => currentUser?.bio || (userRole === 'analyst' ? 'Cybersecurity Analyst & SOC Lead specializing in SENTINEL-X forensic investigation and threat correlation.' : 'Standard user with active email threat monitoring.'));
+  const [bio, setBio] = useState(() => currentUser?.bio || (userRole === 'analyst' ? 'Cybersecurity Analyst & SOC Lead specializing in MailVeil forensic investigation and threat correlation.' : 'Standard user with active email threat monitoring.'));
   const [savedSuccess, setSavedSuccess] = useState(false);
   const [saveMessage, setSaveMessage] = useState('Profile Saved!');
 
@@ -520,7 +520,7 @@ export function SettingsPage({ userRole }: { onResetCache?: () => void; userRole
                     <div>
                       <h4 className="text-base font-bold text-gray-900 dark:text-zinc-100">{displayName || currentUser?.displayName || 'User'}</h4>
                       <p className="text-xs text-gray-500 dark:text-gray-400 font-mono">
-                        {userRole === 'analyst' ? 'Cybersecurity Analyst · Sentinel-X SOC' : 'Standard Organization User'}
+                        {userRole === 'analyst' ? 'Cybersecurity Analyst · MailVeil SOC' : 'Standard Organization User'}
                       </p>
                       <span className="inline-block mt-1 text-[10px] font-mono font-bold text-white bg-blue-600 px-2.5 py-0.5 rounded-lg shadow-sm">
                         {userRole === 'analyst' ? 'ANALYST ACCOUNT' : 'USER ACCOUNT'}
@@ -1049,7 +1049,7 @@ export function SettingsPage({ userRole }: { onResetCache?: () => void; userRole
                       AI Engine — Google Gemini
                     </h3>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                      Sentinel-X utilizes Google Gemini Flash for zero-latency email threat forensics.
+                      MailVeil utilizes Google Gemini Flash for zero-latency email threat forensics.
                     </p>
                   </div>
 

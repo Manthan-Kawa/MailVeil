@@ -67,7 +67,7 @@ function sendEmailToUser(ticket: Ticket, analystComment?: string, analystReport?
   const comment = analystComment || ticket.analystComment || 'The security investigation for your submitted suspicious email report has concluded.';
   const reportObj = analystReport || ticket.analystReport;
   const reportInfo = reportObj
-    ? `\nAttached Investigation Report: ${reportObj.name}\n(Available for instant download in your Sentinel-X Check Status portal)`
+    ? `\nAttached Investigation Report: ${reportObj.name}\n(Available for instant download in your MailVeil Check Status portal)`
     : '';
 
   if (reportObj?.data) {
@@ -76,7 +76,7 @@ function sendEmailToUser(ticket: Ticket, analystComment?: string, analystReport?
     } catch { /* ignore */ }
   }
 
-  const subject = `[SENTINEL-X SOC] Investigation Report: ${ticket.id}`;
+  const subject = `[MAILVEIL SOC] Investigation Report: ${ticket.id}`;
 
   const bodyText = `Dear User,
 
@@ -95,10 +95,10 @@ ${comment}
 ${reportInfo}
 
 SECURITY RECOMMENDATION:
-Please log in to your Sentinel-X portal under "Check Status" to view telemetry details.
+Please log in to your MailVeil portal under "Check Status" to view telemetry details.
 
 Regards,
-SENTINEL-X Cyber Defense Operations
+MAILVEIL Cyber Defense Operations
 Security Operations Center (SOC)`;
 
   const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(ticket.userEmail)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;

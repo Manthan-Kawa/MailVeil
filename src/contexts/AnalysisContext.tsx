@@ -36,9 +36,11 @@ export function convertAnalysisToReportData(result: EmailAnalysisResult): Report
   const subjectHdr = result.headers.find((h) => h.key.toLowerCase() === 'subject')?.value;
   const fromHdr = result.headers.find((h) => h.key.toLowerCase() === 'from')?.value;
 
+  const cleanVerdict = result.verdict.replace(/benign\s*\/?\s*/gi, '').trim() || 'Clean Email';
+
   const caseTitle = subjectHdr
-    ? `${result.verdict}: ${subjectHdr}`
-    : `${result.verdict} — ${result.threat_intel.domain || result.origin.sending_ip || 'Email Forensics'}`;
+    ? `${cleanVerdict}: ${subjectHdr}`
+    : `${cleanVerdict} — ${result.threat_intel.domain || result.origin.sending_ip || 'Email Forensics'}`;
 
   // Key findings
   const keyFindings =
@@ -46,7 +48,7 @@ export function convertAnalysisToReportData(result: EmailAnalysisResult): Report
       ? result.risk_factors.map((rf) => `${rf.label}: ${rf.detail}`)
       : result.ai_inferences.length > 0
       ? result.ai_inferences.map((inf) => `${inf.inference} (${inf.confidence}% confidence)`)
-      : [`Verdict: ${result.verdict}`, `Threat Score: ${result.threat_score}/100`];
+      : [`Verdict: ${cleanVerdict}`, `Threat Score: ${result.threat_score}/100`];
 
   // Observed facts
   const observedFacts =

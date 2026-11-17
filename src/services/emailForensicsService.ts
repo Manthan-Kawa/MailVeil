@@ -55,7 +55,7 @@ export interface AttachmentForensicItem {
   entropyScore: number; // 0 - 8.0
   entropyRating: 'Low' | 'Moderate' | 'High (Obfuscated/Packed)';
   sandboxAnalysis: {
-    status: 'Executed in Sandbox' | 'Quarantined Before Execution' | 'Verified Benign';
+    status: 'Executed in Sandbox' | 'Quarantined Before Execution' | 'Verified Clean';
     runtimeBehavior: string[];
     outboundConnections: string[];
   };
@@ -81,7 +81,7 @@ export interface AttachmentForensicInspection {
   entropyRating: 'Low' | 'Moderate' | 'High (Obfuscated/Packed)';
   visualScreenshotUrl?: string;
   sandboxAnalysis: {
-    status: 'Executed in Sandbox' | 'Quarantined Before Execution' | 'Verified Benign';
+    status: 'Executed in Sandbox' | 'Quarantined Before Execution' | 'Verified Clean';
     runtimeBehavior: string[];
     outboundConnections: string[];
   };
@@ -340,7 +340,7 @@ export class EmailForensicsService {
           ? 'Malicious Email Detected'
           : targetEmail.analysis.threat_level === 'suspicious'
           ? 'Suspicious Email Warning'
-          : 'Benign / Clean Email';
+          : 'Clean Email';
     } else {
       rawAnalysisResult = await analyzeEmail(rawEmailText);
     }
@@ -559,7 +559,7 @@ export class EmailForensicsService {
           ? ('Quarantined Before Execution' as const)
           : isSuspicious
           ? ('Executed in Sandbox' as const)
-          : ('Verified Benign' as const),
+          : ('Verified Clean' as const),
         runtimeBehavior: isMalicious
           ? ['Attempts to execute unverified child process in sandboxed container', 'Monitors local process table']
           : isSuspicious
@@ -624,8 +624,8 @@ export class EmailForensicsService {
       entropyRating: primaryItem?.entropyRating ?? (hasDetectedFile ? (isMalicious ? 'High (Obfuscated/Packed)' : 'Low') : 'Low'),
       visualScreenshotUrl: isMalicious ? 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=600&q=80' : undefined,
       sandboxAnalysis: primaryItem?.sandboxAnalysis || {
-        status: isMalicious ? 'Quarantined Before Execution' : 'Verified Benign',
-        runtimeBehavior: hasDetectedFile ? ['Verified benign profile'] : ['No attachment payload present.'],
+        status: isMalicious ? 'Quarantined Before Execution' : 'Verified Clean',
+        runtimeBehavior: hasDetectedFile ? ['Verified clean profile'] : ['No attachment payload present.'],
         outboundConnections: isMalicious ? [`${sendingIp}:443`] : [],
       },
       attachmentId: primaryItem?.attachmentId || targetEmail.attachments?.find((a) => a.attachmentId)?.attachmentId,

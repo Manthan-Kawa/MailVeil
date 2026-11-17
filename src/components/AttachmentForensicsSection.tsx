@@ -97,7 +97,7 @@ export function AttachmentForensicsSection({
       entropyScore: attachmentForensics.entropyScore || 3.41,
       entropyRating: attachmentForensics.entropyRating || 'Low',
       sandboxAnalysis: attachmentForensics.sandboxAnalysis || {
-        status: 'Verified Benign',
+        status: 'Verified Clean',
         runtimeBehavior: ['No abnormal child processes or registry mutations observed.'],
         outboundConnections: [],
       },
@@ -119,7 +119,7 @@ export function AttachmentForensicsSection({
       entropyScore: 3.48,
       entropyRating: 'Low',
       sandboxAnalysis: {
-        status: 'Verified Benign',
+        status: 'Verified Clean',
         runtimeBehavior: ['Clean payload structure.'],
         outboundConnections: [],
       },
@@ -420,7 +420,7 @@ export function AttachmentForensicsSection({
           <div className="space-y-2.5">
             <div className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-zinc-100 flex items-center gap-2">
               <Terminal className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-              <span>Sandbox Status: {item.sandboxAnalysis?.status || 'Verified Benign'}</span>
+              <span>Sandbox Status: {item.sandboxAnalysis?.status || 'Verified Clean'}</span>
             </div>
             <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/50 space-y-2.5 text-xs shadow-sm">
               <div className="text-[11px] text-gray-900 dark:text-gray-400 font-semibold">Observed Runtime Behavior:</div>
@@ -721,7 +721,7 @@ export function AttachmentForensicsSection({
                             Sandbox Runtime Profile
                           </div>
                           <div className="text-[11px] text-gray-900 dark:text-gray-400 font-mono font-medium">
-                            Status: <span className="text-black dark:text-gray-200 font-bold">{item.sandboxAnalysis?.status || 'Verified Benign'}</span>
+                            Status: <span className="text-black dark:text-gray-200 font-bold">{item.sandboxAnalysis?.status || 'Verified Clean'}</span>
                           </div>
                           <ul className="space-y-1 text-[11px] text-black dark:text-zinc-100 list-disc pl-4 font-medium">
                             {(item.sandboxAnalysis?.runtimeBehavior || []).slice(0, 2).map((act, i) => (

@@ -16,6 +16,19 @@ import { MAILVEIL_LIGHT_LOGO_BASE64 } from '@/utils/reportLogo';
 const CARTO_API_KEY = (import.meta.env.VITE_CARTO_API_KEY as string) || 'cb1_3i66_1_450e166351e036c0fa2b44d5';
 
 /**
+ * Removes any occurrences of 'Benign' and replaces them cleanly with 'Clean' / standard verified terminology.
+ */
+export function sanitizeBenign(str?: string): string {
+  if (!str) return '';
+  return str
+    .replace(/benign\s*\/\s*/gi, '')
+    .replace(/\/\s*benign/gi, '')
+    .replace(/\bbenign\b/gi, 'Clean')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
  * Options for generating the high-fidelity forensic PDF
  */
 export interface PdfExportOptions {
@@ -44,12 +57,12 @@ ${subDivider}
 Case ID:          ${result.case_id}
 Campaign ID:      ${result.campaign_id}
 Alert Level:      ${result.alert_level.toUpperCase()}
-Threat Verdict:   ${result.verdict}
+Threat Verdict:   ${sanitizeBenign(result.verdict) || 'Clean Email'}
 Threat Score:     ${result.threat_score} / 100
 Confidence:       ${result.confidence}%
 
 Executive Summary:
-${result.summary}
+${sanitizeBenign(result.summary)}
 
 2. EMAIL AUTHENTICATION & INFRASTRUCTURE
 ${subDivider}
@@ -143,6 +156,12 @@ export function generateFormattedPdfHtml(
       ? 'This incident involves an engineered campaign crafted to impersonate trusted infrastructure. Cryptographic signatures were failed or deliberately omitted to bypass standard mail authentication filters, routing through suspicious ingress relays.'
       : 'Email cleared standard cryptographic verification. Sender alignment and authentication factors appear normal.'
   );
+
+  const cleanTitle = sanitizeBenign(data.caseTitle);
+  const cleanVerdict = sanitizeBenign(result?.verdict || (data.riskScore >= 75 ? 'Malicious Email Detected' : data.riskScore >= 40 ? 'Suspicious Email Warning' : 'Clean Email')) || 'Clean Email';
+  const cleanThreatSummary = sanitizeBenign(data.threatSummary);
+  const cleanExecSummary = sanitizeBenign(execSummary);
+  const cleanRiskNarrative = sanitizeBenign(riskNarrative);
 
   // User Mitigation Checklist
   const mitigationList = deepReport?.aiSynthesis?.mitigationChecklist && deepReport.aiSynthesis.mitigationChecklist.length > 0
@@ -537,12 +556,12 @@ export function generateFormattedPdfHtml(
         <div class="score-lbl">THREAT SCORE</div>
       </div>
       <div class="exec-info">
-        <h2>${data.caseTitle}</h2>
+        <h2>${cleanTitle}</h2>
         <div style="margin-bottom: 8px; font-size: 11px;">
-          CLASSIFICATION: <strong style="color: ${scoreColor};">${result?.verdict || 'Suspicious Activity'}</strong> · 
+          CLASSIFICATION: <strong style="color: ${scoreColor};">${cleanVerdict}</strong> · 
           CONFIDENCE: <strong>${result?.confidence ?? 95}%</strong>
         </div>
-        <div class="exec-summary">${data.threatSummary}</div>
+        <div class="exec-summary">${cleanThreatSummary}</div>
       </div>
     </div>
 
@@ -557,11 +576,11 @@ export function generateFormattedPdfHtml(
       <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px;">
         <div>
           <div style="font-size: 10px; font-weight: 700; color: #0284c7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Executive AI Summary</div>
-          <div style="font-size: 12px; font-weight: 600; color: #0f172a; line-height: 1.5;">${execSummary}</div>
+          <div style="font-size: 12px; font-weight: 600; color: #0f172a; line-height: 1.5;">${cleanExecSummary}</div>
         </div>
         <div style="background: #f1f5f9; border-left: 3px solid #7c3aed; padding: 10px 12px; border-radius: 6px;">
           <div style="font-size: 10px; font-weight: 700; color: #6d28d9; text-transform: uppercase; margin-bottom: 3px;">Plain-Language Risk Explanation</div>
-          <div style="font-size: 11.5px; color: #334155; line-height: 1.5;">${riskNarrative}</div>
+          <div style="font-size: 11.5px; color: #334155; line-height: 1.5;">${cleanRiskNarrative}</div>
         </div>
       </div>
 
@@ -830,7 +849,7 @@ export function generateFormattedPdfHtml(
         </tr>
         <tr>
           <th>Sandbox Verdict</th>
-          <td style="font-weight: 600;">${attachment.sandboxAnalysis?.status || 'Executed in Isolated Sandbox'}</td>
+          <td style="font-weight: 600;">${sanitizeBenign(attachment.sandboxAnalysis?.status) || 'Executed in Isolated Sandbox'}</td>
         </tr>
       </table>
 

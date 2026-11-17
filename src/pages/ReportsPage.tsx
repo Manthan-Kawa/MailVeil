@@ -812,7 +812,7 @@ function FullReportPreview({
       tags.push('Newly Registered Domain (<30d)');
     }
     if (isMalicious) tags.push('Active Phishing Campaign', 'High Entropy Attachment');
-    if (tags.length === 0) tags.push('Security Assessment', 'Benign Sender');
+    if (tags.length === 0) tags.push('Security Assessment', 'Clean Sender');
     return tags;
   }, [result, isMalicious]);
 
@@ -857,7 +857,7 @@ function FullReportPreview({
           : [
             { tag: 'Standard Text Streams', description: 'Clean FlateDecode compressed font and vector layouts', risk: 'low' as const },
           ],
-      sandboxStatus: isMalicious ? 'Quarantined Before Execution' : isSuspicious ? 'Executed in Sandbox' : 'Verified Benign',
+      sandboxStatus: isMalicious ? 'Quarantined Before Execution' : isSuspicious ? 'Executed in Sandbox' : 'Verified Clean',
       runtimeBehavior: isMalicious
         ? [
           'Attempts to spawn cmd.exe via Adobe Acrobat Reader child process',

@@ -294,7 +294,7 @@ Required JSON shape (all fields required, arrays may be empty):
   "case_id": "CASE-YYYY-NNNN",
   "campaign_id": "STRING or UNKNOWN",
   "alert_level": "critical|high|medium|low|info",
-  "verdict": "SHORT verdict e.g. BEC / Credential Harvesting or Benign / Authentic Newsletter",
+  "verdict": "SHORT verdict e.g. BEC / Credential Harvesting or Clean / Authentic Newsletter",
   "threat_score": 0-100,
   "confidence": 0-100,
   "summary": "2-3 sentence concise forensic summary",
@@ -335,7 +335,7 @@ Rules:
 - Extract top 8-12 key RFC headers (From, To, Subject, Date, Message-ID, Received, Authentication-Results, SPF, DKIM, DMARC, Return-Path). Do NOT include large body/html/base64 chunks in headers.
 - Origin Extraction: Identify the earliest 'Received: from' line at the very bottom of the Received chain. Isolate the original sender's public IP address (ignoring internal webmail IPs or 127.0.0.1 loopbacks; if bottommost is internal webmail, check X-Originating-IP or earliest public MTA hop). Provide accurate city, country, latitude, longitude, ISP/ASN, and host details for that specific originating IP.
 - Keep observed_facts to 4-8 items, ai_inferences to 2-4 items, risk_factors to 2-5 items.
-- threat_score must reflect actual risk (0-100). Benign newsletter/marketing email < 15, legitimate corporate email < 25, suspicious/phishing > 75.
+- threat_score must reflect actual risk (0-100). Clean newsletter/marketing email < 15, legitimate corporate email < 25, suspicious/phishing > 75.
 - Infer SPF/DKIM/DMARC from Authentication-Results headers if present.
 - Return ONLY the JSON object. No other text.`;
 

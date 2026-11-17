@@ -201,26 +201,26 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
   }, [filteredEmails, currentPage, itemsPerPage]);
 
   const renderRiskBadge = (level?: ThreatLevel, score?: number) => {
-    const baseClasses = "w-[136px] h-7 inline-flex items-center justify-center gap-1.5 px-3 rounded-full text-xs font-semibold whitespace-nowrap shrink-0 transition-all";
+    const baseClasses = "w-[136px] h-7 inline-flex items-center justify-center gap-1.5 px-3 rounded-full text-xs font-bold whitespace-nowrap shrink-0 transition-all text-white shadow-xs";
     if (level === 'malicious') {
       return (
-        <span className={`${baseClasses} bg-red-50 dark:bg-red-500/15 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-500/30`}>
-          <ShieldAlert className="w-3.5 h-3.5 shrink-0 text-red-600 dark:text-red-400" />
+        <span className={`${baseClasses} bg-red-600`}>
+          <ShieldAlert className="w-3.5 h-3.5 shrink-0 text-white stroke-[2.2]" />
           <span>Malicious ({score ?? 90})</span>
         </span>
       );
     }
     if (level === 'suspicious') {
       return (
-        <span className={`${baseClasses} bg-amber-50 dark:bg-amber-500/15 text-amber-800 dark:text-amber-400 border border-amber-300 dark:border-amber-500/30`}>
-          <AlertTriangle className="w-3.5 h-3.5 shrink-0 text-amber-600 dark:text-amber-400" />
+        <span className={`${baseClasses} bg-amber-600`}>
+          <AlertTriangle className="w-3.5 h-3.5 shrink-0 text-white stroke-[2.2]" />
           <span>Suspicious ({score ?? 50})</span>
         </span>
       );
     }
     return (
-      <span className={`${baseClasses} bg-emerald-50 dark:bg-emerald-500/15 text-emerald-800 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/30`}>
-        <ShieldCheck className="w-3.5 h-3.5 shrink-0 text-emerald-600 dark:text-emerald-400" />
+      <span className={`${baseClasses} bg-emerald-600`}>
+        <ShieldCheck className="w-3.5 h-3.5 shrink-0 text-white stroke-[2.2]" />
         <span>Clean ({score ?? 0})</span>
       </span>
     );
@@ -234,8 +234,8 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
         <div className="hidden md:flex items-center justify-between gap-4 p-4 lg:p-5 rounded-2xl bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 relative overflow-hidden shadow-sm">
           {/* Left: Icon + Title & Badges + Connected Account */}
           <div className="flex items-center gap-4 min-w-0">
-            <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shrink-0 shadow-lg shadow-cyan-500/10">
-              <Mail className="w-5 h-5 text-cyan-400" />
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-[#edf5ff] dark:bg-white border border-blue-100 dark:border-white text-blue-600 dark:text-blue-600 shadow-sm transition-colors shrink-0">
+              <Mail className="w-6 h-6 text-blue-600 dark:text-blue-600 stroke-[2.2]" />
             </div>
 
           <div className="min-w-0 space-y-1">
@@ -244,17 +244,17 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
               <h1 className="text-xl font-bold tracking-tight text-gray-900 dark:text-zinc-100">
                 Automated Email Ingestion &amp; Analysis
               </h1>
-              <span className="text-xs font-semibold px-2.5 py-0.5 rounded-lg bg-purple-100 dark:bg-purple-500/20 text-purple-800 dark:text-purple-300 border border-purple-300 dark:border-purple-500/30 shrink-0">
+              <span className="text-xs font-bold px-2.5 py-0.5 rounded-lg bg-purple-600 text-white shadow-xs shrink-0">
                 Live Gemini Triage
               </span>
               {isGoogleConnected ? (
-                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-lg bg-emerald-100 dark:bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-500/30 flex items-center gap-1.5 shrink-0">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 dark:bg-emerald-400 animate-pulse" />
+                <span className="text-xs font-bold px-2.5 py-0.5 rounded-lg bg-emerald-600 text-white flex items-center gap-1.5 shrink-0 shadow-xs">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                   Gmail Live
                 </span>
               ) : (
-                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-lg bg-cyan-100 dark:bg-cyan-500/15 text-cyan-800 dark:text-cyan-300 border border-cyan-300 dark:border-cyan-500/30 flex items-center gap-1.5 shrink-0">
-                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-600 dark:bg-cyan-400 animate-pulse" />
+                <span className="text-xs font-bold px-2.5 py-0.5 rounded-lg bg-cyan-600 text-white flex items-center gap-1.5 shrink-0 shadow-xs">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                   Mailbox Live
                 </span>
               )}
@@ -340,8 +340,8 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
       <div className="block md:hidden rounded-2xl p-4 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm space-y-3.5">
         {/* Row 1: Icon + Title + Subtitle */}
         <div className="flex items-start gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-600 dark:text-cyan-400 flex items-center justify-center shrink-0 shadow-lg shadow-cyan-500/10 mt-0.5">
-            <Mail className="w-5 h-5" />
+          <div className="w-10 h-10 rounded-2xl flex items-center justify-center bg-[#edf5ff] dark:bg-white border border-blue-100 dark:border-white text-blue-600 dark:text-blue-600 shadow-sm transition-colors shrink-0 mt-0.5">
+            <Mail className="w-5 h-5 text-blue-600 dark:text-blue-600 stroke-[2.2]" />
           </div>
           <div className="min-w-0 flex-1">
             <h1 className="text-base font-bold tracking-tight text-gray-900 dark:text-zinc-100 leading-snug">
@@ -355,18 +355,18 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
 
         {/* Row 2: Badges (Gemini triage, Gmail live) */}
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-500/15 border border-purple-300 dark:border-purple-500/30 text-purple-800 dark:text-purple-300 text-xs font-semibold">
-            <Sparkles className="w-3.5 h-3.5 text-purple-700 dark:text-purple-400" />
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-600 text-white text-xs font-bold shadow-xs">
+            <Sparkles className="w-3.5 h-3.5 text-white" />
             <span>Gemini triage</span>
           </span>
           {isGoogleConnected ? (
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-500/15 border border-emerald-300 dark:border-emerald-500/30 text-emerald-800 dark:text-emerald-300 text-xs font-semibold">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 dark:bg-emerald-400 animate-pulse" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-600 text-white text-xs font-bold shadow-xs">
+              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
               <span>Gmail live</span>
             </span>
           ) : (
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-100 dark:bg-cyan-500/15 border border-cyan-300 dark:border-cyan-500/30 text-cyan-800 dark:text-cyan-300 text-xs font-semibold">
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-600 dark:bg-cyan-400 animate-pulse" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-600 text-white text-xs font-bold shadow-xs">
+              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
               <span>Mailbox live</span>
             </span>
           )}
@@ -757,8 +757,8 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
                     <div className="flex items-center gap-2 flex-wrap">
                       {renderRiskBadge(level, displayScore)}
                       {showSocEscalated && (
-                        <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-purple-500/20 border border-purple-500/30 text-[10.5px] text-purple-700 dark:text-purple-300 font-medium">
-                          <span className="w-1.5 h-1.5 rounded-full bg-purple-500 dark:bg-purple-400 animate-pulse shrink-0" />
+                        <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-purple-600 text-white text-[10.5px] font-bold shadow-xs">
+                          <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse shrink-0" />
                           <span>SOC Escalated</span>
                         </span>
                       )}
@@ -797,9 +797,9 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
 
                   {/* Row 4: Action */}
                   <div className="flex items-center justify-end pt-0.5">
-                    <span className="inline-flex items-center gap-1 text-[11px] text-cyan-400 font-medium">
-                      <Eye className="w-3.5 h-3.5" />
-                      <span>Inspect Details &amp; Forensics →</span>
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-cyan-600 text-white text-[11px] font-bold shadow-xs">
+                      <Eye className="w-3.5 h-3.5 text-white" />
+                      <span>View Forensics</span>
                     </span>
                   </div>
                 </div>
@@ -835,8 +835,8 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
                   <td colSpan={5} className="py-16 text-center">
                     {!isGoogleConnected ? (
                       <div className="flex flex-col items-center justify-center gap-4">
-                        <div className="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
-                          <Mail className="w-7 h-7 text-cyan-500 dark:text-cyan-400" />
+                        <div className="w-14 h-14 rounded-2xl flex items-center justify-center bg-[#edf5ff] dark:bg-white border border-blue-100 dark:border-white text-blue-600 dark:text-blue-600 shadow-sm transition-colors">
+                          <Mail className="w-7 h-7 text-blue-600 dark:text-blue-600 stroke-[2.2]" />
                         </div>
                         <div className="space-y-1">
                           <p className="text-sm font-semibold text-gray-900 dark:text-zinc-100">Connect Gmail to get started</p>
@@ -882,8 +882,8 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
                         <div className="flex flex-col items-center justify-center gap-1 w-[136px]">
                           {renderRiskBadge(level, displayScore)}
                           {showSocEscalated && (
-                            <span className="inline-flex items-center justify-center gap-1.5 text-[10.5px] leading-none text-purple-700 dark:text-purple-300 font-medium whitespace-nowrap tracking-wide">
-                              <span className="w-1.5 h-1.5 rounded-full bg-purple-500 dark:bg-purple-400 animate-pulse shrink-0" />
+                            <span className="inline-flex items-center justify-center gap-1.5 px-2 py-0.5 rounded-md text-[10.5px] leading-none text-white bg-purple-600 font-bold whitespace-nowrap tracking-wide shadow-xs">
+                              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse shrink-0" />
                               <span className="leading-none">SOC Escalated</span>
                             </span>
                           )}
@@ -934,10 +934,10 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
                               e.stopPropagation();
                               selectEmail(email);
                             }}
-                            className="px-3 py-1.5 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/25 text-cyan-300 border border-cyan-500/20 text-xs flex items-center gap-1.5 font-medium transition-all cursor-pointer"
+                            className="px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white shadow-xs text-xs flex items-center gap-1.5 font-bold transition-all active:scale-95 cursor-pointer"
                             title="Inspect Details & Deep Forensics"
                           >
-                            <Eye className="w-3.5 h-3.5" />
+                            <Eye className="w-3.5 h-3.5 text-white" />
                             View
                           </button>
                         </div>

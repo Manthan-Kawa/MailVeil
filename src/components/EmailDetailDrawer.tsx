@@ -286,23 +286,23 @@ export function EmailDetailDrawer({
   const getThreatBadge = () => {
     if (threatLevel === 'malicious') {
       return (
-        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 dark:bg-red-500/15 border border-red-200 dark:border-red-500/30 text-red-700 dark:text-red-400 text-xs font-semibold uppercase tracking-wider whitespace-nowrap shrink-0">
-          <ShieldAlert className="w-4 h-4 text-red-600 dark:text-red-400 shrink-0" />
+        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-600 text-white text-xs font-bold uppercase tracking-wider whitespace-nowrap shrink-0 shadow-xs">
+          <ShieldAlert className="w-4 h-4 text-white shrink-0 stroke-[2.2]" />
           Malicious Threat ({threatScore}/100)
         </div>
       );
     }
     if (threatLevel === 'suspicious') {
       return (
-        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-500/15 border border-amber-300 dark:border-amber-500/30 text-amber-800 dark:text-amber-400 text-xs font-semibold uppercase tracking-wider whitespace-nowrap shrink-0">
-          <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
+        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-600 text-white text-xs font-bold uppercase tracking-wider whitespace-nowrap shrink-0 shadow-xs">
+          <AlertTriangle className="w-4 h-4 text-white shrink-0 stroke-[2.2]" />
           Suspicious ({threatScore}/100)
         </div>
       );
     }
     return (
-      <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200 dark:border-emerald-500/30 text-emerald-800 dark:text-emerald-400 text-xs font-semibold uppercase tracking-wider whitespace-nowrap shrink-0">
-        <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+      <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-600 text-white text-xs font-bold uppercase tracking-wider whitespace-nowrap shrink-0 shadow-xs">
+        <ShieldCheck className="w-4 h-4 text-white shrink-0 stroke-[2.2]" />
         Clean / Authentic ({threatScore}/100)
       </div>
     );

@@ -339,18 +339,18 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
       {/* Workflow indicator */}
       <div className="rounded-2xl p-2.5 sm:p-3 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-xs">
         <div className="flex items-center gap-2 overflow-x-auto no-scrollbar scrollbar-none">
-          {ANALYSIS_STAGES.map((stage, i, arr) => {
-            const isActive = stage === activeStage;
-            const isDone = ANALYSIS_STAGES.indexOf(activeStage) > i;
+          {ANALYSIS_STEPS.map((s, i, arr) => {
+            const isActive = i === progressStep;
+            const isDone = i < progressStep;
             return (
-              <div key={stage} className="flex items-center shrink-0">
+              <div key={s.stage} className="flex items-center shrink-0">
                 {isActive ? (
                   <div
                     className="flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap text-white shadow-md shadow-blue-500/20 border border-blue-400/30"
                     style={{ background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 45%, #6366f1 100%)' }}
                   >
                     <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-                    <span>{stage}</span>
+                    <span>{s.stage}</span>
                   </div>
                 ) : isDone ? (
                   <div
@@ -358,12 +358,21 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
                     style={{ background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 45%, #6366f1 100%)' }}
                   >
                     <Check className="w-3.5 h-3.5 text-white stroke-[2.5] relative z-10" />
-                    <span className="relative z-10">{stage}</span>
+                    <span className="relative z-10">{s.stage}</span>
+                    {/* Sentinel-X smooth wave-like shine effect */}
+                    <div
+                      className="absolute inset-0 pointer-events-none"
+                      style={{
+                        background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0) 20%, rgba(255,255,255,0.45) 50%, rgba(255,255,255,0) 80%, transparent 100%)',
+                        animation: 'sentinelWaveShine 3s cubic-bezier(0.4, 0, 0.2, 1) infinite',
+                        animationDelay: `${i * 320}ms`,
+                      }}
+                    />
                   </div>
                 ) : (
                   <div className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium whitespace-nowrap text-zinc-500">
                     <span className="w-1.5 h-1.5 rounded-full bg-zinc-600" />
-                    <span>{stage}</span>
+                    <span>{s.stage}</span>
                   </div>
                 )}
                 {i < arr.length - 1 && (

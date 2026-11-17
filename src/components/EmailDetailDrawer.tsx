@@ -383,20 +383,21 @@ export function EmailDetailDrawer({
 
           {/* Tab Navigation */}
           <div className="flex items-center gap-2 pb-1 overflow-hidden">
-            <div className="relative isolate flex items-center gap-2 overflow-x-auto overflow-y-hidden scrollbar-none touch-scroll touch-pan-x overscroll-x-contain py-1 max-w-full select-none">
+            <div className="relative isolate inline-flex w-fit max-w-full items-center gap-1 p-1 rounded-xl bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 shadow-sm overflow-x-auto overflow-y-hidden scrollbar-none touch-scroll touch-pan-x overscroll-x-contain select-none">
               {/* Smooth sliding indicator pill */}
-              <div
-                className="absolute z-0 pointer-events-none rounded-xl bg-cyan-500/15 dark:bg-cyan-500/20 border border-cyan-400/50 dark:border-cyan-500/40 shadow-sm "
-                style={{
-                  top: 0,
-                  left: 0,
-                  transform: `translate3d(${indicatorStyle.left}px, ${indicatorStyle.top}px, 0)`,
-                  width: indicatorStyle.width,
-                  height: indicatorStyle.height,
-                  opacity: indicatorStyle.opacity,
-                  transition: 'transform 300ms cubic-bezier(0.25, 1, 0.5, 1), width 300ms cubic-bezier(0.25, 1, 0.5, 1), height 300ms cubic-bezier(0.25, 1, 0.5, 1), opacity 150ms ease',
-                  zIndex: 0 }}
-              />
+              {indicatorStyle.opacity > 0 && (
+                <div
+                  className="absolute z-0 pointer-events-none rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
+                  style={{
+                    transform: `translate3d(${indicatorStyle.left}px, ${indicatorStyle.top}px, 0)`,
+                    width: indicatorStyle.width,
+                    height: indicatorStyle.height,
+                    transition: 'transform 320ms cubic-bezier(0.25, 0.1, 0.25, 1), width 320ms cubic-bezier(0.25, 0.1, 0.25, 1), height 320ms cubic-bezier(0.25, 0.1, 0.25, 1)',
+                    left: 0,
+                    top: 0,
+                  }}
+                />
+              )}
 
               {[
                 { id: 'assessment' as const, label: 'AI Threat Assessment', icon: Sparkles },
@@ -413,15 +414,15 @@ export function EmailDetailDrawer({
                       setActiveTab(tab.id);
                       tabRefs.current[tab.id]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
                     }}
-                    style={{ zIndex: 10 }}
-                    className={`relative z-10 flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-colors duration-200 cursor-pointer shrink-0 ${
+                    type="button"
+                    className={`relative z-10 flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors duration-200 cursor-pointer shrink-0 select-none ${
                       active
-                        ? 'text-cyan-950 dark:text-cyan-200 font-bold'
-                        : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+                        ? 'text-white font-bold'
+                        : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white'
                     }`}
                   >
-                    <Icon className={`w-3.5 h-3.5 ${active ? 'text-cyan-700 dark:text-cyan-300' : 'text-gray-500 dark:text-gray-400'}`} />
-                    {tab.label}
+                    <Icon className={`w-3.5 h-3.5 relative z-10 ${active ? 'text-white' : 'text-gray-500 dark:text-zinc-400'}`} />
+                    <span className="relative z-10">{tab.label}</span>
                   </button>
                 );
               })}

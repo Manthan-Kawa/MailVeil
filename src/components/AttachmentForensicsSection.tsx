@@ -237,12 +237,12 @@ export function AttachmentForensicsSection({
     const isSusp = verdict === 'suspicious';
     return (
       <span
-        className={`text-[11px] uppercase font-bold px-2.5 py-1 rounded-full whitespace-nowrap border shrink-0 ${
+        className={`text-[11px] uppercase font-bold px-2.5 py-1 rounded-full whitespace-nowrap text-white shadow-xs shrink-0 ${
           isMal
-            ? 'bg-red-500/20 text-red-300 border-red-500/40'
+            ? 'bg-red-600'
             : isSusp
-            ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
-            : 'text-gray-900 dark:text-zinc-100'
+            ? 'bg-amber-600'
+            : 'bg-emerald-600'
     }`}
       >
         Verdict: {verdict}
@@ -259,7 +259,7 @@ export function AttachmentForensicsSection({
     return (
       <div
         key={item.id}
-        className="p-5 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm dark:shadow-none space-y-5 transition-all hover:border-gray-200 dark:hover:border-white/20"
+        className="p-5 rounded-2xl bg-white dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm space-y-5 transition-all hover:border-gray-300 dark:hover:border-zinc-700/80"
       >
         {/* Header info */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-gray-200 dark:border-zinc-800/50 pb-4">
@@ -398,14 +398,14 @@ export function AttachmentForensicsSection({
                       <div className="text-black dark:text-zinc-100 text-[11px] mt-0.5 font-medium">{tag.description}</div>
                     </div>
                     <span
-                      className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded shrink-0 ${
+                      className={`text-[10px] uppercase font-bold px-2.5 py-0.5 rounded text-white shadow-xs shrink-0 ${
                         tag.risk === 'critical'
-                          ? 'bg-red-500/20 text-red-700 dark:text-red-400 border border-red-500/30'
+                          ? 'bg-red-600'
                           : tag.risk === 'high'
-                          ? 'bg-orange-500/20 text-orange-700 dark:text-orange-400 border border-orange-500/30'
+                          ? 'bg-orange-600'
                           : tag.risk === 'medium'
-                          ? 'bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30'
-                          : 'bg-green-500/20 text-green-700 dark:text-green-400 border border-green-500/30'
+                          ? 'bg-amber-600'
+                          : 'bg-emerald-600'
                     }`}
                     >
                       {tag.risk}
@@ -468,7 +468,7 @@ export function AttachmentForensicsSection({
 
       {/* Empty State */}
       {!hasAttachments ? (
-        <div className="p-8 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm dark:shadow-none text-center space-y-3">
+        <div className="p-8 rounded-2xl bg-white dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm text-center space-y-3">
           <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto">
             <CheckCircle2 className="w-6 h-6" />
           </div>
@@ -497,7 +497,7 @@ export function AttachmentForensicsSection({
            List names vertically one below the other (1 by 1).
            Top header provides "Download All as ZIP" action.
         ══════════════════════════════════════════════════════════════════════ */
-        <div className="p-5 rounded-2xl bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 shadow-sm dark:shadow-none space-y-5">
+        <div className="p-5 rounded-2xl bg-white dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm space-y-5">
           {/* Top Banner with ZIP download action */}
           <div className="p-4 rounded-xl bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-950/40 dark:via-indigo-950/30 dark:to-purple-950/40 border border-blue-200 dark:border-blue-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
             <div className="space-y-0.5">

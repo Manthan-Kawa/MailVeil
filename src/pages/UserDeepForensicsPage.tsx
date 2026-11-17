@@ -329,102 +329,82 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  </p>
  </div>
 
- {/* Workflow indicator */}
- <div
- className="bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 rounded-2xl shadow-sm p-4"
- style={{
- background: isDark ? 'linear-gradient(145deg, #0a0d15, #080b14)' : '#ffffff',
- border: isDark ? '1px solid rgba(255,255,255,0.07)' : '1px solid #e2e8f0',
- boxShadow: isDark ? '0 4px 24px rgba(0,0,0,0.5)' : '0 1px 3px rgba(0,0,0,0.05)',
- }}
- >
- <div className="flex items-center justify-between gap-1 overflow-x-auto scrollbar-none no-scrollbar touch-scroll pb-1">
- {ANALYSIS_STAGES.map((stage, i) => {
- const isActive = stage === activeStage;
- const isDone = ANALYSIS_STAGES.indexOf(activeStage) > i;
- return (
- <div key={stage} className="flex items-center shrink-0">
- <div
- className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-300 ${
- isActive ? (isDark ? 'text-purple-300' : 'text-purple-700') : isDone ? (isDark ? 'text-green-400' : 'text-emerald-700') : (isDark ? 'text-gray-500' : 'text-gray-500')
- }`}
- style={
- isActive
- ? { background: isDark ? 'rgba(139,92,246,0.2)' : 'rgba(139,92,246,0.15)', border: isDark ? '1px solid rgba(139,92,246,0.4)' : '1px solid rgba(139,92,246,0.3)', boxShadow: isDark ? '0 2px 8px rgba(0,0,0,0.4)' : '0 1px 2px rgba(0,0,0,0.05)' }
- : isDone
- ? { background: isDark ? 'rgba(34,197,94,0.1)' : 'rgba(34,197,94,0.1)', border: isDark ? '1px solid rgba(34,197,94,0.2)' : '1px solid rgba(34,197,94,0.25)' }
- : { background: isDark ? 'rgba(255,255,255,0.03)' : '#f8fafc', border: isDark ? '1px solid rgba(255,255,255,0.05)' : '1px solid #e2e8f0' }
- }
- >
- <span className={`w-1.5 h-1.5 rounded-full ${isActive ? 'bg-purple-500 animate-pulse' : isDone ? 'bg-green-500' : (isDark ? 'bg-gray-600' : 'bg-slate-300')}`} />
- {stage}
- </div>
- {i < ANALYSIS_STAGES.length - 1 && (
- <ChevronRight className={`w-3.5 h-3.5 mx-1 ${isDone ? (isDark ? 'text-green-500' : 'text-emerald-600') : (isDark ? 'text-gray-700' : 'text-gray-300')}`} />
- )}
- </div>
- );
- })}
- </div>
- </div>
+      {/* Workflow indicator */}
+      <div className="rounded-2xl p-2.5 sm:p-3 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-xs">
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar scrollbar-none">
+          {ANALYSIS_STAGES.map((stage, i, arr) => {
+            const isActive = stage === activeStage;
+            const isDone = ANALYSIS_STAGES.indexOf(activeStage) > i;
+            return (
+              <div key={stage} className="flex items-center shrink-0">
+                {isActive ? (
+                  <div
+                    className="flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap text-white shadow-md shadow-blue-500/20 border border-blue-400/30"
+                    style={{ background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 45%, #6366f1 100%)' }}
+                  >
+                    <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                    <span>{stage}</span>
+                  </div>
+                ) : isDone ? (
+                  <div
+                    className="relative overflow-hidden flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap text-white shadow-md shadow-blue-500/20 border border-blue-400/30"
+                    style={{ background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 45%, #6366f1 100%)' }}
+                  >
+                    <Check className="w-3.5 h-3.5 text-white stroke-[2.5] relative z-10" />
+                    <span className="relative z-10">{stage}</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium whitespace-nowrap text-zinc-500">
+                    <span className="w-1.5 h-1.5 rounded-full bg-zinc-600" />
+                    <span>{stage}</span>
+                  </div>
+                )}
+                {i < arr.length - 1 && (
+                  <ChevronRight className="w-3.5 h-3.5 text-zinc-600 mx-1 shrink-0" />
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
 
- {/* Central Analyzing View */}
- <div
- className="bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 rounded-2xl shadow-sm p-8 flex flex-col items-center justify-center py-12 text-center"
- style={{
- background: isDark ? 'linear-gradient(145deg, #090b12 0%, #0c0f1a 100%)' : '#ffffff',
- border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #e2e8f0',
- boxShadow: isDark ? '0 8px 32px rgba(0,0,0,0.5)' : '0 4px 20px rgba(0,0,0,0.06)',
- }}
- >
- <div className="mb-6">
- <GradientLiveProgressRing
- progress={progressPercent}
- sublabel={`STAGE ${progressStep + 1}/${ANALYSIS_STEPS.length}`}
- />
- </div>
+      {/* Central Analyzing View */}
+      <div className="rounded-2xl p-8 sm:p-14 flex flex-col items-center justify-center text-center bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm space-y-6">
+        <div className="my-2">
+          <GradientLiveProgressRing
+            progress={progressPercent}
+            size={190}
+            strokeWidth={10}
+            sublabel={`STAGE ${progressStep + 1}/${ANALYSIS_STEPS.length}`}
+          />
+        </div>
 
- <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">{current.label}</h3>
- <p className="text-xs text-gray-600 dark:text-gray-400 mb-8 max-w-md">{current.detail}</p>
+        <div className="space-y-1.5">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
+            {current.label}
+          </h3>
+          <p className="text-xs sm:text-sm text-gray-500 dark:text-zinc-400 max-w-lg mx-auto font-normal">
+            {current.detail}
+          </p>
+        </div>
 
- <div className="w-full max-w-md space-y-2">
- {ANALYSIS_STEPS.map((s, i) => {
- const isDone = i < progressStep;
- const isActive = i === progressStep;
- return (
- <div
- key={s.stage}
- className="flex items-center gap-3 px-3.5 py-2.5 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 rounded-xl transition-all duration-300"
- style={{
- background: isActive ? (isDark ? 'rgba(139,92,246,0.12)' : 'rgba(139,92,246,0.08)') : isDone ? (isDark ? 'rgba(34,197,94,0.05)' : 'rgba(34,197,94,0.06)') : (isDark ? 'rgba(255,255,255,0.02)' : '#f8fafc'),
- border: `1px solid ${isActive ? (isDark ? 'rgba(139,92,246,0.3)' : 'rgba(139,92,246,0.3)') : isDone ? (isDark ? 'rgba(34,197,94,0.15)' : 'rgba(34,197,94,0.25)') : (isDark ? 'rgba(255,255,255,0.04)' : '#e2e8f0')}`,
- }}
- >
- <div
- className="w-5 h-5 rounded-full flex items-center justify-center shrink-0"
- style={{ background: isDone ? (isDark ? 'rgba(34,197,94,0.2)' : 'rgba(34,197,94,0.15)') : isActive ? (isDark ? 'rgba(139,92,246,0.2)' : 'rgba(139,92,246,0.15)') : (isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)') }}
- >
- {isDone ? (
- <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-green-400" />
- ) : isActive ? (
- <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse" />
- ) : (
- <div className="w-2 h-2 dark:bg-gray-600 rounded-full" />
- )}
- </div>
- <span className={`text-xs ${isDone ? (isDark ? 'text-gray-400' : 'text-gray-600') : isActive ? (isDark ? 'text-white' : 'text-gray-900') + ' font-semibold' : (isDark ? 'text-gray-600' : 'text-gray-400')}`}>
- {s.stage} — {s.label}
- </span>
- </div>
- );
- })}
- </div>
+        {/* Active step card matching Sentinel-X / EmailAnalyzerPage */}
+        <div className="w-full max-w-xl pt-2">
+          <div className="flex items-center gap-3 px-5 py-3.5 bg-blue-950/20 dark:bg-[#151d2a] border border-blue-500/30 rounded-xl text-left">
+            <div className="w-4 h-4 rounded-full bg-blue-500/20 border border-blue-400 flex items-center justify-center shrink-0">
+              <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+            </div>
+            <span className="font-semibold text-xs sm:text-sm text-zinc-200">
+              {current.stage} &mdash; {current.label}
+            </span>
+          </div>
+        </div>
 
- <p className="text-[11px] text-gray-500 dark:text-gray-600 mt-6 font-mono">Calling Claude AI… this may take 10-20 seconds</p>
- </div>
- </div>
- );
- }
+        <p className="text-[11px] text-gray-500 dark:text-zinc-500 font-mono">Calling Claude AI… this may take 10-20 seconds</p>
+      </div>
+    </div>
+  );
+}
 
  if (!report) {
  return (
@@ -467,18 +447,18 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  {/* ── Top Header Navigation & Threat Score Card ──────────────────────────── */}
  <SlideIn delay={0} direction="down">
  {/* Mobile View (Phone/Tablet: block md:hidden) matching requested card UI */}
- <div className="block md:hidden p-4 sm:p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 rounded-2xl shadow-sm border dark: -white/[0.08] space-y-3">
+ <div className="block md:hidden p-4 sm:p-5 bg-white dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 rounded-2xl shadow-sm space-y-3">
  {/* Row 1: Badges - Case ID + Time on left, Read-Only Forensic Report on far right */}
  <div className="flex items-center justify-between gap-2">
  <div className="flex items-center gap-2 min-w-0">
- <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-cyan-50 text-cyan-700 border border-cyan-200/80 dark:bg-cyan-950/40 dark:text-cyan-300 dark: -cyan-800/50 font-mono shrink-0">
+ <span className="text-[11px] font-bold px-2.5 py-0.5 rounded bg-cyan-700 text-white font-mono shadow-xs shrink-0">
  {report.caseId}
  </span>
  <span className="text-[11px] font-mono text-gray-500 dark:text-gray-400 truncate">
  {new Date(report.analyzedAt).toLocaleString()}
  </span>
  </div>
- <span className="text-[11px] font-medium px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 border border-purple-200/80 dark:bg-purple-950/40 dark:text-purple-300 dark: -purple-800/50 shrink-0">
+ <span className="text-[11px] font-bold px-2.5 py-0.5 rounded bg-purple-600 text-white shadow-xs shrink-0">
  Read-Only Forensic Report
  </span>
  </div>
@@ -565,7 +545,7 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  </div>
 
  {/* Laptop / Desktop View (PC/Laptop: hidden md:flex) - original desktop layout */}
- <div className="hidden md:flex p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 rounded-2xl shadow-sm dark:border-zinc-800 dark:shadow-xl items-center justify-between gap-4">
+ <div className="hidden md:flex p-5 bg-white dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 rounded-2xl shadow-sm items-center justify-between gap-4">
  <div className="flex items-center gap-4 min-w-0">
  <button
  onClick={() => {
@@ -580,13 +560,13 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
 
  <div className="min-w-0 space-y-1">
  <div className="flex items-center gap-2 flex-wrap">
- <span className="text-[11px] font-bold px-2 py-0.5 rounded text-cyan-700 border dark: /10 dark:text-cyan-300 dark: -white/10 font-mono">
+ <span className="text-[11px] font-bold px-2.5 py-0.5 rounded bg-cyan-700 text-white font-mono shadow-xs">
  {report.caseId}
  </span>
  <span className="text-[11px] text-gray-500 dark:text-gray-400">
  {new Date(report.analyzedAt).toLocaleString()}
  </span>
- <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-purple-500/20 text-purple-700 dark:text-purple-300 border -purple-500/30">
+ <span className="text-[11px] font-bold px-2.5 py-0.5 rounded bg-purple-600 text-white shadow-xs">
  Read-Only Forensic Report
  </span>
  </div>
@@ -601,7 +581,7 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
 
  {/* Action buttons & threat badge */}
  <div className="flex items-center gap-3 shrink-0">
- <div className="h-11 px-3.5 flex items-center gap-3 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 rounded-xl /50 dark:border-zinc-800">
+ <div className="h-11 px-3.5 flex items-center gap-3 bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 rounded-xl shadow-xs">
  <div className="text-right">
  <div
  className={`text-base font-bold font-mono leading-none ${threatLevel === 'malicious'
@@ -716,7 +696,7 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
 
  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
  {/* Executive Summary & Narrative */}
- <div className="lg:col-span-2 p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 rounded-2xl shadow-sm dark:border-zinc-800 dark:shadow-none space-y-4">
+ <div className="lg:col-span-2 p-5 bg-white dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 rounded-2xl shadow-sm space-y-4">
  <div>
  <div className="text-[11px] text-cyan-700 dark:text-cyan-400 uppercase tracking-wider font-semibold mb-1">
  Executive AI Summary
@@ -726,7 +706,7 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  </p>
  </div>
 
- <div className="p-4 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 rounded-xl /40 border dark: -white/5 space-y-2">
+ <div className="p-4 bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-zinc-800/60 rounded-xl space-y-2">
  <div className="text-xs font-bold text-purple-700 dark:text-purple-300 flex items-center gap-1.5">
  <Eye className="w-4 h-4" />
  Plain-Language Risk Explanation
@@ -738,7 +718,7 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  </div>
 
  {/* Mitigation Checklist */}
- <div className="p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 rounded-2xl shadow-sm dark:border-zinc-800 dark:shadow-none space-y-3">
+ <div className="p-5 bg-white dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 rounded-2xl shadow-sm space-y-3">
  <div className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
  <Shield className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
  User Mitigation Checklist
@@ -747,7 +727,7 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  {aiSynthesis.mitigationChecklist.map((item, idx) => (
  <div
  key={idx}
- className="p-3 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 rounded-xl dark: /[0.03] border dark: -white/5 space-y-1"
+ className="p-3 bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-zinc-800/60 rounded-xl space-y-1"
  >
  <div className="flex items-center justify-between gap-2">
  <span className="text-xs font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
@@ -755,13 +735,13 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  {item.action}
  </span>
  <span
- className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded ${item.urgency === 'immediate'
- ? 'bg-red-500/20 text-red-600 dark:text-red-300 border border-red-500/30'
- : item.urgency === 'recommended'
- ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30'
- : 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30'
- }`}
- >
+                        className={`text-[10px] uppercase font-bold px-2.5 py-0.5 rounded text-white shadow-xs ${item.urgency === 'immediate'
+                          ? 'bg-red-600'
+                          : item.urgency === 'recommended'
+                          ? 'bg-amber-600'
+                          : 'bg-emerald-600'
+                        }`}
+                      >
  {item.urgency}
  </span>
  </div>
@@ -800,7 +780,7 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  ].map((auth, i) => {
  const pass = auth.val === 'PASS' || auth.val === 'ALIGNED';
  return (
- <div key={i} className="p-4 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 rounded-2xl shadow-sm dark:border-zinc-800 dark:shadow-none space-y-1.5">
+ <div key={i} className="p-4 bg-white dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 rounded-2xl shadow-sm space-y-1.5">
  <div className="text-xs text-gray-500 dark:text-gray-400">{auth.title}</div>
  <div className="flex items-center gap-2">
  {pass ? (
@@ -822,7 +802,7 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  </div>
 
  {/* Hop-by-Hop Relay Route Table */}
- <div className="p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 rounded-2xl shadow-sm dark:border-zinc-800 dark:shadow-none space-y-3">
+ <div className="p-5 bg-white dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 rounded-2xl shadow-sm space-y-3">
  <div className="flex items-center justify-between">
  <h3 className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-white flex items-center gap-2">
  <Server className="w-4 h-4 text-purple-500 dark:text-purple-400" />
@@ -854,15 +834,15 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  <td className="py-3 px-3 text-gray-500 dark:text-gray-400">{hop.delay}</td>
  <td className="py-3 px-3">
  <span
- className={`text-[10px] px-2 py-0.5 rounded font-bold uppercase ${hop.status === 'malicious'
- ? 'bg-red-500/20 text-red-600 dark:text-red-300 border border-red-500/30'
- : hop.status === 'suspicious'
- ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30'
- : hop.status === 'internal'
- ? 'bg-blue-500/20 text-blue-700 dark:text-blue-300 border border-blue-500/30'
- : 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30'
- }`}
- >
+                            className={`text-[10px] px-2.5 py-0.5 rounded font-bold uppercase text-white shadow-xs ${hop.status === 'malicious'
+                              ? 'bg-red-600'
+                              : hop.status === 'suspicious'
+                              ? 'bg-amber-600'
+                              : hop.status === 'internal'
+                              ? 'bg-blue-600'
+                              : 'bg-emerald-600'
+                            }`}
+                          >
  {hop.status}
  </span>
  </td>
@@ -889,30 +869,30 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
 
  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
  {/* Reputation Overview */}
- <div className="p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 rounded-2xl shadow-sm dark:border-zinc-800 dark:shadow-none space-y-4">
+ <div className="p-5 bg-white dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 rounded-2xl shadow-sm space-y-4">
  <h3 className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-white">
  Entity Reputation Assessment
  </h3>
 
  <div className="space-y-3">
- <div className="p-3.5 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 rounded-xl /40 border dark: -white/5 flex items-center justify-between">
+ <div className="p-3.5 bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-zinc-800/60 rounded-xl flex items-center justify-between">
  <div>
  <div className="text-[11px] text-gray-500 dark:text-gray-400">Sending IP Reputation</div>
  <div className="text-xs font-mono font-bold text-gray-900 dark:text-white">{threatIntel.sendingIp}</div>
  </div>
  <span
- className={`text-xs uppercase font-bold px-2.5 py-1 rounded ${threatIntel.ipReputation === 'malicious'
- ? 'bg-red-500/20 text-red-600 dark:text-red-300 border border-red-500/30'
- : threatIntel.ipReputation === 'suspicious'
- ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30'
- : 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30'
- }`}
- >
+                        className={`text-xs uppercase font-bold px-2.5 py-1 rounded text-white shadow-xs ${threatIntel.ipReputation === 'malicious'
+                          ? 'bg-red-600'
+                          : threatIntel.ipReputation === 'suspicious'
+                          ? 'bg-amber-600'
+                          : 'bg-emerald-600'
+                        }`}
+                      >
  {threatIntel.ipReputation}
  </span>
  </div>
 
- <div className="p-3.5 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 rounded-xl /40 border dark: -white/5 flex items-center justify-between">
+ <div className="p-3.5 bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-zinc-800/60 rounded-xl flex items-center justify-between">
  <div>
  <div className="text-[11px] text-gray-500 dark:text-gray-400">Sender Domain Age</div>
  <div className="text-xs font-semibold text-gray-900 dark:text-white">{threatIntel.domain}</div>
@@ -946,7 +926,7 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  </div>
 
  {/* Blacklists Grid */}
- <div className="lg:col-span-2 p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 rounded-2xl shadow-sm dark:border-zinc-800 dark:shadow-none space-y-3">
+ <div className="lg:col-span-2 p-5 bg-white dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 rounded-2xl shadow-sm space-y-3">
  <div className="flex items-center justify-between">
  <h3 className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-white">
  6-Engine Reputation & Blacklist Scanner
@@ -960,20 +940,20 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  return (
  <div
  key={i}
- className="p-3 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 rounded-xl /30 border dark: -white/5 flex items-start justify-between gap-3"
+ className="p-3 bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-zinc-800/60 rounded-xl flex items-start justify-between gap-3"
  >
  <div className="space-y-0.5">
  <div className="text-xs font-bold text-gray-900 dark:text-white">{bl.engine}</div>
  <div className="text-[11px] text-gray-500 dark:text-gray-400">{bl.detail}</div>
  </div>
  <span
- className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded shrink-0 ${isClean
- ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30'
- : bl.status === 'warning'
- ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30'
- : 'bg-red-500/20 text-red-600 dark:text-red-300 border border-red-500/30'
- }`}
- >
+                        className={`text-[10px] uppercase font-bold px-2.5 py-0.5 rounded text-white shadow-xs shrink-0 ${isClean
+                          ? 'bg-emerald-600'
+                          : bl.status === 'warning'
+                          ? 'bg-amber-600'
+                          : 'bg-red-600'
+                        }`}
+                      >
  {bl.status}
  </span>
  </div>
@@ -999,20 +979,20 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
 
  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
  {/* Telemetry info */}
- <div className="p-5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 rounded-2xl shadow-sm dark:border-zinc-800 dark:shadow-none space-y-4">
+ <div className="p-5 bg-white dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 rounded-2xl shadow-sm space-y-4">
  <h3 className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-white">
  Physical & Autonomous Origin
  </h3>
 
  <div className="space-y-3 text-xs">
- <div className="p-3 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 rounded-xl /40 border dark: -white/5">
+ <div className="p-3 bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-zinc-800/60 rounded-xl">
  <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase">Originating Public IP</div>
  <div className="font-bold text-cyan-600 dark:text-cyan-300 font-mono text-sm tracking-wide">
  {origin.sendingIp}
  </div>
  </div>
 
- <div className="p-3 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 rounded-xl /40 border dark: -white/5">
+ <div className="p-3 bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-zinc-800/60 rounded-xl">
  <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase">Originating Location</div>
  <div className="font-bold text-gray-900 dark:text-white text-sm">
  {origin.city}, {origin.country}
@@ -1022,12 +1002,12 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  </div>
  </div>
 
- <div className="p-3 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 rounded-xl /40 border dark: -white/5">
+ <div className="p-3 bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-zinc-800/60 rounded-xl">
  <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase">Routing Autonomous System</div>
  <div className="font-bold text-gray-900 dark:text-white truncate">{origin.asn}</div>
  </div>
 
- <div className="p-3 bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/50 rounded-xl /40 border dark: -white/5">
+ <div className="p-3 bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-zinc-800/60 rounded-xl">
  <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase">Hosting Infrastructure</div>
  <div className="font-bold text-gray-900 dark:text-white">{origin.hostingProvider}</div>
  </div>
@@ -1035,7 +1015,7 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  </div>
 
  {/* Dark Cyber Map */}
- <div className="lg:col-span-2 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 rounded-2xl shadow-sm dark:border-zinc-800 overflow-hidden ">
+ <div className="lg:col-span-2 bg-white dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 rounded-2xl shadow-sm overflow-hidden">
  <DarkCyberMap
  markers={[origin.mapMarker]}
  height="320px"
@@ -1062,7 +1042,7 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  <span className="text-[11px] text-gray-500 dark:text-gray-500">Attacker → Relays → Gateway → Target</span>
  </div>
 
- <div className="lg:bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800/50 rounded-2xl shadow-sm lg:border lg: dark:lg:border-zinc-800 lg: dark:lg:bg-[#0d0e16] lg:overflow-hidden lg:shadow-none dark:lg:shadow-xl">
+ <div className="bg-white dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 rounded-2xl shadow-sm overflow-hidden">
  <AttackGraphCanvas
  result={report.rawAnalysisResult}
  height={440}

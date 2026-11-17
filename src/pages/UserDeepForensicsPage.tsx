@@ -50,14 +50,14 @@ import { SlideIn } from '@/components/SlideIn';
 import { useTheme } from '@/context/ThemeContext';
 
 const ANALYSIS_STEPS = [
- { stage: 'Reconstructing TCP Streams', label: 'Reconstructing TCP streams', detail: 'Reassembling network packet streams and reordering TCP segments' },
- { stage: 'Detecting STARTTLS Negotiations', label: 'Detecting STARTTLS negotiations', detail: 'Scanning SMTP/IMAP/POP3 command channels for cleartext or stripped STARTTLS' },
- { stage: 'Parsing TLS Handshakes', label: 'Parsing TLS handshakes', detail: 'Deconstructing ClientHello, ServerHello, and negotiated cipher suites' },
- { stage: 'Validating X.509 Certificates', label: 'Validating X.509 certificates', detail: 'Inspecting certificate chain, expiration, key length, and signature algorithm' },
- { stage: 'Scoring Cipher Suites', label: 'Scoring cryptographic posture', detail: 'Evaluating forward secrecy, encryption algorithms, and downgrade risks' },
- { stage: 'Correlating Sessions', label: 'Correlating session infrastructure', detail: 'Mapping IP infrastructure and threat intelligence campaign clusters' },
- { stage: 'Preserving Evidence', label: 'Preserving cryptographic evidence', detail: 'Generating SHA-256 session hash and recording immutable audit trail' },
- { stage: 'Generating Report', label: 'Compiling posture assessment report', detail: 'Finalizing posture assessment score and remediation plan' },
+ { stage: 'Email Ingestion', label: 'Parsing RFC822 Structure & Headers', detail: 'Extracting MIME components, RFC 5322 header fields, sender identities, and body content' },
+ { stage: 'Threat Detection', label: 'Detecting Phishing & Malicious Vectors', detail: 'Scanning for social engineering triggers, urgency patterns, brand impersonation, and link obfuscation' },
+ { stage: 'AI Synthesis', label: 'Evaluating Intent with AI Threat Engine', detail: 'Synthesizing plain-language risk narrative, behavioral intent analysis, and anomaly confidence score' },
+ { stage: 'Relay Tracing', label: 'Tracing SMTP Relays & Authentication', detail: 'Validating Received hop transit chain, return-path consistency, and SPF/DKIM/DMARC protocols' },
+ { stage: 'Threat Intelligence', label: 'Cross-Referencing Global Threat Feeds', detail: 'Querying external blacklists, domain reputation databases, and known threat actor infrastructure' },
+ { stage: 'Origin Investigation', label: 'Mapping Sender GeoIP & Infrastructure', detail: 'Resolving originating server coordinates, Autonomous System (ASN) reputation, and network topology' },
+ { stage: 'Evidence Preservation', label: 'Preserving Cryptographic Chain of Custody', detail: 'Computing SHA-256 integrity hashes for headers, body, and attachments for immutable audit records' },
+ { stage: 'Forensic Report', label: 'Compiling Comprehensive Forensic Dossier', detail: 'Finalizing multi-vector risk score, interactive attack graph, and recommended mitigation actions' },
 ] as const;
 
 interface UserDeepForensicsPageProps {
@@ -72,7 +72,7 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  const [report, setReport] = useState<DeepForensicsReport | null>(null);
  const [isAnalyzing, setIsAnalyzing] = useState(true);
  const [progressStep, setProgressStep] = useState(0);
- const [activeStage, setActiveStage] = useState<AnalysisStage>('Reconstructing TCP Streams');
+ const [activeStage, setActiveStage] = useState<AnalysisStage>('Email Ingestion');
  const [copiedText, setCopiedText] = useState<string | null>(null);
  const [activeTab, setActiveTab] = useState<'all' | 'synthesis' | 'headers' | 'threat-intel' | 'origin' | 'attack-graph' | 'attachments'>('all');
  const navContainerRef = useRef<HTMLDivElement | null>(null);
@@ -125,7 +125,7 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  setIsAnalyzing(true);
  setLoadError(null);
  setProgressStep(0);
- setActiveStage('Reconstructing TCP Streams');
+ setActiveStage('Email Ingestion');
 
  // Run API call and step animation concurrently matching EmailAnalyzerPage speed (700ms per step)
  const STEP_MS = 700;
@@ -145,7 +145,7 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  } else {
  if (mounted) {
  setProgressStep(TOTAL_STEPS - 1);
- setActiveStage('Generating Report');
+ setActiveStage('Forensic Report');
  }
  clearInterval(interval);
  resolveAnimation();

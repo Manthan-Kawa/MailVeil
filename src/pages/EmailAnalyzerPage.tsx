@@ -104,44 +104,44 @@ const GAUGE_LABEL: Record<AlertLevel, string> = {
 
 export const ANALYSIS_STEPS = [
   {
-    stage: 'Reconstructing TCP Streams',
-    label: 'Reconstructing TCP streams',
-    detail: 'Reassembling network packet streams and reordering TCP segments',
+    stage: 'Email Ingestion',
+    label: 'Parsing RFC822 Structure & Headers',
+    detail: 'Extracting MIME components, RFC 5322 header fields, sender identities, and body content',
   },
   {
-    stage: 'Detecting STARTTLS Negotiations',
-    label: 'Detecting STARTTLS negotiations',
-    detail: 'Scanning SMTP/IMAP/POP3 command channels for cleartext or stripped STARTTLS',
+    stage: 'Threat Detection',
+    label: 'Detecting Phishing & Malicious Vectors',
+    detail: 'Scanning for social engineering triggers, urgency patterns, brand impersonation, and link obfuscation',
   },
   {
-    stage: 'Parsing TLS Handshakes',
-    label: 'Parsing TLS handshakes',
-    detail: 'Deconstructing ClientHello, ServerHello, and negotiated cipher suites',
+    stage: 'AI Synthesis',
+    label: 'Evaluating Intent with AI Threat Engine',
+    detail: 'Synthesizing plain-language risk narrative, behavioral intent analysis, and anomaly confidence score',
   },
   {
-    stage: 'Validating X.509 Certificates',
-    label: 'Validating X.509 certificates',
-    detail: 'Inspecting certificate chain, expiration, key length, and signature algorithm',
+    stage: 'Relay Tracing',
+    label: 'Tracing SMTP Relays & Authentication',
+    detail: 'Validating Received hop transit chain, return-path consistency, and SPF/DKIM/DMARC protocols',
   },
   {
-    stage: 'Scoring Cipher Suites',
-    label: 'Scoring cryptographic posture',
-    detail: 'Evaluating forward secrecy, encryption algorithms, and downgrade risks',
+    stage: 'Threat Intelligence',
+    label: 'Cross-Referencing Global Threat Feeds',
+    detail: 'Querying external blacklists, domain reputation databases, and known threat actor infrastructure',
   },
   {
-    stage: 'Correlating Sessions',
-    label: 'Correlating session infrastructure',
-    detail: 'Mapping IP infrastructure and threat intelligence campaign clusters',
+    stage: 'Origin Investigation',
+    label: 'Mapping Sender GeoIP & Infrastructure',
+    detail: 'Resolving originating server coordinates, Autonomous System (ASN) reputation, and network topology',
   },
   {
-    stage: 'Preserving Evidence',
-    label: 'Preserving cryptographic evidence',
-    detail: 'Generating SHA-256 session hash and recording immutable audit trail',
+    stage: 'Evidence Preservation',
+    label: 'Preserving Cryptographic Chain of Custody',
+    detail: 'Computing SHA-256 integrity hashes for headers, body, and attachments for immutable audit records',
   },
   {
-    stage: 'Generating Report',
-    label: 'Compiling posture assessment report',
-    detail: 'Finalizing posture assessment score and remediation plan',
+    stage: 'Forensic Report',
+    label: 'Compiling Comprehensive Forensic Dossier',
+    detail: 'Finalizing multi-vector risk score, interactive attack graph, and recommended mitigation actions',
   },
 ] as const;
 
@@ -191,7 +191,7 @@ export function EmailAnalyzerPage({ onNavigate }: { onNavigate?: (route: string)
 
   const [state, setState] = useState<AnalyzerState>(() => (currentResult ? 'results' : 'idle'));
   const [userRequestedIdle, setUserRequestedIdle] = useState(false);
-  const [activeStage, setActiveStage] = useState<AnalysisStage>('Email');
+  const [activeStage, setActiveStage] = useState<AnalysisStage>('Email Ingestion');
   const [progressStep, setProgressStep] = useState(0);
   const [dragOver, setDragOver] = useState(false);
   const [fileName, setFileName] = useState<string | null>(() => {

@@ -394,14 +394,14 @@ export const AI_INFERENCES: AIInference[] = [
 ];
 
 export const ANALYSIS_STAGES = [
-  'Email',
-  'Detect',
-  'Explain',
-  'Trace',
-  'Correlate',
-  'Investigate',
-  'Preserve',
-  'Report',
+  'Email Ingestion',
+  'Threat Detection',
+  'AI Synthesis',
+  'Relay Tracing',
+  'Threat Intelligence',
+  'Origin Investigation',
+  'Evidence Preservation',
+  'Forensic Report',
 ] as const;
 
 export type AnalysisStage = (typeof ANALYSIS_STAGES)[number];

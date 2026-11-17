@@ -348,38 +348,75 @@ export function OriginInvestigationPage({ onNavigate }: { onNavigate?: (route: s
         </SlideIn>
       ) : (
         <>
-          {/* ── Top Row: Infrastructure Map (2/3) | Details (1/3) ── */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
-            <SlideIn delay={100} direction="left" className="lg:col-span-2 h-full flex flex-col">
+          {/* ── Top Row: Infrastructure Map (7/12) | Details (5/12) ── */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch min-h-[640px] lg:h-[720px]">
+            <SlideIn delay={100} direction="left" className="lg:col-span-7 h-full flex flex-col min-h-0">
               <div
-                className="rounded-2xl p-5 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm h-full flex flex-col"
+                className="rounded-2xl p-5 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm h-full flex flex-col min-h-0"
               >
-                <div className="mb-4 shrink-0">
-                  <h3 className="text-sm font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
-                    <Globe className="w-4 h-4 text-purple-500 dark:text-purple-400" />
-                    Infrastructure Map
-                  </h3>
-                  <p className="text-[11px] text-gray-500 dark:text-zinc-400 mt-0.5">
-                    Suspected attacker origin relay pointer with real-time live pulse telemetry
-                  </p>
+                <div className="mb-3.5 shrink-0 flex items-center justify-between">
+                  <div>
+                    <h3 className="text-sm font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
+                      <Globe className="w-4 h-4 text-purple-500 dark:text-purple-400" />
+                      Infrastructure Map
+                    </h3>
+                    <p className="text-[11px] text-gray-500 dark:text-zinc-400 mt-0.5">
+                      Suspected attacker origin relay pointer with real-time live pulse telemetry
+                    </p>
+                  </div>
                 </div>
-                <div className="flex-1 w-full min-h-[440px] flex flex-col">
-                  <DarkCyberMap
-                    markers={liveMarkers}
-                    selectedId={selected?.id}
-                    singlePointerMode={true}
-                    onSelectMarker={(m) => {
-                      const found = liveMarkers.find((loc) => loc.id === m.id);
-                      if (found) setSelected(found);
-                    }}
-                    height="h-full flex-1 min-h-[440px]"
-                  />
+
+                {/* Map Container with thin subtle dark border matching Reference Image 1 */}
+                <div className="flex-1 min-h-0 w-full rounded-xl border border-gray-200 dark:border-zinc-800/80 overflow-hidden bg-black/40 flex flex-col">
+                  <div className="flex-1 min-h-[360px] w-full relative">
+                    <DarkCyberMap
+                      markers={liveMarkers}
+                      selectedId={selected?.id}
+                      singlePointerMode={true}
+                      borderless={true}
+                      onSelectMarker={(m) => {
+                        const found = liveMarkers.find((loc) => loc.id === m.id);
+                        if (found) setSelected(found);
+                      }}
+                      height="h-full w-full"
+                    />
+                  </div>
+
+                  {/* Telemetry Footer Overlay (from Reference Image 1) */}
+                  {selected && (
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 px-4 py-2.5 bg-black/75 backdrop-blur-md border-t border-white/10 text-[11px] font-mono shrink-0 select-none">
+                      <div>
+                        <span className="text-gray-400 block text-[10px] uppercase font-bold tracking-wider">Coordinates</span>
+                        <span className="text-cyan-400 dark:text-cyan-300 font-bold truncate block">
+                          {selected.lat.toFixed(2)}°, {selected.lng.toFixed(2)}°
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-gray-400 block text-[10px] uppercase font-bold tracking-wider">Location</span>
+                        <span className="text-gray-900 dark:text-white font-bold truncate block" title={`${selected.city}, ${selected.country}`}>
+                          {selected.city}, {selected.country}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-gray-400 block text-[10px] uppercase font-bold tracking-wider">Origin IP</span>
+                        <span className="text-red-500 dark:text-red-400 font-bold truncate block font-mono">
+                          {selected.ip}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-gray-400 block text-[10px] uppercase font-bold tracking-wider">Autonomous Sys</span>
+                        <span className="text-purple-600 dark:text-purple-300 font-bold truncate block" title={selected.asn}>
+                          {selected.asn}
+                        </span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </SlideIn>
 
-            <SlideIn delay={160} direction="right" className="lg:col-span-1 h-full flex flex-col">
-              <LocationDetailPanel location={selected} />
+            <SlideIn delay={160} direction="right" className="lg:col-span-5 h-full flex flex-col min-h-0">
+              <LocationDetailPanel location={selected} result={currentResult} />
             </SlideIn>
           </div>
 
@@ -396,7 +433,13 @@ export function OriginInvestigationPage({ onNavigate }: { onNavigate?: (route: s
   );
 }
 
-function LocationDetailPanel({ location }: { location: InfraLocation | null }) {
+function LocationDetailPanel({
+  location,
+  result,
+}: {
+  location: InfraLocation | null;
+  result?: EmailAnalysisResult | null;
+}) {
   if (!location) {
     return (
       <div
@@ -408,67 +451,203 @@ function LocationDetailPanel({ location }: { location: InfraLocation | null }) {
     );
   }
 
+  const alertLevel = (result?.alert_level || (location.confidence >= 75 ? 'critical' : location.confidence >= 50 ? 'high' : 'medium')).toLowerCase();
+
   return (
     <div
-      className="rounded-2xl p-5 h-full flex flex-col justify-between bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
+      className="rounded-2xl p-5 h-full flex flex-col min-h-0 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm"
     >
-      <div>
-        <div className="mb-4">
-          <h3 className="text-base font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
+      {/* ── Panel Header ── */}
+      <div className="mb-4 shrink-0">
+        <div className="flex items-center justify-between gap-2">
+          <h3 className="text-base font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2 truncate">
             <MapPin className="w-4 h-4 text-red-500 dark:text-red-400 shrink-0" />
-            {location.city}, {location.country}
+            <span className="truncate">{location.city}, {location.country}</span>
           </h3>
-          <p className="text-xs font-semibold text-purple-600 dark:text-purple-300 mt-1 font-mono">{location.role}</p>
+          <CopyButton value={`${location.city}, ${location.country}`} />
         </div>
+        <p className="text-xs font-semibold text-purple-600 dark:text-purple-300 mt-1 font-mono truncate">
+          {location.role}
+        </p>
+      </div>
 
-        <div className="space-y-1">
-          <DetailRow label="Country" value={`${location.country} (${location.countryCode})`} />
-          <DetailRow label="City/Region" value={location.city} />
-          <DetailRow label="IP Address" value={location.ip} />
-          <DetailRow label="ASN" value={`${location.asn} (${location.asnOrg})`} />
-          <DetailRow label="Hosting" value={location.hosting} mono={false} />
-          <div className="flex items-center justify-between gap-3 py-2.5 border-b border-gray-200/60 dark:border-zinc-800/50 last:border-0">
-            <span className="text-xs text-gray-500 dark:text-zinc-400 dark:text-gray-400 font-medium">Confidence</span>
-            <div className="flex items-center gap-2">
-              <div className="w-20 h-1.5 bg-slate-200 dark:bg-zinc-800 rounded-full overflow-hidden">
-                <div
-                  className="h-full rounded-full"
-                  style={{
-                    width: `${location.confidence}%`,
-                    background: location.confidence >= 75 ? '#ef4444' : '#f97316',
-                  }}
-                />
+      {/* ── Scrollable Details Cards Container (matches Reference Image 1) ── */}
+      <div className="flex-1 min-h-0 overflow-y-auto pr-1 space-y-3 scrollbar-thin">
+        {/* Card 1 – Originating Location */}
+        <div className="p-3.5 rounded-xl bg-gray-50/80 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 space-y-2.5">
+          <div className="flex items-center justify-between">
+            <div className="text-[10px] text-gray-500 dark:text-zinc-400 uppercase font-mono font-bold tracking-wider flex items-center gap-1.5">
+              <Globe className="w-3 h-3 text-cyan-600 dark:text-cyan-400" />
+              <span>Originating Location</span>
+            </div>
+            <CopyButton value={`${location.city}, ${location.country} (${location.countryCode})`} />
+          </div>
+
+          <div className="space-y-2">
+            <div>
+              <div className="text-[10px] text-gray-500 dark:text-zinc-400 uppercase font-mono">Country</div>
+              <div className="font-bold text-xs text-gray-900 dark:text-zinc-100 flex items-center justify-between mt-0.5">
+                <span>{location.country} <span className="font-normal font-mono text-gray-500 dark:text-zinc-400">({location.countryCode})</span></span>
+                <CopyButton value={`${location.country} (${location.countryCode})`} />
               </div>
-              <span className="text-xs font-mono text-gray-900 dark:text-zinc-100 font-bold">{location.confidence}%</span>
+            </div>
+
+            <div className="pt-2 border-t border-gray-200/50 dark:border-zinc-800/50">
+              <div className="text-[10px] text-gray-500 dark:text-zinc-400 uppercase font-mono">City / Region</div>
+              <div className="font-bold text-xs text-gray-900 dark:text-zinc-100 flex items-center justify-between mt-0.5">
+                <span>{location.city}</span>
+                <CopyButton value={location.city} />
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-gray-200/50 dark:border-zinc-800/50">
+              <div className="text-[10px] text-gray-500 dark:text-zinc-400 uppercase font-mono">Geolocated Coordinates</div>
+              <div className="font-mono font-semibold text-xs text-cyan-600 dark:text-cyan-400 flex items-center justify-between mt-0.5">
+                <span>Lat: {location.lat.toFixed(4)}° N, Lng: {location.lng.toFixed(4)}° E</span>
+                <CopyButton value={`${location.lat.toFixed(4)}, ${location.lng.toFixed(4)}`} />
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="mt-4 pt-3 border-t border-gray-200 dark:border-zinc-800/50">
-        <h4 className="text-[10px] text-gray-500 dark:text-zinc-400 dark:text-gray-400 uppercase tracking-widest font-mono font-bold mb-2.5">
-          Supporting Evidence
-        </h4>
-        <div className="space-y-2">
-          {location.evidence.map((e, i) => (
-            <div key={i} className="flex items-start gap-2">
-              <Info className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400 shrink-0 mt-0.5" />
-              <span className="text-xs text-gray-700 dark:text-zinc-300 dark:text-gray-300 leading-relaxed">{e}</span>
+        {/* Card 2 – Network Identification */}
+        <div className="p-3.5 rounded-xl bg-gray-50/80 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 space-y-2.5">
+          <div className="flex items-center justify-between">
+            <div className="text-[10px] text-gray-500 dark:text-zinc-400 uppercase font-mono font-bold tracking-wider flex items-center gap-1.5">
+              <Network className="w-3 h-3 text-purple-600 dark:text-purple-400" />
+              <span>Network Identification</span>
             </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
+            <CopyButton value={location.ip} />
+          </div>
 
-function DetailRow({ label, value, mono = true }: { label: string; value: string; mono?: boolean }) {
-  return (
-    <div className="flex items-center justify-between gap-3 py-2 border-b border-gray-200/60 dark:border-zinc-800/50 last:border-0">
-      <span className="text-xs text-gray-500 dark:text-zinc-400 dark:text-gray-400 font-medium">{label}</span>
-      <div className="flex items-center gap-1.5 min-w-0">
-        <span className={`text-xs text-gray-900 dark:text-zinc-100 ${mono ? 'font-mono' : ''} text-right break-all font-semibold`}>{value}</span>
-        {mono && <CopyButton value={value} />}
+          <div className="space-y-2">
+            <div>
+              <div className="text-[10px] text-gray-500 dark:text-zinc-400 uppercase font-mono">Originating IP Address</div>
+              <div className="font-mono font-bold text-sm text-red-500 dark:text-red-400 flex items-center justify-between mt-0.5">
+                <span>{location.ip}</span>
+                <CopyButton value={location.ip} />
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-gray-200/50 dark:border-zinc-800/50">
+              <div className="text-[10px] text-gray-500 dark:text-zinc-400 uppercase font-mono">Autonomous System (ASN)</div>
+              <div className="font-mono font-bold text-xs text-purple-600 dark:text-purple-300 flex items-center justify-between mt-0.5">
+                <span>{location.asn}</span>
+                <CopyButton value={location.asn} />
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-gray-200/50 dark:border-zinc-800/50">
+              <div className="text-[10px] text-gray-500 dark:text-zinc-400 uppercase font-mono">ISP / Network</div>
+              <div className="font-bold text-xs text-gray-900 dark:text-zinc-100 flex items-center justify-between mt-0.5">
+                <span className="truncate pr-2">{location.asnOrg || 'Autonomous Network'}</span>
+                <CopyButton value={location.asnOrg || ''} />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 3 – Hosting Infrastructure */}
+        <div className="p-3.5 rounded-xl bg-gray-50/80 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 space-y-2.5">
+          <div className="flex items-center justify-between">
+            <div className="text-[10px] text-gray-500 dark:text-zinc-400 uppercase font-mono font-bold tracking-wider flex items-center gap-1.5">
+              <Server className="w-3 h-3 text-blue-600 dark:text-blue-400" />
+              <span>Hosting Infrastructure</span>
+            </div>
+            <CopyButton value={location.hosting} />
+          </div>
+
+          <div className="space-y-2">
+            <div>
+              <div className="text-[10px] text-gray-500 dark:text-zinc-400 uppercase font-mono">Hosting Provider</div>
+              <div className="font-bold text-xs text-gray-900 dark:text-zinc-100 flex items-center justify-between mt-0.5">
+                <span className="truncate pr-2">{location.hosting}</span>
+                <CopyButton value={location.hosting} />
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-gray-200/50 dark:border-zinc-800/50">
+              <div className="text-[10px] text-gray-500 dark:text-zinc-400 uppercase font-mono">Infrastructure Type</div>
+              <div className="font-bold text-xs text-amber-600 dark:text-amber-400 mt-0.5">
+                {location.role}
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-gray-200/50 dark:border-zinc-800/50">
+              <div className="text-[10px] text-gray-500 dark:text-zinc-400 uppercase font-mono">Autonomous System</div>
+              <div className="font-mono font-bold text-xs text-gray-900 dark:text-zinc-100 flex items-center justify-between mt-0.5">
+                <span className="truncate pr-2">{location.asn} {location.asnOrg ? `(${location.asnOrg})` : ''}</span>
+                <CopyButton value={`${location.asn} (${location.asnOrg})`} />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 4 – Threat Assessment */}
+        <div className="p-3.5 rounded-xl bg-gray-50/80 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 space-y-2.5">
+          <div className="flex items-center justify-between">
+            <div className="text-[10px] text-gray-500 dark:text-zinc-400 uppercase font-mono font-bold tracking-wider flex items-center gap-1.5">
+              <Shield className="w-3 h-3 text-red-500 dark:text-red-400" />
+              <span>Threat Assessment</span>
+            </div>
+            {/* Threat classification badge */}
+            <span
+              className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase shadow-sm ${
+                (alertLevel === 'critical' || location.confidence >= 75)
+                  ? 'bg-red-600 text-white'
+                  : (alertLevel === 'high' || location.confidence >= 50)
+                    ? 'bg-orange-600 text-white'
+                    : (alertLevel === 'medium' || location.confidence >= 40)
+                      ? 'bg-amber-600 text-white'
+                      : 'bg-emerald-600 text-white'
+              }`}
+            >
+              {(alertLevel ? alertLevel.toUpperCase() : (location.confidence >= 75 ? 'CRITICAL' : 'SUSPICIOUS'))} THREAT
+            </span>
+          </div>
+
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-[10px] text-gray-500 dark:text-zinc-400 uppercase font-mono">Attribution Confidence</span>
+              <span className="font-mono font-bold text-sm text-gray-900 dark:text-zinc-100">{location.confidence}%</span>
+            </div>
+            <div className="w-full h-2 bg-gray-200 dark:bg-zinc-800 rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all duration-500"
+                style={{
+                  width: `${location.confidence}%`,
+                  background: location.confidence >= 75
+                    ? 'linear-gradient(90deg, #f97316, #ef4444)'
+                    : location.confidence >= 45
+                      ? 'linear-gradient(90deg, #eab308, #f97316)'
+                      : 'linear-gradient(90deg, #10b981, #06b6d4)',
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Supporting Evidence Card */}
+        <div className="p-3.5 rounded-xl bg-gray-50/80 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 space-y-2.5">
+          <div className="flex items-center justify-between">
+            <h4 className="text-[10px] text-gray-500 dark:text-zinc-400 uppercase tracking-widest font-mono font-bold flex items-center gap-1.5">
+              <Info className="w-3.5 h-3.5 text-cyan-500 dark:text-cyan-400" />
+              <span>Supporting Evidence ({location.evidence.length})</span>
+            </h4>
+          </div>
+
+          <div className="space-y-2">
+            {location.evidence.map((e, i) => (
+              <div key={i} className="flex items-start justify-between gap-2 p-2 rounded-lg bg-white/50 dark:bg-zinc-900/50 border border-gray-200/50 dark:border-zinc-800/40 text-xs">
+                <div className="flex items-start gap-2 min-w-0 flex-1">
+                  <Info className="w-3.5 h-3.5 text-cyan-500 dark:text-cyan-400 shrink-0 mt-0.5" />
+                  <span className="text-gray-700 dark:text-zinc-300 leading-relaxed font-sans text-[11px] sm:text-xs break-words">{e}</span>
+                </div>
+                <CopyButton value={e} />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

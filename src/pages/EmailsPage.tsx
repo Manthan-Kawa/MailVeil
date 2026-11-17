@@ -70,6 +70,33 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
   const [syncNotice, setSyncNotice] = useState<string | null>(null);
   const [isGoogleModalOpen, setIsGoogleModalOpen] = useState(false);
 
+  const tabButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const [tabIndicator, setTabIndicator] = useState<{ left: number; width: number; ready: boolean }>({
+    left: 0,
+    width: 0,
+    ready: false,
+  });
+
+  useLayoutEffect(() => {
+    const updateIndicator = () => {
+      const el = tabButtonRefs.current[filterState.threatLevel];
+      if (el) {
+        setTabIndicator({
+          left: el.offsetLeft,
+          width: el.offsetWidth,
+          ready: true,
+        });
+      }
+    };
+    updateIndicator();
+    const rafId = requestAnimationFrame(updateIndicator);
+    window.addEventListener('resize', updateIndicator);
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener('resize', updateIndicator);
+    };
+  }, [filterState.threatLevel]);
+
   const handleDisconnectGmail = () => {
     disconnectGoogle();
     const userEmail = (currentUser?.email || '').trim().toLowerCase();
@@ -624,7 +651,16 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
           </div>
 
           {/* Filter pills */}
-          <div className="inline-flex w-fit max-w-full items-center gap-1 p-1 rounded-xl bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 shadow-sm overflow-x-auto scrollbar-none select-none">
+          <div className="relative inline-flex w-fit max-w-full items-center gap-1 p-1 rounded-xl bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 shadow-sm overflow-x-auto scrollbar-none select-none">
+            {tabIndicator.ready && (
+              <div
+                className="absolute top-1 bottom-1 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20 pointer-events-none transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+                style={{
+                  left: `${tabIndicator.left}px`,
+                  width: `${tabIndicator.width}px`,
+                }}
+              />
+            )}
             {[
               { id: 'all' as const, label: 'All Emails', icon: Inbox },
               { id: 'malicious' as const, label: 'Malicious', icon: ShieldAlert },
@@ -636,6 +672,7 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
               return (
                 <button
                   key={tab.id}
+                  ref={(el) => { tabButtonRefs.current[tab.id] = el; }}
                   type="button"
                   onClick={() => {
                     setFilterState((prev) => ({ ...prev, threatLevel: tab.id }));
@@ -647,17 +684,6 @@ export function EmailsPage({ onNavigate }: EmailsPageProps) {
                       : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white'
                   }`}
                 >
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeEmailsFilterTab"
-                      className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
-                      transition={{
-                        type: 'tween',
-                        ease: [0.25, 0.1, 0.25, 1],
-                        duration: 0.22,
-                      }}
-                    />
-                  )}
                   <span className="relative z-10 flex items-center gap-1.5">
                     <Icon className="w-3.5 h-3.5" />
                     {tab.label}

@@ -26,6 +26,7 @@ import {
   ArrowRight,
   Check,
   Globe,
+  Globe2,
   MapPin,
   Link2,
   Lock,
@@ -602,6 +603,7 @@ function FullReportPreview({
   onPrintPdf: () => void;
 }) {
   const [copiedText, setCopiedText] = useState<string | null>(null);
+  const navContainerRef = useRef<HTMLDivElement>(null);
   const reportTabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const [reportIndicatorStyle, setReportIndicatorStyle] = useState<{
     left: number;
@@ -627,9 +629,15 @@ function FullReportPreview({
     updateIndicator();
     const rafId = requestAnimationFrame(updateIndicator);
     window.addEventListener('resize', updateIndicator);
+    let observer: ResizeObserver | null = null;
+    if (navContainerRef.current && typeof ResizeObserver !== 'undefined') {
+      observer = new ResizeObserver(updateIndicator);
+      observer.observe(navContainerRef.current);
+    }
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener('resize', updateIndicator);
+      observer?.disconnect();
     };
   }, [activeTab]);
 
@@ -876,42 +884,45 @@ function FullReportPreview({
   return (
     <div className="rounded-2xl p-6 space-y-6 bg-gray-50 dark:bg-zinc-900/60 border border-gray-200 dark:border-zinc-800/80 shadow-sm backdrop-blur-sm">
       {/* ── Quick Navigation Tabs (Capsule format) ─────────────────── */}
-      <div className="inline-flex w-fit max-w-full items-center gap-1 p-1 rounded-xl bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 shadow-sm mb-4 overflow-x-auto scrollbar-none select-none">
+      <div
+        ref={navContainerRef}
+        className="relative h-10 flex w-full items-center gap-1 p-1 rounded-xl bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 shadow-sm mb-4 select-none"
+      >
+        {/* Smooth Left-Right Sliding Indicator Pill (matching User Requests page) */}
+        {reportIndicatorStyle.opacity > 0 && (
+          <div
+            className="absolute top-1 bottom-1 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20 pointer-events-none transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+            style={{
+              left: `${reportIndicatorStyle.left}px`,
+              width: `${reportIndicatorStyle.width}px`,
+            }}
+          />
+        )}
         {[
-          { id: 'all', label: 'Complete Forensic Report', icon: Shield },
-          { id: 'synthesis', label: 'Email Analyzer', icon: MailSearch },
-          { id: 'headers', label: 'Crypto Forensics', icon: FileSearch },
-          { id: 'threat-intel', label: 'Certificate Vault', icon: ShieldCheck },
-          { id: 'origin', label: 'Session Mapping', icon: MapPin },
-          { id: 'attack-graph', label: 'Attack Graph', icon: Share2 },
+          { id: 'all',          label: 'Complete Forensic Report', icon: Shield     },
+          { id: 'synthesis',    label: 'Email Analyzer',           icon: MailSearch },
+          { id: 'headers',      label: 'Header Forensics',         icon: FileSearch },
+          { id: 'threat-intel', label: 'Threat Intelligence',      icon: Globe2     },
+          { id: 'origin',       label: 'Origin Investigation',     icon: MapPin     },
+          { id: 'attack-graph', label: 'Attack Graph',             icon: Share2     },
         ].map((tab) => {
           const Icon = tab.icon;
           const active = activeTab === tab.id;
           return (
             <button
               key={tab.id}
+              ref={(el) => { reportTabRefs.current[tab.id] = el; }}
               type="button"
               onClick={() => setActiveTab(tab.id as ReportContentTab)}
-              className={`relative h-9 px-3.5 rounded-lg text-xs sm:text-sm font-semibold whitespace-nowrap transition-colors duration-200 cursor-pointer select-none shrink-0 ${
+              className={`relative flex-1 min-w-0 h-8 px-1.5 sm:px-2 rounded-lg text-[11px] sm:text-xs font-semibold transition-colors duration-200 cursor-pointer select-none flex items-center justify-center ${
                 active
                   ? 'text-white font-bold'
                   : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white'
               }`}
             >
-              {active && (
-                <motion.div
-                  layoutId="activeReportsTab"
-                  className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
-                  transition={{
-                    type: 'tween',
-                    ease: [0.25, 0.1, 0.25, 1],
-                    duration: 0.22,
-                  }}
-                />
-              )}
-              <span className="relative z-10 flex items-center gap-2">
-                <Icon className="w-3.5 h-3.5" />
-                {tab.label}
+              <span className="relative z-10 flex items-center justify-center gap-1.5 sm:gap-2 truncate max-w-full">
+                <Icon className="w-3.5 h-3.5 shrink-0" />
+                <span className="truncate">{tab.label}</span>
               </span>
             </button>
           );
@@ -1346,6 +1357,7 @@ function FullReportPreview({
                 markers={liveMarkers}
                 selectedId={liveMarkers[0]?.id}
                 singlePointerMode={true}
+                borderless={true}
                 height="h-[340px]"
               />
 

@@ -297,14 +297,14 @@ export function SubmitReportPage({ onNavigate }: SubmitReportPageProps) {
 
                 <div className="flex items-start gap-3 mt-2">
                   <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 shadow-md shadow-blue-500/25 border border-blue-400/30 hover:brightness-110 active:scale-98 transition-all select-none p-2"
-                    style={{ background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 45%, #6366f1 100%)' }}
+                    className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 shadow-lg shadow-blue-500/30 border border-blue-400/25 select-none"
+                    style={{ background: 'linear-gradient(135deg, #1d4ed8 0%, #3b82f6 50%, #6366f1 100%)' }}
                   >
-                    <img
-                      src="/file-icon.png"
-                      alt="Uploaded email file"
-                      className="w-full h-full object-contain drop-shadow-sm pointer-events-none"
-                    />
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect x="3" y="4" width="18" height="16" rx="2.5" fill="white" fillOpacity="0.15" stroke="white" strokeOpacity="0.5" strokeWidth="1.5"/>
+                      <path d="M3 8.5L10.5 13.5C11.4 14.1 12.6 14.1 13.5 13.5L21 8.5" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+                      <path d="M8 12.5L4 16M16 12.5L20 16" stroke="white" strokeOpacity="0.4" strokeWidth="1.2" strokeLinecap="round"/>
+                    </svg>
                   </div>
                   <div className="min-w-0 flex-1">
                     <h4 className="text-sm sm:text-base font-bold text-gray-900 dark:text-white truncate" title={emlFile.name}>

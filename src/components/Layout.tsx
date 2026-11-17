@@ -30,7 +30,7 @@ import {
 } from 'lucide-react';
 import { useState, useEffect, useLayoutEffect, useRef, useMemo, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { getNavItemsForRole, type NavRole } from '@/config/navigation';
 import type { LucideIcon } from 'lucide-react';
 import { TransparentLogo } from '@/components/TransparentLogo';
@@ -255,7 +255,7 @@ export function Sidebar({ activeId, onNavigate, onSignOut, mobileOpen, onMobileC
                     layoutId="sidebarActiveNavPill"
                     className="absolute inset-0 rounded-xl shadow-md shadow-blue-500/25 border border-blue-400/30 z-0 pointer-events-none"
                     style={{ background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 45%, #6366f1 100%)' }}
-                    transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                    transition={{ type: 'tween', ease: [0.25, 0.1, 0.25, 1], duration: 0.3 }}
                   />
                 )}
                 <Icon
@@ -1325,11 +1325,18 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
           </button>
 
           {/* Notif dropdown — exact Attendify notification specs */}
-          {notifOpen && typeof document !== 'undefined' && createPortal(
-            <div
-              ref={notifDropdownRef}
-              className="fixed top-14 sm:top-[4.25rem] left-3 sm:left-auto right-3 sm:right-4 lg:right-6 w-auto sm:w-96 max-w-none sm:max-w-sm rounded-2xl z-[9999] shadow-2xl overflow-hidden animate-fade-in bg-white dark:bg-black border border-gray-200 dark:border-zinc-800 text-gray-900 dark:text-zinc-100 touch-auto"
-            >
+          {typeof document !== 'undefined' && createPortal(
+            <AnimatePresence>
+              {notifOpen && (
+                <motion.div
+                  key="notif-panel"
+                  ref={notifDropdownRef}
+                  initial={{ opacity: 0, scale: 0.96, y: -8 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.96, y: -8 }}
+                  transition={{ duration: 0.18, ease: [0.25, 0.1, 0.25, 1] }}
+                  className="fixed top-14 sm:top-[4.25rem] left-3 sm:left-auto right-3 sm:right-4 lg:right-6 w-auto sm:w-96 max-w-none sm:max-w-sm rounded-2xl z-[9999] shadow-2xl overflow-hidden bg-white dark:bg-black border border-gray-200 dark:border-zinc-800 text-gray-900 dark:text-zinc-100 touch-auto"
+                >
               {/* Notification Header */}
               <div className="px-4 py-3 bg-white dark:bg-black border-b border-gray-200 dark:border-zinc-800 flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -1341,14 +1348,23 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
                     </span>
                   )}
                 </div>
-                {unreadCount > 0 && (
+                <div className="flex items-center gap-2 shrink-0">
+                  {unreadCount > 0 && (
+                    <button
+                      onClick={markAllRead}
+                      className="text-[10px] font-mono font-semibold text-sky-600 hover:text-sky-700 dark:text-purple-400 dark:hover:text-purple-300 transition-colors"
+                    >
+                      Mark all read
+                    </button>
+                  )}
                   <button
-                    onClick={markAllRead}
-                    className="text-[10px] font-mono font-semibold text-sky-600 hover:text-sky-700 dark:text-purple-400 dark:hover:text-purple-300 transition-colors shrink-0"
+                    onClick={() => setNotifOpen(false)}
+                    aria-label="Close notifications"
+                    className="p-1 rounded-md text-gray-400 hover:text-gray-900 dark:hover:text-zinc-100 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
                   >
-                    Mark all read
+                    <X className="w-3.5 h-3.5" />
                   </button>
-                )}
+                </div>
               </div>
 
               {/* Notification subheader / tab bar */}
@@ -1376,7 +1392,7 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
                               transition={{
                                 type: 'tween',
                                 ease: [0.25, 0.1, 0.25, 1],
-                                duration: 0.22,
+                                duration: 0.3,
                               }}
                             />
                           )}
@@ -1461,7 +1477,9 @@ export function TopBar({ onMenuClick, onNavigate, mobileOpen }: TopBarProps) {
                   })
                 )}
               </div>
-            </div>,
+            </motion.div>
+              )}
+            </AnimatePresence>,
             document.body
           )}
         </div>

@@ -1,8 +1,8 @@
 import Spline from '@splinetool/react-spline';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Shield, ArrowRight, Mail, Zap, Eye, EyeOff, Lock, Globe,
-  UserPlus, ChevronLeft, Check, Sparkles, UserCheck, AlertTriangle,
+  UserPlus, ChevronLeft, Check, Sparkles, UserCheck, AlertTriangle, X,
 } from 'lucide-react';
 import { TransparentLogo } from '@/components/TransparentLogo';
 import { buildUser, type UserRole, deriveRoleFromEmail, deriveDisplayName } from '@/contexts/AuthContext';
@@ -155,6 +155,16 @@ function useAuth() {
   return { isLoggedIn, login, logout, userEmail };
 }
 
+/* ─── Animated dots loader ─── */
+function AnimatedDots({ label }: { label: string }) {
+  const [dots, setDots] = useState(1);
+  useEffect(() => {
+    const id = setInterval(() => setDots(d => d >= 3 ? 1 : d + 1), 650);
+    return () => clearInterval(id);
+  }, []);
+  return <span>{label}{'.'.repeat(dots)}</span>;
+}
+
 /* ─── Google icon ─── */
 function GoogleIcon() {
   return (
@@ -198,9 +208,16 @@ function AuthModal({ initialMode = 'login', onClose, onSuccess, onGoogleSignIn, 
   const [appleToast, setAppleToast] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Auto-dismiss errors after 5 seconds
+  useEffect(() => {
+    if (!error) return;
+    const timer = setTimeout(() => setError(''), 5000);
+    return () => clearTimeout(timer);
+  }, [error]);
+
   function handleAppleClick() {
     setAppleToast(true);
-    setTimeout(() => setAppleToast(false), 3000);
+    setTimeout(() => setAppleToast(false), 5000);
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -326,22 +343,44 @@ function AuthModal({ initialMode = 'login', onClose, onSuccess, onGoogleSignIn, 
 
           {/* Quick Demo Fill for Testing */}
           {tab === 'login' && (
-            <div className="flex items-center gap-1.5 px-1 py-0.5 text-[11px] flex-wrap">
-              <span className="font-mono text-[10px] uppercase text-gray-500">Quick Test:</span>
-              <button
-                type="button"
-                onClick={() => { setEmail('demo@analyst'); setPassword('12345678'); }}
-                className="px-2 py-0.5 rounded-md bg-blue-500/15 hover:bg-blue-500/25 text-blue-400 border border-blue-500/30 font-mono text-[10px] transition-colors"
-              >
-                demo@analyst (12345678)
-              </button>
-              <button
-                type="button"
-                onClick={() => { setEmail('demo@user'); setPassword('12345678'); }}
-                className="px-2 py-0.5 rounded-md bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 border border-emerald-500/30 font-mono text-[10px] transition-colors"
-              >
-                demo@user (12345678)
-              </button>
+            <div className="space-y-2">
+              <div className="flex items-center gap-2.5">
+                <div className="h-px flex-1" style={{ background: 'rgba(255,255,255,0.06)' }} />
+                <span className="text-[9.5px] text-gray-600 tracking-[0.12em] uppercase font-medium select-none">try a demo</span>
+                <div className="h-px flex-1" style={{ background: 'rgba(255,255,255,0.06)' }} />
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {/* Analyst chip */}
+                <button
+                  type="button"
+                  onClick={() => { setEmail('demo@analyst'); setPassword('12345678'); }}
+                  className="group flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-left transition-all duration-150 active:scale-[0.97] cursor-pointer"
+                  style={{ background: 'rgba(59,130,246,0.07)', border: '1px solid rgba(59,130,246,0.15)' }}
+                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(59,130,246,0.14)'; e.currentTarget.style.borderColor = 'rgba(59,130,246,0.3)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(59,130,246,0.07)'; e.currentTarget.style.borderColor = 'rgba(59,130,246,0.15)'; }}
+                >
+                  <span className="w-2 h-2 rounded-full bg-blue-400 shrink-0 shadow-[0_0_6px_rgba(96,165,250,0.6)]" />
+                  <div className="min-w-0">
+                    <div className="text-blue-400 text-[10px] font-bold tracking-wider uppercase leading-none mb-0.5">Analyst</div>
+                    <div className="text-gray-500 font-mono text-[9.5px] truncate">demo@analyst</div>
+                  </div>
+                </button>
+                {/* User chip */}
+                <button
+                  type="button"
+                  onClick={() => { setEmail('demo@user'); setPassword('12345678'); }}
+                  className="group flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-left transition-all duration-150 active:scale-[0.97] cursor-pointer"
+                  style={{ background: 'rgba(52,211,153,0.07)', border: '1px solid rgba(52,211,153,0.15)' }}
+                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(52,211,153,0.14)'; e.currentTarget.style.borderColor = 'rgba(52,211,153,0.3)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(52,211,153,0.07)'; e.currentTarget.style.borderColor = 'rgba(52,211,153,0.15)'; }}
+                >
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0 shadow-[0_0_6px_rgba(52,211,153,0.6)]" />
+                  <div className="min-w-0">
+                    <div className="text-emerald-400 text-[10px] font-bold tracking-wider uppercase leading-none mb-0.5">User</div>
+                    <div className="text-gray-500 font-mono text-[9.5px] truncate">demo@user</div>
+                  </div>
+                </button>
+              </div>
             </div>
           )}
 
@@ -412,7 +451,7 @@ function AuthModal({ initialMode = 'login', onClose, onSuccess, onGoogleSignIn, 
             className="w-full py-3.5 rounded-2xl text-white font-bold text-sm mt-1 bg-blue-600 hover:bg-blue-500 active:opacity-80 transition-all disabled:opacity-60 flex items-center justify-center gap-2 cursor-pointer shadow-sm"
           >
             {isSubmitting ? (
-              <span>{tab === 'login' ? 'Signing in...' : 'Checking account...'}</span>
+              <AnimatedDots label={tab === 'login' ? 'Signing in' : 'Creating account'} />
             ) : (
               <span>{tab === 'login' ? 'Sign In' : 'Create User Account'}</span>
             )}
@@ -486,6 +525,15 @@ export function WelcomePage({ onNavigate }: WelcomePageProps) {
   const [authError, setAuthError] = useState('');
   const [setupModalOpen, setSetupModalOpen] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+
+  // Auto-dismiss auth error notification after 5 seconds
+  useEffect(() => {
+    if (!authError) return;
+    const timer = setTimeout(() => {
+      setAuthError('');
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [authError]);
 
   // pendingDemo tracks whether we should navigate to email-analyzer after successful login
   const [pendingDemo, setPendingDemo] = useState(false);
@@ -699,7 +747,7 @@ export function WelcomePage({ onNavigate }: WelcomePageProps) {
             <button
               id="analyze-email-btn"
               onClick={handleAnalyzeEmailClick}
-              className="group relative flex items-center gap-2 text-white font-semibold text-sm px-7 sm:px-8 py-3.5 sm:py-4 rounded-full transition-all duration-200 hover:scale-105 active:scale-100 bg-zinc-900 border border-zinc-700/80 shadow-sm"
+              className="glow-btn group relative flex items-center gap-2 text-white font-semibold text-sm px-7 sm:px-8 py-3.5 sm:py-4 rounded-full transition-all duration-200 hover:scale-105 active:scale-100 bg-zinc-900 border border-zinc-700/80 shadow-sm"
             >
               <Mail className="w-4 h-4 text-blue-300" />
               <span>Analyze Email</span>
@@ -750,9 +798,19 @@ export function WelcomePage({ onNavigate }: WelcomePageProps) {
       />
       {/* Show auth error as an overlay toast if needed */}
       {authError && (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-xl text-sm text-red-300 font-medium"
-          style={{ background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.35)', backdropFilter: 'blur(12px)' }}>
-          {authError}
+        <div
+          className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[99999] px-5 py-3 rounded-xl text-sm text-red-300 font-medium shadow-2xl flex items-center gap-2.5 animate-slide-up"
+          style={{ background: 'rgba(239,68,68,0.2)', border: '1px solid rgba(239,68,68,0.4)', backdropFilter: 'blur(12px)' }}
+        >
+          <AlertTriangle className="w-4 h-4 text-red-400 shrink-0" />
+          <span>{authError}</span>
+          <button
+            onClick={() => setAuthError('')}
+            className="ml-2 text-red-400 hover:text-white transition-colors cursor-pointer"
+            aria-label="Dismiss error"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
         </div>
       )}
     </div>

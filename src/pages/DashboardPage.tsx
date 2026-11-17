@@ -26,7 +26,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { type Severity } from '@/data/mockData';
-import { useRef, useEffect, useState, useMemo } from 'react';
+import { useRef, useEffect, useState, useMemo, useLayoutEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAnalysis } from '@/contexts/AnalysisContext';
 import { useTickets } from '@/contexts/TicketContext';
@@ -193,6 +193,32 @@ const DEFAULT_RECENT_EMAIL_THREATS = [
 export function DashboardPage({ onNavigate }: { onNavigate?: (route: string) => void }) {
   const { isDark } = useTheme();
   const [activeTab, setActiveTab] = useState<'24H' | '7D'>('24H');
+  const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const [tabIndicator, setTabIndicator] = useState<{ left: number; width: number; ready: boolean }>({
+    left: 0,
+    width: 0,
+    ready: false,
+  });
+
+  useLayoutEffect(() => {
+    const updateIndicator = () => {
+      const el = tabRefs.current[activeTab];
+      if (el) {
+        setTabIndicator({
+          left: el.offsetLeft,
+          width: el.offsetWidth,
+          ready: true,
+        });
+      }
+    };
+    updateIndicator();
+    const rafId = requestAnimationFrame(updateIndicator);
+    window.addEventListener('resize', updateIndicator);
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener('resize', updateIndicator);
+    };
+  }, [activeTab]);
   const { analyzedReports } = useAnalysis();
   const { tickets } = useTickets();
   const elapsed = useElapsed();
@@ -416,11 +442,21 @@ export function DashboardPage({ onNavigate }: { onNavigate?: (route: string) => 
 
                 {/* Range Toggle with smooth sliding animation */}
                 <div className="relative inline-flex items-center rounded-xl p-1 bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 shadow-sm self-start sm:self-auto select-none">
+                  {tabIndicator.ready && (
+                    <div
+                      className="absolute top-1 bottom-1 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20 pointer-events-none transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+                      style={{
+                        left: `${tabIndicator.left}px`,
+                        width: `${tabIndicator.width}px`,
+                      }}
+                    />
+                  )}
                   {(['24H', '7D'] as const).map((tab) => {
                     const isSelected = activeTab === tab;
                     return (
                       <button
                         key={tab}
+                        ref={(el) => { tabRefs.current[tab] = el; }}
                         type="button"
                         onClick={() => setActiveTab(tab)}
                         className={`relative px-3.5 py-1.5 rounded-lg text-xs font-bold transition-colors duration-200 cursor-pointer select-none ${
@@ -429,17 +465,6 @@ export function DashboardPage({ onNavigate }: { onNavigate?: (route: string) => 
                             : 'text-gray-500 hover:text-gray-900 dark:text-zinc-400 dark:hover:text-white'
                         }`}
                       >
-                        {isSelected && (
-                          <motion.div
-                            layoutId="activeTrafficRangeTab"
-                            className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
-                            transition={{
-                              type: 'tween',
-                              ease: [0.25, 0.1, 0.25, 1],
-                              duration: 0.22,
-                            }}
-                          />
-                        )}
                         <span className="relative z-10">{tab}</span>
                       </button>
                     );

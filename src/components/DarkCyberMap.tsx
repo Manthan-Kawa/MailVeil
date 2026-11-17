@@ -29,7 +29,9 @@ interface DarkCyberMapProps {
   selectedId?: string | null;
   onSelectMarker?: (marker: MapMarker) => void;
   height?: string;
+  className?: string;
   singlePointerMode?: boolean;
+  borderless?: boolean;
 }
 
 /** Build a custom div-based pulsing marker HTML */
@@ -111,7 +113,9 @@ export function DarkCyberMap({
   selectedId,
   onSelectMarker,
   height = 'h-64 md:h-80',
+  className = '',
   singlePointerMode = true,
+  borderless = false,
 }: DarkCyberMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef          = useRef<L.Map | null>(null);
@@ -249,10 +253,25 @@ export function DarkCyberMap({
           ">
             <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
               <span style="
-                display:inline-block;width:8px;height:8px;border-radius:50%;
-                background:#ef4444;box-shadow:0 0 6px #ef4444;
-                animation:cyberPulse1 2.2s ease-out infinite;
-              "></span>
+                position:relative;display:inline-flex;align-items:center;justify-content:center;
+                width:10px;height:10px;
+              ">
+                <span style="
+                  position:absolute;width:10px;height:10px;border-radius:50%;
+                  border:1.5px solid #ef4444;
+                  animation:cyberPulse1 2s ease-out infinite;
+                "></span>
+                <span style="
+                  position:absolute;width:10px;height:10px;border-radius:50%;
+                  border:1.5px solid #ef4444;
+                  animation:cyberPulse2 2s ease-out 1s infinite;
+                "></span>
+                <span style="
+                  display:block;width:6px;height:6px;border-radius:50%;
+                  background:#ef4444;box-shadow:0 0 5px #ef4444;
+                  position:relative;z-index:1;
+                "></span>
+              </span>
               <span style="font-size:11px;font-weight:700;color:#ef4444;letter-spacing:0.08em;text-transform:uppercase;">
                 ${m.severity ?? 'CRITICAL'} THREAT
               </span>
@@ -297,11 +316,15 @@ export function DarkCyberMap({
 
   return (
     <div
-      className={`relative w-full ${height} bg-gray-50 dark:bg-zinc-900/60 rounded-2xl border border-gray-200 dark:border-zinc-800/80 overflow-hidden select-none shadow-sm isolate`}
-      style={{ minHeight: '400px', isolation: 'isolate' }}
+      className={`relative w-full ${height} ${
+        borderless
+          ? 'bg-transparent'
+          : 'bg-gray-50 dark:bg-zinc-900/60 rounded-2xl border border-gray-200 dark:border-zinc-800/80 shadow-sm'
+      } overflow-hidden select-none isolate ${className}`}
+      style={{ isolation: 'isolate' }}
     >
       {/* ── Real Leaflet map fills the entire card ── */}
-      <div ref={mapContainerRef} className="w-full h-full" style={{ minHeight: '400px' }} />
+      <div ref={mapContainerRef} className="w-full h-full min-h-[300px]" />
 
       {/* ── Top Right Origin Status Badge (Hidden on mobile, visible on tablet & PC) ── */}
       {primaryMarker && (

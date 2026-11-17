@@ -283,8 +283,8 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
       <div
         className="relative w-full max-w-2xl rounded-2xl sm:rounded-3xl overflow-hidden animate-slide-up flex flex-col my-auto max-h-[calc(100vh-3rem)]"
         style={{
-          background: isDark ? 'linear-gradient(145deg, #0d1118, #0a0c14)' : '#ffffff',
-          border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #e2e8f0',
+          background: isDark ? '#18181b' : '#ffffff',
+          border: isDark ? '1px solid rgba(63,63,70,0.8)' : '1px solid #e2e8f0',
           boxShadow: isDark ? '0 32px 80px rgba(0,0,0,0.85)' : '0 25px 60px -15px rgba(0,0,0,0.25)'
         }}
         onClick={(e) => e.stopPropagation()}
@@ -292,25 +292,20 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
         {/* Modal header */}
         <div
           className="flex items-center justify-between px-4 sm:px-6 py-3.5 sm:py-4 shrink-0"
-          style={{ borderBottom: isDark ? '1px solid rgba(39,39,42,0.5)' : '1px solid #e2e8f0' }}
+          style={{ borderBottom: isDark ? '1px solid rgba(63,63,70,0.6)' : '1px solid #e2e8f0' }}
         >
           <div className="flex items-center gap-3">
             <div
               className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
               style={{
                 background: status === 'resolved' || status === 'analyzed'
-                  ? 'rgba(168,85,247,0.15)'
+                  ? '#8b5cf6'
                   : status === 'in_review'
-                    ? 'rgba(6,182,212,0.15)'
-                    : 'rgba(245,158,11,0.15)',
-                border: status === 'resolved' || status === 'analyzed'
-                  ? '1px solid rgba(168,85,247,0.3)'
-                  : status === 'in_review'
-                    ? '1px solid rgba(6,182,212,0.3)'
-                    : '1px solid rgba(245,158,11,0.3)'
+                    ? '#06b6d4'
+                    : '#f59e0b',
               }}
             >
-              <Inbox className={`w-5 h-5 ${status === 'resolved' || status === 'analyzed' ? 'text-purple-400' : status === 'in_review' ? 'text-cyan-400' : 'text-amber-400'}`} />
+              <Inbox className="w-5 h-5 text-white" />
             </div>
             <div>
               <div className="flex items-center gap-2 flex-wrap">
@@ -330,7 +325,7 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
             <button
               onClick={() => sendEmailToUser(ticket, analystComment, reportFile)}
               title={`Compose email to ${ticket.userEmail}`}
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-semibold text-purple-700 dark:text-purple-300 bg-purple-500/10 border border-purple-500/30 transition-transform duration-150 ease-out active:scale-95 cursor-pointer"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-semibold text-white bg-purple-600 hover:bg-purple-500 transition-colors duration-150 ease-out active:scale-95 cursor-pointer shadow-sm"
             >
               <Mail className="w-3.5 h-3.5" /> Launch Gmail
             </button>
@@ -348,7 +343,7 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
           {/* Submission metadata */}
           <div
             className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 p-3.5 sm:p-4 rounded-2xl"
-            style={{ background: isDark ? 'rgba(39,39,42,0.5)' : '#f8fafc', border: isDark ? '1px solid rgba(39,39,42,0.5)' : '1px solid #e2e8f0' }}
+            style={{ background: isDark ? 'rgba(39,39,42,0.6)' : '#f8fafc', border: isDark ? '1px solid rgba(63,63,70,0.7)' : '1px solid #e2e8f0' }}
           >
             {[
               { icon: User, label: 'User Email', value: ticket.userEmail },
@@ -374,7 +369,7 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
               </label>
               <p
                 className="text-sm text-gray-900 dark:text-zinc-100 leading-relaxed p-3.5 rounded-xl text-xs"
-                style={{ background: isDark ? 'rgba(39,39,42,0.5)' : '#f8fafc', border: isDark ? '1px solid rgba(39,39,42,0.5)' : '1px solid #e2e8f0' }}
+                style={{ background: isDark ? 'rgba(39,39,42,0.6)' : '#f8fafc', border: isDark ? '1px solid rgba(63,63,70,0.7)' : '1px solid #e2e8f0' }}
               >
                 {ticket.userComment}
               </p>
@@ -383,14 +378,11 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
 
           {/* User Interaction Flags */}
           {ticket.didInteract && (ticket.didInteract.clickedLink || ticket.didInteract.enteredCreds) && (
-            <div
-              className="p-3 rounded-xl flex items-center gap-2.5"
-              style={{ background: isDark ? 'rgba(239,68,68,0.08)' : 'rgba(239,68,68,0.08)', border: isDark ? '1px solid rgba(239,68,68,0.25)' : '1px solid rgba(239,68,68,0.25)' }}
-            >
-              <AlertTriangle className="w-4 h-4 text-red-500 dark:text-red-400 shrink-0" />
+            <div className="p-3 rounded-xl flex items-center gap-2.5 bg-red-500 animate-pulse" style={{ animationDuration: '2s' }}>
+              <AlertTriangle className="w-4 h-4 text-white shrink-0" />
               <div>
-                <p className="text-xs text-red-700 dark:text-red-300 font-bold">High Risk Interaction Reported by User!</p>
-                <p className="text-xs text-red-700 dark:text-red-300">
+                <p className="text-xs text-white font-bold">High Risk Interaction Reported by User!</p>
+                <p className="text-xs text-red-100">
                   User indicated: {ticket.didInteract.clickedLink ? '• Clicked Embedded Link ' : ''}
                   {ticket.didInteract.enteredCreds ? '• Submitted Credentials / Passwords' : ''}
                 </p>
@@ -404,17 +396,34 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
               <label className="text-[10px] font-bold text-gray-500 dark:text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
                 <FileText className="w-3 h-3" /> Submitted Capture File (.eml / .pcap)
               </label>
-              <button
-                onClick={() => downloadAttachment(ticket.emlFile!.data, ticket.emlFile!.name)}
-                className="w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-sm text-blue-600 dark:text-blue-300 font-semibold transition-transform duration-150 ease-out active:scale-95 cursor-pointer"
-                style={{ background: 'rgba(59,130,246,0.08)', border: isDark ? '1px solid rgba(59,130,246,0.2)' : '1px solid rgba(59,130,246,0.25)' }}
+              <div
+                className="rounded-xl p-3"
+                style={{ background: isDark ? 'rgba(30,32,48,0.8)' : '#f0f4ff', border: isDark ? '1px solid rgba(99,102,241,0.2)' : '1px solid rgba(99,102,241,0.25)' }}
               >
-                <Download className="w-4 h-4 text-blue-500 dark:text-blue-400" />
-                <span className="truncate">{ticket.emlFile.name}</span>
-                <span className="text-[11px] text-gray-500 dark:text-gray-500 font-normal ml-auto shrink-0">
-                  {formatBytes(ticket.emlFile.size)}
-                </span>
-              </button>
+                {/* File row */}
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-indigo-500">
+                    <Mail className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-bold text-gray-900 dark:text-zinc-100 font-mono truncate">{ticket.emlFile.name}</p>
+                    <p className="text-[11px] text-gray-500 dark:text-gray-400 font-mono">File Size: {formatBytes(ticket.emlFile.size)}</p>
+                  </div>
+                </div>
+                {/* Footer row */}
+                <div className="flex items-center justify-between mt-2.5 pt-2 border-t border-indigo-500/10">
+                  <span className="text-[11px] text-emerald-500 font-mono font-semibold flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse inline-block" />
+                    Original evidence attached
+                  </span>
+                  <button
+                    onClick={() => downloadAttachment(ticket.emlFile!.data, ticket.emlFile!.name)}
+                    className="text-[11px] text-indigo-400 hover:text-indigo-300 font-mono font-semibold transition-colors cursor-pointer flex items-center gap-1"
+                  >
+                    <Download className="w-3 h-3" /> Download file
+                  </button>
+                </div>
+              </div>
             </div>
           )}
 
@@ -500,9 +509,8 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
                     width: statusIndicatorStyle.width,
                     height: statusIndicatorStyle.height,
                     opacity: statusIndicatorStyle.opacity,
-                    background: status === 'analyzed' ? (isDark ? 'rgba(34,197,94,0.2)' : 'rgba(34,197,94,0.15)') : (isDark ? 'rgba(6,182,212,0.2)' : 'rgba(6,182,212,0.15)'),
-                    border: status === 'analyzed' ? (isDark ? '1px solid rgba(34,197,94,0.4)' : '1px solid rgba(34,197,94,0.5)') : (isDark ? '1px solid rgba(6,182,212,0.4)' : '1px solid rgba(6,182,212,0.5)'),
-                    transition: 'transform 260ms cubic-bezier(0.25, 1, 0.5, 1), width 260ms cubic-bezier(0.25, 1, 0.5, 1), height 260ms cubic-bezier(0.25, 1, 0.5, 1), opacity 150ms ease, background 200ms ease, border 200ms ease',
+                    background: status === 'analyzed' ? '#059669' : '#0e7490',
+                    transition: 'transform 260ms cubic-bezier(0.25, 1, 0.5, 1), width 260ms cubic-bezier(0.25, 1, 0.5, 1), height 260ms cubic-bezier(0.25, 1, 0.5, 1), opacity 150ms ease, background 200ms ease',
                     left: 0,
                     top: 0
                   }}
@@ -517,8 +525,8 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
                       setError('');
                     }}
                     className={`relative z-10 px-3 py-1.5 rounded-lg text-xs font-bold font-mono transition-colors duration-200 capitalize ${status === s
-                      ? s === 'analyzed' ? 'text-emerald-700 dark:text-emerald-400' : 'text-cyan-700 dark:text-cyan-300'
-                      : 'text-gray-600 dark:text-zinc-400 font-medium hover:bg-gray-100/80 dark:hover:bg-zinc-800/80'
+                      ? 'text-white'
+                      : 'text-gray-600 dark:text-zinc-400 font-medium hover:bg-zinc-800/80'
                       }`}
                   >
                     {s === 'in_review' ? 'In Investigation' : 'Analyzed'}
@@ -577,7 +585,7 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
                           className={`p-2.5 rounded-xl text-xs max-w-[85%] sm:max-w-[70%] min-w-[180px] ${isAnalyst
                             ? 'ml-auto bg-blue-500/10 text-gray-900 border border-blue-500/25 dark:bg-black/40 dark:border-blue-500/25 dark:text-blue-100'
                             : 'mr-auto bg-purple-500/10 text-gray-900 border border-purple-500/25 dark:bg-black/40 dark:border-purple-500/25 dark:text-purple-100'
-                        }`}
+                            }`}
                         >
                           <div className={`flex items-center justify-between gap-2 text-[10px] font-mono mb-1 ${isAnalyst ? 'text-blue-600 dark:text-blue-400' : 'text-purple-600 dark:text-purple-400'
                             }`}>
@@ -599,7 +607,7 @@ function TicketModal({ ticket, onClose, onRespond }: ModalProps) {
                     onChange={(e) => setChatMessage(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleSendChatMessage()}
                     placeholder="Post quick update in user's ticket thread..."
-                    className="flex-1 text-xs rounded-xl px-3 py-2 text-gray-900 dark:text-gray-100 placeholder-slate-400 dark:placeholder-gray-500 font-mono bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80"
+                    className="flex-1 text-xs rounded-xl px-3 py-2 text-gray-900 dark:text-gray-100 placeholder-slate-400 dark:placeholder-gray-500 font-mono bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 focus:outline-none focus:ring-0 focus:border-purple-500/60"
                   />
                   <button
                     type="button"
@@ -1028,23 +1036,22 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
               const label = s === 'all'
                 ? 'All'
                 : s === 'pending'
-                ? 'Pending'
-                : s === 'in_review'
-                ? 'In Review'
-                : s === 'analyzed'
-                ? 'Analyzed'
-                : 'Resolved';
+                  ? 'Pending'
+                  : s === 'in_review'
+                    ? 'In Review'
+                    : s === 'analyzed'
+                      ? 'Analyzed'
+                      : 'Resolved';
               return (
                 <button
                   key={s}
                   ref={(el) => { tabButtonRefs.current[s] = el; }}
                   type="button"
                   onClick={() => setFilterStatus(s)}
-                  className={`relative h-9 px-4 rounded-lg text-xs sm:text-sm font-semibold capitalize transition-colors duration-200 shrink-0 whitespace-nowrap cursor-pointer select-none ${
-                    active
-                      ? 'text-white font-bold'
-                      : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white'
-                  }`}
+                  className={`relative h-9 px-4 rounded-lg text-xs sm:text-sm font-semibold capitalize transition-colors duration-200 shrink-0 whitespace-nowrap cursor-pointer select-none ${active
+                    ? 'text-white font-bold'
+                    : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white'
+                    }`}
                 >
                   <span className="relative z-10">{label}</span>
                 </button>
@@ -1096,29 +1103,22 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
                       className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 mt-0.5"
                       style={{
                         background: ticket.status === 'resolved'
-                          ? 'rgba(168,85,247,0.12)'
+                          ? '#8b5cf6'
                           : ticket.status === 'analyzed'
-                            ? 'rgba(34,197,94,0.12)'
+                            ? '#10b981'
                             : ticket.status === 'in_review'
-                              ? 'rgba(6,182,212,0.12)'
-                              : 'rgba(245,158,11,0.12)',
-                        border: ticket.status === 'resolved'
-                          ? '1px solid rgba(168,85,247,0.25)'
-                          : ticket.status === 'analyzed'
-                            ? '1px solid rgba(34,197,94,0.25)'
-                            : ticket.status === 'in_review'
-                              ? '1px solid rgba(6,182,212,0.3)'
-                              : '1px solid rgba(245,158,11,0.25)'
+                              ? '#06b6d4'
+                              : '#f59e0b',
                       }}
                     >
                       {ticket.status === 'resolved' ? (
-                        <CheckCircle2 className="w-5 h-5 text-purple-500 dark:text-purple-400" />
+                        <CheckCircle2 className="w-5 h-5 text-white" />
                       ) : ticket.status === 'analyzed' ? (
-                        <CheckCircle2 className="w-5 h-5 text-green-500 dark:text-green-400" />
+                        <CheckCircle2 className="w-5 h-5 text-white" />
                       ) : ticket.status === 'in_review' ? (
-                        <Clock className="w-5 h-5 text-cyan-500 dark:text-cyan-400 animate-spin" />
+                        <Clock className="w-5 h-5 text-white animate-spin" />
                       ) : (
-                        <Clock className="w-5 h-5 text-amber-500 dark:text-amber-400 animate-pulse" />
+                        <Clock className="w-5 h-5 text-white animate-pulse" />
                       )}
                     </div>
 
@@ -1127,13 +1127,12 @@ export function UserRequestsPage({ onNavigate: _onNavigate }: UserRequestsPagePr
                         <span className="text-xs font-mono font-bold text-gray-900 dark:text-zinc-100 whitespace-nowrap">{ticket.id}</span>
                         <StatusBadge status={ticket.status} />
                         {ticket.verdict && (
-                          <span className={`text-[10px] px-2.5 py-0.5 rounded font-bold uppercase text-white shadow-xs ${
-                            ticket.verdict.toLowerCase().includes('malicious') || ticket.verdict.toLowerCase().includes('phish')
-                              ? 'bg-red-600'
-                              : ticket.verdict.toLowerCase().includes('suspect') || ticket.verdict.toLowerCase().includes('suspicious')
+                          <span className={`text-[10px] px-2.5 py-0.5 rounded font-bold uppercase text-white shadow-xs ${ticket.verdict.toLowerCase().includes('malicious') || ticket.verdict.toLowerCase().includes('phish')
+                            ? 'bg-red-600'
+                            : ticket.verdict.toLowerCase().includes('suspect') || ticket.verdict.toLowerCase().includes('suspicious')
                               ? 'bg-amber-600'
                               : 'bg-emerald-600'
-                          }`}>
+                            }`}>
                             {ticket.verdict}
                           </span>
                         )}

@@ -464,7 +464,7 @@ export function SettingsPage({ userRole }: { onResetCache?: () => void; userRole
                         layoutId="settingsActiveTabPill"
                         className="absolute inset-0 rounded-xl shadow-md shadow-blue-500/25 border border-blue-400/30 z-0 pointer-events-none"
                         style={{ background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 45%, #6366f1 100%)' }}
-                        transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                        transition={{ type: 'tween', ease: [0.25, 0.1, 0.25, 1], duration: 0.3 }}
                       />
                     )}
                     <div className="relative z-10 flex items-center gap-3">

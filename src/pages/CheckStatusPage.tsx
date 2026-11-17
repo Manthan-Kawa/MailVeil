@@ -6,6 +6,7 @@ import {
   FileText, MessageSquare, AlertCircle, Filter, Search,
   Calendar, Hash, Send, ShieldCheck, ShieldAlert, Star,
   CornerDownRight, User, AlertTriangle, ArrowRight, Trash2,
+  Mail,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTickets, type Ticket, type TicketAttachment, type TicketStatus } from '@/contexts/TicketContext';
@@ -46,30 +47,27 @@ function StatusBadge({ status }: { status: TicketStatus }) {
     case 'closed':
       return (
         <span
-          className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold"
-          style={{ background: 'rgba(168,85,247,0.12)', border: '1px solid rgba(168,85,247,0.3)', color: '#c084fc' }}
+          className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold font-mono text-white bg-purple-600 shadow-xs"
         >
-          <CheckCircle2 className="w-3 h-3" />
+          <CheckCircle2 className="w-2.5 h-2.5 text-white" />
           Resolved
         </span>
       );
     case 'analyzed':
       return (
         <span
-          className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold"
-          style={{ background: 'rgba(34,197,94,0.12)', border: '1px solid rgba(34,197,94,0.3)', color: '#4ade80' }}
+          className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold font-mono text-white bg-emerald-600 shadow-xs"
         >
-          <CheckCircle2 className="w-3 h-3" />
+          <CheckCircle2 className="w-2.5 h-2.5 text-white" />
           Analyzed
         </span>
       );
     case 'in_review':
       return (
         <span
-          className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold"
-          style={{ background: 'rgba(6,182,212,0.12)', border: '1px solid rgba(6,182,212,0.3)', color: '#22d3ee' }}
+          className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold font-mono text-white bg-cyan-600 shadow-xs"
         >
-          <Clock className="w-3 h-3 animate-spin" />
+          <Clock className="w-2.5 h-2.5 animate-spin text-white" />
           In Investigation
         </span>
       );
@@ -77,11 +75,10 @@ function StatusBadge({ status }: { status: TicketStatus }) {
     default:
       return (
         <span
-          className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold"
-          style={{ background: 'rgba(245,158,11,0.12)', border: '1px solid rgba(245,158,11,0.3)', color: '#fbbf24' }}
+          className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold font-mono text-white bg-amber-600 shadow-xs"
         >
-          <Clock className="w-3 h-3 animate-pulse" />
-          Pending Review
+          <Clock className="w-2.5 h-2.5 animate-pulse text-white" />
+          Pending
         </span>
       );
   }
@@ -145,41 +142,35 @@ function CaseDetailModal({
       <div
         className="relative w-full max-w-2xl rounded-2xl sm:rounded-3xl overflow-hidden animate-slide-up flex flex-col my-auto max-h-[calc(100vh-3rem)]"
         style={{
-          background: isDark ? 'linear-gradient(145deg, #0d1118, #0a0c14)' : '#ffffff',
-          border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #e2e8f0',
+          background: isDark ? '#18181b' : '#ffffff',
+          border: isDark ? '1px solid rgba(63,63,70,0.8)' : '1px solid #e2e8f0',
           boxShadow: isDark ? '0 32px 80px rgba(0,0,0,0.85)' : '0 25px 60px -15px rgba(0,0,0,0.25)' }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
         <div
           className="flex items-center justify-between px-4 sm:px-6 py-3.5 sm:py-4 shrink-0"
-          style={{ borderBottom: isDark ? '1px solid rgba(39,39,42,0.5)' : '1px solid #e2e8f0' }}
+          style={{ borderBottom: isDark ? '1px solid rgba(63,63,70,0.6)' : '1px solid #e2e8f0' }}
         >
           <div className="flex items-center gap-3">
             <div
               className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
               style={{
                 background: isResolved
-                  ? 'rgba(168,85,247,0.15)'
+                  ? '#8b5cf6'
                   : isAnalyzed
-                  ? 'rgba(34,197,94,0.15)'
+                  ? '#10b981'
                   : isInReview
-                  ? 'rgba(6,182,212,0.15)'
-                  : 'rgba(245,158,11,0.15)',
-                border: isResolved
-                  ? '1px solid rgba(168,85,247,0.3)'
-                  : isAnalyzed
-                  ? '1px solid rgba(34,197,94,0.3)'
-                  : isInReview
-                  ? '1px solid rgba(6,182,212,0.3)'
-                  : '1px solid rgba(245,158,11,0.3)' }}
+                  ? '#06b6d4'
+                  : '#f59e0b',
+              }}
             >
               {isResolved || isAnalyzed ? (
-                <ShieldCheck className={`w-5 h-5 ${isResolved ? 'text-purple-400' : 'text-green-400'}`} />
+                <ShieldCheck className="w-5 h-5 text-white" />
               ) : isInReview ? (
-                <Clock className="w-5 h-5 text-cyan-400 animate-spin" />
+                <Clock className="w-5 h-5 text-white animate-spin" />
               ) : (
-                <Clock className="w-5 h-5 text-amber-400 animate-pulse" />
+                <Clock className="w-5 h-5 text-white animate-pulse" />
               )}
             </div>
             <div>
@@ -203,7 +194,7 @@ function CaseDetailModal({
           {/* Progress Stepper */}
           <div
             className="p-3 sm:p-3.5 rounded-2xl flex items-center justify-between overflow-x-auto scrollbar-none gap-2 touch-scroll"
-            style={{ background: isDark ? 'rgba(39,39,42,0.5)' : '#f8fafc', border: isDark ? '1px solid rgba(39,39,42,0.5)' : '1px solid #e2e8f0' }}
+            style={{ background: isDark ? 'rgba(39,39,42,0.6)' : '#f8fafc', border: isDark ? '1px solid rgba(63,63,70,0.7)' : '1px solid #e2e8f0' }}
           >
             {[
               { label: '1. Submitted', active: true, done: true },
@@ -232,7 +223,7 @@ function CaseDetailModal({
           {/* Metadata Grid */}
           <div
             className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 p-3.5 sm:p-4 rounded-2xl"
-            style={{ background: isDark ? 'rgba(39,39,42,0.5)' : '#f8fafc', border: isDark ? '1px solid rgba(39,39,42,0.5)' : '1px solid #e2e8f0' }}
+            style={{ background: isDark ? 'rgba(39,39,42,0.6)' : '#f8fafc', border: isDark ? '1px solid rgba(63,63,70,0.7)' : '1px solid #e2e8f0' }}
           >
             {[
               { icon: Hash, label: 'Case Number', value: ticket.id },
@@ -262,7 +253,7 @@ function CaseDetailModal({
               </label>
               <p
                 className="text-sm text-gray-900 dark:text-zinc-100 leading-relaxed p-3.5 rounded-xl text-xs"
-                style={{ background: isDark ? 'rgba(39,39,42,0.5)' : '#f8fafc', border: isDark ? '1px solid rgba(39,39,42,0.5)' : '1px solid #e2e8f0' }}
+                style={{ background: isDark ? 'rgba(39,39,42,0.6)' : '#f8fafc', border: isDark ? '1px solid rgba(63,63,70,0.7)' : '1px solid #e2e8f0' }}
               >
                 {ticket.userComment}
               </p>
@@ -271,14 +262,14 @@ function CaseDetailModal({
 
           {/* User Interaction Flags if any */}
           {ticket.didInteract && (ticket.didInteract.clickedLink || ticket.didInteract.enteredCreds) && (
-            <div
-              className="flex items-center gap-2.5 p-3 rounded-xl"
-              style={{ background: isDark ? 'rgba(239,68,68,0.08)' : 'rgba(239,68,68,0.08)', border: isDark ? '1px solid rgba(239,68,68,0.25)' : '1px solid rgba(239,68,68,0.25)' }}
-            >
-              <AlertTriangle className="w-4 h-4 text-red-500 dark:text-red-400 shrink-0" />
-              <p className="text-xs text-red-700 dark:text-red-300">
-                You reported observing security alerts or certificate warnings during this session. Please review analyst actions below.
-              </p>
+            <div className="p-3 rounded-xl flex items-center gap-2.5 bg-red-500 animate-pulse" style={{ animationDuration: '2s' }}>
+              <AlertTriangle className="w-4 h-4 text-white shrink-0" />
+              <div>
+                <p className="text-xs text-white font-bold">High Risk Interaction Reported by User!</p>
+                <p className="text-xs text-red-100">
+                  You reported observing security alerts or certificate warnings during this session. Please review analyst actions below.
+                </p>
+              </div>
             </div>
           )}
 
@@ -288,17 +279,34 @@ function CaseDetailModal({
               <label className="text-[10px] font-bold text-gray-500 dark:text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
                 <FileText className="w-3 h-3" /> Submitted Capture File (.eml / .pcap)
               </label>
-              <button
-                onClick={() => downloadAttachment(ticket.emlFile!.data, ticket.emlFile!.name)}
-                className="w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-sm text-blue-600 dark:text-blue-300 font-semibold transition-transform duration-150 ease-out active:scale-95 cursor-pointer"
-                style={{ background: 'rgba(59,130,246,0.08)', border: isDark ? '1px solid rgba(59,130,246,0.2)' : '1px solid rgba(59,130,246,0.25)' }}
+              <div
+                className="rounded-xl p-3"
+                style={{ background: isDark ? 'rgba(30,32,48,0.8)' : '#f0f4ff', border: isDark ? '1px solid rgba(99,102,241,0.2)' : '1px solid rgba(99,102,241,0.25)' }}
               >
-                <Download className="w-4 h-4 text-blue-500 dark:text-blue-400" />
-                <span className="truncate">{ticket.emlFile.name}</span>
-                <span className="text-[11px] text-gray-500 dark:text-gray-500 font-normal ml-auto shrink-0">
-                  {formatBytes(ticket.emlFile.size)}
-                </span>
-              </button>
+                {/* File row */}
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-indigo-500">
+                    <Mail className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-bold text-gray-900 dark:text-zinc-100 font-mono truncate">{ticket.emlFile.name}</p>
+                    <p className="text-[11px] text-gray-500 dark:text-gray-400 font-mono">File Size: {formatBytes(ticket.emlFile.size)}</p>
+                  </div>
+                </div>
+                {/* Footer row */}
+                <div className="flex items-center justify-between mt-2.5 pt-2 border-t border-indigo-500/10">
+                  <span className="text-[11px] text-emerald-500 font-mono font-semibold flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse inline-block" />
+                    Your uploaded file
+                  </span>
+                  <button
+                    onClick={() => downloadAttachment(ticket.emlFile!.data, ticket.emlFile!.name)}
+                    className="text-[11px] text-indigo-400 hover:text-indigo-300 font-mono font-semibold transition-colors cursor-pointer flex items-center gap-1"
+                  >
+                    <Download className="w-3 h-3" /> Download file
+                  </button>
+                </div>
+              </div>
             </div>
           )}
 
@@ -465,8 +473,7 @@ function CaseDetailModal({
                 value={feedback}
                 onChange={(e) => setFeedback(e.target.value)}
                 placeholder="Optional confirmation note (e.g. 'Password reset, thank you!')..."
-                className="w-full text-xs rounded-xl px-3 py-2 text-gray-900 dark:text-gray-100 placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
-                style={{ background: isDark ? 'rgba(39,39,42,0.5)' : '#ffffff', border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #cbd5e1' }}
+                className="w-full text-xs rounded-xl px-3 py-2 text-gray-900 dark:text-gray-100 placeholder-slate-400 dark:placeholder-gray-500 font-mono bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 focus:outline-none focus:ring-0 focus:border-purple-500/60"
               />
 
               <button
@@ -546,8 +553,7 @@ function CaseDetailModal({
                   onChange={(e) => setReplyText(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
                   placeholder="Ask follow-up question or reply to analyst..."
-                  className="flex-1 text-xs rounded-xl px-3.5 py-2.5 text-gray-900 dark:text-gray-100 placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-green-500"
-                  style={{ background: isDark ? 'rgba(39,39,42,0.5)' : '#f8fafc', border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #cbd5e1' }}
+                  className="flex-1 text-xs rounded-xl px-3.5 py-2.5 text-gray-900 dark:text-gray-100 placeholder-slate-400 dark:placeholder-gray-500 font-mono bg-white dark:bg-black/30 border border-gray-200 dark:border-zinc-800/80 focus:outline-none focus:ring-0 focus:border-purple-500/60"
                 />
                 <button
                   onClick={handleSendMessage}
@@ -566,7 +572,7 @@ function CaseDetailModal({
         {/* Modal Footer */}
         <div
           className="px-6 py-4 flex items-center justify-end shrink-0"
-          style={{ borderTop: isDark ? '1px solid rgba(39,39,42,0.5)' : '1px solid #e2e8f0' }}
+          style={{ borderTop: isDark ? '1px solid rgba(63,63,70,0.6)' : '1px solid #e2e8f0' }}
         >
           <button
             onClick={onClose}
@@ -588,6 +594,29 @@ export function CheckStatusPage({ onNavigate }: CheckStatusPageProps) {
   const { isDark } = useTheme();
 
   const [filterStatus, setFilterStatus] = useState<'all' | 'pending' | 'in_review' | 'analyzed' | 'resolved'>('all');
+  const [tabIndicator, setTabIndicator] = useState<{ left: number; width: number; ready: boolean }>({ left: 0, width: 0, ready: false });
+  const tabButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+
+  useLayoutEffect(() => {
+    const updateIndicator = () => {
+      const el = tabButtonRefs.current[filterStatus];
+      if (el) {
+        setTabIndicator({
+          left: el.offsetLeft,
+          width: el.offsetWidth,
+          ready: true,
+        });
+      }
+    };
+    updateIndicator();
+    const rafId = requestAnimationFrame(updateIndicator);
+    window.addEventListener('resize', updateIndicator);
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener('resize', updateIndicator);
+    };
+  }, [filterStatus]);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
 
@@ -762,15 +791,26 @@ export function CheckStatusPage({ onNavigate }: CheckStatusPageProps) {
       {/* Filter and Search Toolbar */}
       <SlideIn delay={100} direction="up">
         <div className="flex items-center gap-3 flex-wrap">
-          {/* Status  tabs */}
+          {/* Status tabs */}
           <div
-            className="h-11 inline-flex w-fit max-w-full items-center gap-1 p-1 rounded-xl bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 shadow-sm overflow-x-auto scrollbar-none select-none"
+            className="relative h-11 inline-flex w-fit max-w-full items-center gap-1 p-1 rounded-xl bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 shadow-sm overflow-x-auto scrollbar-none select-none"
           >
+            {/* Smooth Left-Right Sliding Indicator Pill */}
+            {tabIndicator.ready && (
+              <div
+                className="absolute top-1 bottom-1 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20 pointer-events-none transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+                style={{
+                  left: `${tabIndicator.left}px`,
+                  width: `${tabIndicator.width}px`,
+                }}
+              />
+            )}
             {(['all', 'pending', 'in_review', 'analyzed', 'resolved'] as const).map((s) => {
               const active = filterStatus === s;
               return (
                 <button
                   key={s}
+                  ref={(el) => { tabButtonRefs.current[s] = el; }}
                   type="button"
                   onClick={() => setFilterStatus(s)}
                   className={`relative h-9 px-3.5 rounded-lg text-xs sm:text-sm font-semibold capitalize transition-colors duration-200 flex items-center justify-center shrink-0 whitespace-nowrap cursor-pointer select-none ${
@@ -779,17 +819,6 @@ export function CheckStatusPage({ onNavigate }: CheckStatusPageProps) {
                       : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white'
                   }`}
                 >
-                  {active && (
-                    <motion.div
-                      layoutId="activeCheckStatusFilterTab"
-                      className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
-                      transition={{
-                        type: 'tween',
-                        ease: [0.25, 0.1, 0.25, 1],
-                        duration: 0.22,
-                      }}
-                    />
-                  )}
                   <span className="relative z-10">{s.replace('_', ' ')}</span>
                 </button>
               );
@@ -853,29 +882,23 @@ export function CheckStatusPage({ onNavigate }: CheckStatusPageProps) {
                     <div
                       className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 mt-0.5"
                       style={{
-                        background: ticket.status === 'resolved'
-                          ? 'rgba(168,85,247,0.12)'
+                        background: ticket.status === 'resolved' || ticket.status === 'closed'
+                          ? '#8b5cf6'
                           : ticket.status === 'analyzed'
-                          ? 'rgba(34,197,94,0.12)'
+                          ? '#10b981'
                           : ticket.status === 'in_review'
-                          ? 'rgba(6,182,212,0.12)'
-                          : 'rgba(245,158,11,0.12)',
-                        border: ticket.status === 'resolved'
-                          ? '1px solid rgba(168,85,247,0.25)'
-                          : ticket.status === 'analyzed'
-                          ? '1px solid rgba(34,197,94,0.25)'
-                          : ticket.status === 'in_review'
-                          ? '1px solid rgba(6,182,212,0.3)'
-                          : '1px solid rgba(245,158,11,0.25)' }}
+                          ? '#06b6d4'
+                          : '#f59e0b',
+                      }}
                     >
-                      {ticket.status === 'resolved' ? (
-                        <ShieldCheck className="w-5 h-5 text-purple-400" />
+                      {ticket.status === 'resolved' || ticket.status === 'closed' ? (
+                        <ShieldCheck className="w-5 h-5 text-white" />
                       ) : ticket.status === 'analyzed' ? (
-                        <ShieldCheck className="w-5 h-5 text-green-400" />
+                        <ShieldCheck className="w-5 h-5 text-white" />
                       ) : ticket.status === 'in_review' ? (
-                        <Clock className="w-5 h-5 text-cyan-400 animate-spin" />
+                        <Clock className="w-5 h-5 text-white animate-spin" />
                       ) : (
-                        <Clock className="w-5 h-5 text-amber-400 animate-pulse" />
+                        <Clock className="w-5 h-5 text-white animate-pulse" />
                       )}
                     </div>
 
@@ -884,7 +907,13 @@ export function CheckStatusPage({ onNavigate }: CheckStatusPageProps) {
                         <span className="text-xs font-mono font-bold text-gray-900 dark:text-zinc-100 whitespace-nowrap">{ticket.id}</span>
                         <StatusBadge status={ticket.status} />
                         {ticket.verdict && (
-                          <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-gray-50 text-gray-900 dark:bg-white/5 dark:text-zinc-100">
+                          <span className={`text-[10px] px-2.5 py-0.5 rounded font-bold uppercase text-white shadow-xs ${
+                            ticket.verdict.toLowerCase().includes('malicious') || ticket.verdict.toLowerCase().includes('phish')
+                              ? 'bg-red-600'
+                              : ticket.verdict.toLowerCase().includes('suspect') || ticket.verdict.toLowerCase().includes('suspicious')
+                              ? 'bg-amber-600'
+                              : 'bg-emerald-600'
+                          }`}>
                             {ticket.verdict}
                           </span>
                         )}

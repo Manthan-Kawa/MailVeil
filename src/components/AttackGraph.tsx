@@ -95,76 +95,56 @@ function AttackNode({ data, selected }: NodeProps) {
   const cfg = NODE_CFG[nd.type] ?? NODE_CFG.email;
   const Icon = cfg.icon;
 
+  const getBadgeBg = (v: string) => {
+    const u = v.toUpperCase();
+    if (u.includes('CRIT') || u === 'FAIL' || u.includes('HIGH')) return '#dc2626';
+    if (u.includes('MED')) return '#d97706';
+    if (u.includes('LOW') || u === 'PASS') return '#16a34a';
+    return '#2563eb';
+  };
+  const isBadgeKey = (k: string, v: string) => {
+    const u = v.toUpperCase();
+    return ['Alert Level','Severity','SPF','DMARC','Integrity'].includes(k)
+      || ['CRITICAL','HIGH','MEDIUM','LOW','PASS','FAIL'].includes(u);
+  };
+
   return (
-    <div
-      style={{
-        background: '#18181b',
-        border: `1.5px solid ${selected ? '#ffffff' : cfg.border}`,
-        borderRadius: '10px',
-        width: '215px',
-        boxShadow: selected ? '0 0 0 2px rgba(255,255,255,0.4), 0 4px 20px rgba(0,0,0,0.6)' : '0 4px 16px rgba(0,0,0,0.4)',
-        overflow: 'hidden',
-        cursor: 'grab',
-        userSelect: 'none',
-        transition: 'border-color 0.2s ease, box-shadow 0.2s ease' }}
-    >
-      <Handle type="target" position={Position.Left} id="left" style={{ background: cfg.border, width: 8, height: 8, left: -4 }} />
-      <Handle type="source" position={Position.Right} id="right" style={{ background: cfg.border, width: 8, height: 8, right: -4 }} />
-      <Handle type="target" position={Position.Top} id="top" style={{ background: cfg.border, width: 8, height: 8, top: -4 }} />
-      <Handle type="source" position={Position.Bottom} id="bottom" style={{ background: cfg.border, width: 8, height: 8, bottom: -4 }} />
+    <div style={{ position: 'relative', width: 215, maxWidth: 215, boxSizing: 'border-box', borderRadius: 10, background: '#18181b', border: `1.5px solid ${selected ? '#ffffff' : cfg.border}`, boxShadow: selected ? '0 0 0 2px rgba(255,255,255,0.4), 0 4px 20px rgba(0,0,0,0.6)' : '0 4px 16px rgba(0,0,0,0.4)', cursor: 'grab', userSelect: 'none', transition: 'border-color 0.2s, box-shadow 0.2s', overflow: 'visible' }}>
 
-      {/* Header Bar */}
-      <div style={{ background: cfg.headerBg, borderBottom: `1px solid ${cfg.border}60`, padding: '6px 10px', display: 'flex', alignItems: 'center', gap: '7px' }}>
-        <Icon style={{ color: cfg.iconColor, width: 13, height: 13, flexShrink: 0 }} />
-        <span style={{ color: cfg.iconColor, fontSize: '9.5px', fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', fontFamily: "'Inter', sans-serif" }}>
-          {cfg.label}
-        </span>
-      </div>
+      {/* Handles — only visual properties overridden; ReactFlow owns position/transform so
+           edge endpoints are measured from the correct DOM bounding-box centre. */}
+      <Handle type="target" position={Position.Left}   id="left"   style={{ background: cfg.border, width: 8, height: 8, border: '2px solid #18181b' }} />
+      <Handle type="source" position={Position.Right}  id="right"  style={{ background: cfg.border, width: 8, height: 8, border: '2px solid #18181b' }} />
+      <Handle type="target" position={Position.Top}    id="top"    style={{ background: cfg.border, width: 8, height: 8, border: '2px solid #18181b' }} />
+      <Handle type="source" position={Position.Bottom} id="bottom" style={{ background: cfg.border, width: 8, height: 8, border: '2px solid #18181b' }} />
 
-      {/* Main Label */}
-      <div style={{ padding: '7px 10px 4px' }}>
-        <div style={{ color: '#ffffff', fontSize: '11px', fontWeight: 700, fontFamily: "'Inter', sans-serif", whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-          {nd.label}
+      {/* Content clipped separately to keep rounded corners */}
+      <div style={{ overflow: 'hidden', borderRadius: 9, width: '100%', boxSizing: 'border-box' }}>
+        <div style={{ background: cfg.headerBg, borderBottom: `1px solid ${cfg.border}60`, padding: '6px 10px', display: 'flex', alignItems: 'center', gap: 7, minWidth: 0 }}>
+          <Icon style={{ color: cfg.iconColor, width: 13, height: 13, flexShrink: 0 }} />
+          <span style={{ color: cfg.iconColor, fontSize: '9.5px', fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', fontFamily: "'Inter',sans-serif", overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {cfg.label}
+          </span>
         </div>
-      </div>
-
-      {/* Detail Rows (High contrast) */}
-      <div style={{ padding: '0 10px 8px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-        {nd.details.map((d) => {
-          const valUpper = (d.value || '').toUpperCase();
-          const isBadge = ['Alert Level', 'Severity', 'SPF', 'DMARC', 'Integrity'].includes(d.key) || ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW', 'PASS', 'FAIL'].includes(valUpper);
-          const badgeBg = valUpper.includes('CRIT') || valUpper === 'FAIL' || valUpper.includes('HIGH')
-            ? '#dc2626'
-            : valUpper.includes('MED')
-            ? '#d97706'
-            : valUpper.includes('LOW') || valUpper === 'PASS'
-            ? '#16a34a'
-            : '#2563eb';
-
-          return (
-            <div key={d.key} style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-              <span style={{ color: '#9ca3af', fontSize: '10px', fontWeight: 600, fontFamily: "'Inter', sans-serif", whiteSpace: 'nowrap', flexShrink: 0 }}>{d.key}:</span>
-              {isBadge ? (
-                <span style={{
-                  background: badgeBg,
-                  color: '#ffffff',
-                  fontSize: '9px',
-                  fontWeight: 700,
-                  fontFamily: "'Inter', sans-serif",
-                  padding: '1px 6px',
-                  borderRadius: '4px',
-                  boxShadow: '0 1px 2px rgba(0,0,0,0.2)',
-                  letterSpacing: '0.02em',
-                  textTransform: 'uppercase',
-                }}>
+        <div style={{ padding: '7px 10px 4px', minWidth: 0 }}>
+          <div style={{ color: '#fff', fontSize: 11, fontWeight: 700, fontFamily: "'Inter',sans-serif", whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0 }}>
+            {nd.label}
+          </div>
+        </div>
+        <div style={{ padding: '0 10px 8px', display: 'flex', flexDirection: 'column', gap: 4, width: '100%', boxSizing: 'border-box' }}>
+          {nd.details.map((d) => (
+            <div key={d.key} style={{ display: 'flex', gap: 6, alignItems: 'center', minWidth: 0, width: '100%' }}>
+              <span style={{ color: '#9ca3af', fontSize: 10, fontWeight: 600, fontFamily: "'Inter',sans-serif", whiteSpace: 'nowrap', flexShrink: 0 }}>{d.key}:</span>
+              {isBadgeKey(d.key, d.value) ? (
+                <span style={{ background: getBadgeBg(d.value), color: '#fff', fontSize: 9, fontWeight: 700, padding: '1px 6px', borderRadius: 4, letterSpacing: '0.02em', textTransform: 'uppercase', flexShrink: 0 }}>
                   {d.value}
                 </span>
               ) : (
-                <span style={{ color: '#f3f4f6', fontSize: '10px', fontWeight: 500, fontFamily: "'Inter', sans-serif", overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.value}</span>
+                <span style={{ color: '#f3f4f6', fontSize: 10, fontWeight: 500, fontFamily: "'Inter',sans-serif", overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0, flex: 1 }}>{d.value}</span>
               )}
             </div>
-          );
-        })}
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -293,7 +273,7 @@ export function buildDynamicAttackGraph(
     ], x: layout['n-hash'].x, y: layout['n-hash'].y
   });
 
-  edges.push({ id: 'e-email-hash', source: 'n-email', target: 'n-hash', label: 'HASHLINK', color: '#6366f1', animated: true });
+  edges.push({ id: 'e-email-hash', source: 'n-email', sourceHandle: 'bottom', target: 'n-hash', targetHandle: 'top', label: 'HASHLINK', color: '#6366f1', animated: true });
 
   // Col 1 — Sender & Mail Server
   nodes.push({
@@ -308,7 +288,7 @@ export function buildDynamicAttackGraph(
     ], x: layout['n-sender'].x, y: layout['n-sender'].y
   });
 
-  edges.push({ id: 'e-email-sender', source: 'n-email', target: 'n-sender', label: 'RECEIVES', color: '#f97316', animated: true });
+  edges.push({ id: 'e-email-sender', source: 'n-email', sourceHandle: 'right', target: 'n-sender', targetHandle: 'left', label: 'RECEIVES', color: '#f97316', animated: true });
 
   nodes.push({
     id: 'n-mailserver', type: 'mailserver',
@@ -336,8 +316,8 @@ export function buildDynamicAttackGraph(
     ], x: layout['n-domain'].x, y: layout['n-domain'].y
   });
 
-  edges.push({ id: 'e-sender-domain', source: 'n-sender', target: 'n-domain', label: 'RESOLVES', color: '#3b82f6', animated: true });
-  edges.push({ id: 'e-domain-mailserver', source: 'n-domain', target: 'n-mailserver', label: 'MX RECORD', color: '#8b5cf6', animated: true });
+  edges.push({ id: 'e-sender-domain', source: 'n-sender', sourceHandle: 'right', target: 'n-domain', targetHandle: 'left', label: 'RESOLVES', color: '#3b82f6', animated: true });
+  edges.push({ id: 'e-domain-mailserver', source: 'n-domain', sourceHandle: 'bottom', target: 'n-mailserver', targetHandle: 'right', label: 'MX RECORD', color: '#8b5cf6', animated: true });
 
   // Col 3 — IP & URLs
   nodes.push({
@@ -352,8 +332,8 @@ export function buildDynamicAttackGraph(
     ], x: layout['n-ip'].x, y: layout['n-ip'].y
   });
 
-  edges.push({ id: 'e-domain-ip', source: 'n-domain', target: 'n-ip', label: 'A-RECORD', color: '#eab308', animated: true });
-  edges.push({ id: 'e-mailserver-ip', source: 'n-mailserver', target: 'n-ip', label: 'HOSTED AT', color: '#eab308', animated: true });
+  edges.push({ id: 'e-domain-ip', source: 'n-domain', sourceHandle: 'right', target: 'n-ip', targetHandle: 'left', label: 'A-RECORD', color: '#eab308', animated: true });
+  edges.push({ id: 'e-mailserver-ip', source: 'n-mailserver', sourceHandle: 'right', target: 'n-ip', targetHandle: 'left', label: 'HOSTED AT', color: '#eab308', animated: true });
 
   if (urls.length > 0) {
     urls.slice(0, 2).forEach((url, idx) => {
@@ -370,7 +350,7 @@ export function buildDynamicAttackGraph(
           { key: 'Hops', value: '3 redirects' },
         ], x: layout[`n-url-${idx + 1}`]?.x ?? (1040 + idx * 200), y: layout[`n-url-${idx + 1}`]?.y ?? (280 + idx * 160)
       });
-      edges.push({ id: `e-domain-url-${idx + 1}`, source: 'n-domain', target: urlId, label: 'SERVES', color: '#ef4444', animated: true });
+      edges.push({ id: `e-domain-url-${idx + 1}`, source: 'n-domain', sourceHandle: 'right', target: urlId, targetHandle: 'left', label: 'SERVES', color: '#ef4444', animated: true });
     });
   } else {
     nodes.push({
@@ -383,7 +363,7 @@ export function buildDynamicAttackGraph(
         { key: 'Risk Score', value: `${result.threat_score}/100` },
       ], x: layout['n-url-1'].x, y: layout['n-url-1'].y
     });
-    edges.push({ id: 'e-domain-url-1', source: 'n-domain', target: 'n-url-1', label: 'SERVES', color: '#ef4444', animated: true });
+    edges.push({ id: 'e-domain-url-1', source: 'n-domain', sourceHandle: 'right', target: 'n-url-1', targetHandle: 'left', label: 'SERVES', color: '#ef4444', animated: true });
   }
 
   // Col 4 — ASN & Campaign
@@ -399,7 +379,7 @@ export function buildDynamicAttackGraph(
     ], x: layout['n-asn'].x, y: layout['n-asn'].y
   });
 
-  edges.push({ id: 'e-ip-asn', source: 'n-ip', target: 'n-asn', label: 'BELONGS TO', color: '#a855f7', animated: true });
+  edges.push({ id: 'e-ip-asn', source: 'n-ip', sourceHandle: 'right', target: 'n-asn', targetHandle: 'left', label: 'BELONGS TO', color: '#a855f7', animated: true });
 
   nodes.push({
     id: 'n-campaign', type: 'campaign',
@@ -413,8 +393,8 @@ export function buildDynamicAttackGraph(
     ], x: layout['n-campaign'].x, y: layout['n-campaign'].y
   });
 
-  edges.push({ id: 'e-asn-campaign', source: 'n-asn', target: 'n-campaign', label: 'HOSTS', color: '#f59e0b', animated: true });
-  edges.push({ id: 'e-url-campaign', source: 'n-url-1', target: 'n-campaign', label: 'PART OF', color: '#f59e0b', animated: true });
+  edges.push({ id: 'e-asn-campaign', source: 'n-asn', sourceHandle: 'right', target: 'n-campaign', targetHandle: 'left', label: 'HOSTS', color: '#f59e0b', animated: true });
+  edges.push({ id: 'e-url-campaign', source: 'n-url-1', sourceHandle: 'right', target: 'n-campaign', targetHandle: 'left', label: 'PART OF', color: '#f59e0b', animated: true });
 
   // Col 5 — Case
   nodes.push({
@@ -431,8 +411,8 @@ export function buildDynamicAttackGraph(
     ], x: layout['n-case'].x, y: layout['n-case'].y
   });
 
-  edges.push({ id: 'e-campaign-case', source: 'n-campaign', target: 'n-case', label: 'LINKED TO', color: '#22c55e', animated: true });
-  edges.push({ id: 'e-hash-case', source: 'n-hash', target: 'n-case', label: 'EVIDENCE RECORD', color: '#22c55e', animated: true });
+  edges.push({ id: 'e-campaign-case', source: 'n-campaign', sourceHandle: 'right', target: 'n-case', targetHandle: 'left', label: 'LINKED TO', color: '#22c55e', animated: true });
+  edges.push({ id: 'e-hash-case', source: 'n-hash', sourceHandle: 'right', target: 'n-case', targetHandle: 'bottom', label: 'EVIDENCE RECORD', color: '#22c55e', animated: true });
 
   return { nodes, edges };
 }
@@ -514,6 +494,8 @@ function AttackGraphCanvasInner({
         data: { nodeData: n },
         selected: n.id === selectedId,
         draggable: true,
+        width: 215,
+        style: { width: 215 },
       };
     });
 
@@ -521,6 +503,8 @@ function AttackGraphCanvasInner({
       id: e.id,
       source: e.source,
       target: e.target,
+      sourceHandle: (e as any).sourceHandle ?? 'right',
+      targetHandle: (e as any).targetHandle ?? 'left',
       type: 'smoothstep',
       animated: true,
       label: e.label,
@@ -581,6 +565,8 @@ function AttackGraphCanvasInner({
       data: { nodeData: n },
       selected: false,
       draggable: true,
+      width: 215,
+      style: { width: 215 },
     }));
     setNodes(defaultNodes);
     setSelectedId(null);
@@ -662,7 +648,7 @@ function AttackGraphCanvasInner({
                   return nd ? (NODE_CFG[nd.type]?.border ?? '#3b82f6') : '#3b82f6';
                 }}
                 maskColor="rgba(18, 19, 23, 0.8)"
-                style={{ background: '#18181b', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px', width: 160, height: 100, right: '16px', bottom: '16px' }}
+                style={{ background: '#18181b', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px', width: 160, height: 100, top: '16px', bottom: 'auto', right: '16px' }}
               />
             </div>
           </ReactFlow>
@@ -671,6 +657,15 @@ function AttackGraphCanvasInner({
           <div
             className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20 inline-flex items-center gap-1 p-1 bg-gray-50 dark:bg-zinc-900/60 rounded-xl border border-gray-200 dark:border-zinc-800/80 select-none shadow-lg backdrop-blur-md"
           >
+            {indicatorStyle.opacity > 0 && (
+              <div
+                className="absolute top-1 bottom-1 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20 pointer-events-none transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+                style={{
+                  left: `${indicatorStyle.left}px`,
+                  width: `${indicatorStyle.width}px`,
+                }}
+              />
+            )}
             {[
               { id: 'fit', label: 'Fit View', action: fitView },
               { id: 'reset', label: 'Reset', action: reset },
@@ -679,6 +674,7 @@ function AttackGraphCanvasInner({
               return (
                 <button
                   key={btn.id}
+                  ref={(el) => { actionRefs.current[btn.id] = el; }}
                   type="button"
                   onClick={() => {
                     setActiveAction(btn.id as 'fit' | 'reset');
@@ -690,17 +686,6 @@ function AttackGraphCanvasInner({
                       : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white'
                   }`}
                 >
-                  {isSelected && (
-                    <motion.div
-                      layoutId="activeAttackGraphActionTab"
-                      className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
-                      transition={{
-                        type: 'tween',
-                        ease: [0.25, 0.1, 0.25, 1],
-                        duration: 0.22,
-                      }}
-                    />
-                  )}
                   <span className="relative z-10">{btn.label}</span>
                 </button>
               );
@@ -709,7 +694,7 @@ function AttackGraphCanvasInner({
 
           {/* Legend */}
           <div
-            className="absolute bottom-3 left-3 right-3 sm:right-auto sm:bottom-4 sm:left-4 z-20 flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2 rounded-xl backdrop-blur-md overflow-x-auto scrollbar-none max-w-[calc(100%-24px)]"
+            className="absolute bottom-3 left-3 right-3 z-20 flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2 rounded-xl backdrop-blur-md overflow-x-auto scrollbar-none"
             style={{
               background: 'rgba(24, 24, 27, 0.95)',
               border: '1px solid rgba(255, 255, 255, 0.12)',
@@ -860,16 +845,19 @@ export function renderAttackGraphToSvg(
     let sx = scx, sy = scy;
     let tx = tcx, ty = tcy;
 
+    // Handle circles are rendered at ±4px outside the card border (see circle cx/cy offsets).
+    // Edge endpoints must reach those handle centres to avoid gaps between lines and circles.
+    const HANDLE_OFFSET = 4; // matches the cx/cy offset used when drawing handle circles
     if (Math.abs(dx) >= Math.abs(dy)) {
-      sx = dx > 0 ? s.x + NODE_W : s.x;
+      sx = dx > 0 ? s.x + NODE_W + HANDLE_OFFSET : s.x - HANDLE_OFFSET;
       sy = scy;
-      tx = dx > 0 ? t.x : t.x + NODE_W;
+      tx = dx > 0 ? t.x - HANDLE_OFFSET : t.x + NODE_W + HANDLE_OFFSET;
       ty = tcy;
     } else {
       sx = scx;
-      sy = dy > 0 ? s.y + NODE_H : s.y;
+      sy = dy > 0 ? s.y + NODE_H + HANDLE_OFFSET : s.y - HANDLE_OFFSET;
       tx = tcx;
-      ty = dy > 0 ? t.y : t.y + NODE_H;
+      ty = dy > 0 ? t.y - HANDLE_OFFSET : t.y + NODE_H + HANDLE_OFFSET;
     }
 
     const mx = (sx + tx) / 2;

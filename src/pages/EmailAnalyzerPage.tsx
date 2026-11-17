@@ -528,14 +528,14 @@ function IdleView({
 
                   <div className="flex items-start gap-3 mt-2">
                     <div
-                      className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 shadow-md shadow-blue-500/25 border border-blue-400/30 hover:brightness-110 active:scale-98 transition-all select-none p-2"
-                      style={{ background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 45%, #6366f1 100%)' }}
+                      className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 shadow-lg shadow-blue-500/30 border border-blue-400/25 select-none"
+                      style={{ background: 'linear-gradient(135deg, #1d4ed8 0%, #3b82f6 50%, #6366f1 100%)' }}
                     >
-                      <img
-                        src="/file-icon.png"
-                        alt="Uploaded email file"
-                        className="w-full h-full object-contain drop-shadow-sm pointer-events-none"
-                      />
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="4" width="18" height="16" rx="2.5" fill="white" fillOpacity="0.15" stroke="white" strokeOpacity="0.5" strokeWidth="1.5"/>
+                        <path d="M3 8.5L10.5 13.5C11.4 14.1 12.6 14.1 13.5 13.5L21 8.5" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+                        <path d="M8 12.5L4 16M16 12.5L20 16" stroke="white" strokeOpacity="0.4" strokeWidth="1.2" strokeLinecap="round"/>
+                      </svg>
                     </div>
                     <div className="min-w-0 flex-1">
                       <h4 className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white truncate" title={uploadedFile.name}>
@@ -1075,7 +1075,7 @@ function ResultsView({
             {/* Smooth Left-Right Sliding Indicator Pill */}
             {tabIndicatorStyle.opacity > 0 && (
               <div
-                className="absolute top-1 bottom-1 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20 pointer-events-none transition-all duration-200 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+                className="absolute top-1 bottom-1 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20 pointer-events-none transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
                 style={{
                   left: `${tabIndicatorStyle.left}px`,
                   width: `${tabIndicatorStyle.width}px`,

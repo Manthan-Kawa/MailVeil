@@ -95,9 +95,9 @@ export function AppearanceCard() {
                   layoutId="themeSelectionActiveBorder"
                   className="absolute inset-0 rounded-2xl border-2 border-blue-600 dark:border-white pointer-events-none shadow-sm"
                   transition={{
-                    type: 'spring',
-                    stiffness: 420,
-                    damping: 32,
+                    type: 'tween',
+                    ease: [0.25, 0.1, 0.25, 1],
+                    duration: 0.3,
                   }}
                 />
               )}

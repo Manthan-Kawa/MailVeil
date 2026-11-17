@@ -21,3 +21,8 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+# Debug, audit & inspection artifacts
+/*.png
+/*.docx
+paper_audit_raw.txt

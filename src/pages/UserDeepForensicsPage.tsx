@@ -658,7 +658,16 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
 
  {/* ── Quick Navigation Tabs ─────────────────────────────────────────── */}
  <SlideIn delay={60} direction="up">
- <div className="inline-flex w-fit max-w-full items-center gap-1 p-1 rounded-xl bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 shadow-sm mb-4 overflow-x-auto scrollbar-none select-none">
+ <div className="relative inline-flex w-fit max-w-full items-center gap-1 p-1 rounded-xl bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 shadow-sm mb-4 overflow-x-auto scrollbar-none select-none">
+   {reportIndicatorStyle.opacity > 0 && (
+     <div
+       className="absolute top-1 bottom-1 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20 pointer-events-none transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+       style={{
+         left: `${reportIndicatorStyle.left}px`,
+         width: `${reportIndicatorStyle.width}px`,
+       }}
+     />
+   )}
  {[
  { id: 'all', label: 'Complete Forensic Report', icon: Shield },
  { id: 'synthesis', label: 'PCAP Analyzer', icon: MailSearch },
@@ -672,6 +681,7 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  return (
  <button
  key={tab.id}
+ ref={(el) => { reportTabRefs.current[tab.id] = el; }}
  type="button"
  onClick={() => setActiveTab(tab.id as any)}
  className={`relative h-9 px-3.5 rounded-lg text-xs sm:text-sm font-semibold whitespace-nowrap transition-colors duration-200 cursor-pointer select-none shrink-0 ${
@@ -680,17 +690,6 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white'
  }`}
  >
- {active && (
- <motion.div
- layoutId="activeUserDeepForensicsTab"
- className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
- transition={{
-   type: 'tween',
-   ease: [0.25, 0.1, 0.25, 1],
-   duration: 0.22,
- }}
- />
- )}
  <span className="relative z-10 flex items-center gap-2">
  <Icon className="w-3.5 h-3.5" />
  {tab.label}
@@ -1041,6 +1040,7 @@ export function UserDeepForensicsPage({ emailId, onNavigate }: UserDeepForensics
  markers={[origin.mapMarker]}
  height="320px"
  singlePointerMode={true}
+ borderless={true}
  />
  </div>
  </div>

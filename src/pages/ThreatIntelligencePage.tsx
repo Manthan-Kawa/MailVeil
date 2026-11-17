@@ -83,6 +83,20 @@ export function ThreatIntelligencePage({ onNavigate }: { onNavigate?: (route: st
   const [vaultSaved, setVaultSaved] = useState(false);
   const [isSavingToVault, setIsSavingToVault] = useState(false);
 
+  const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const [tabIndicator, setTabIndicator] = useState<{ left: number; width: number; ready: boolean }>({ left: 0, width: 0, ready: false });
+
+  useLayoutEffect(() => {
+    const el = tabRefs.current[tab];
+    if (el) {
+      setTabIndicator({
+        left: el.offsetLeft,
+        width: el.offsetWidth,
+        ready: true,
+      });
+    }
+  }, [tab]);
+
   const hasLive = Boolean(currentResult && (currentResult.case_id || currentResult.verdict));
   const rawLevel = (currentResult?.alert_level || 'info').toLowerCase();
   const lc = LEVEL_COLORS[rawLevel] || LEVEL_COLORS.info;
@@ -247,13 +261,23 @@ export function ThreatIntelligencePage({ onNavigate }: { onNavigate?: (route: st
             >
               {/* Tabs header with smooth sliding indicator pill */}
               <div className="p-2 sm:p-2.5 border-b border-gray-200 dark:border-zinc-800/50">
-                <div className="inline-flex w-fit max-w-full items-center gap-1 p-1 rounded-xl bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 shadow-sm overflow-x-auto scrollbar-none select-none">
+                <div className="relative inline-flex w-fit max-w-full items-center gap-1 p-1 rounded-xl bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 shadow-sm overflow-x-auto scrollbar-none select-none">
+                  {tabIndicator.ready && (
+                    <div
+                      className="absolute top-1 bottom-1 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20 pointer-events-none transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+                      style={{
+                        left: `${tabIndicator.left}px`,
+                        width: `${tabIndicator.width}px`,
+                      }}
+                    />
+                  )}
                   {TABS.map((t) => {
                     const Icon = t.icon;
                     const isActive = tab === t.id;
                     return (
                       <button
                         key={t.id}
+                        ref={(el) => { tabRefs.current[t.id] = el; }}
                         type="button"
                         onClick={() => setTab(t.id)}
                         className={`relative shrink-0 flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-4 py-2 sm:py-2 rounded-lg text-xs font-bold transition-colors duration-200 whitespace-nowrap cursor-pointer select-none ${
@@ -262,17 +286,6 @@ export function ThreatIntelligencePage({ onNavigate }: { onNavigate?: (route: st
                             : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white'
                         }`}
                       >
-                        {isActive && (
-                          <motion.div
-                            layoutId="activeThreatIntelTab"
-                            className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
-                            transition={{
-                              type: 'tween',
-                              ease: [0.25, 0.1, 0.25, 1],
-                              duration: 0.22,
-                            }}
-                          />
-                        )}
                         <Icon className={`relative z-10 w-4 h-4 transition-colors duration-200 ${isActive ? 'text-white' : 'text-gray-400 dark:text-zinc-400'}`} />
                         <span className="relative z-10">{t.label}</span>
                       </button>
@@ -722,6 +735,20 @@ function IndicatorsTab({ result }: { result: EmailAnalysisResult | null }) {
   const [typeFilter, setTypeFilter] = useState<string>('all');
   const [selected, setSelected] = useState<RelatedIndicator | null>(null);
 
+  const typeTabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const [typeIndicator, setTypeIndicator] = useState<{ left: number; width: number; ready: boolean }>({ left: 0, width: 0, ready: false });
+
+  useLayoutEffect(() => {
+    const el = typeTabRefs.current[typeFilter];
+    if (el) {
+      setTypeIndicator({
+        left: el.offsetLeft,
+        width: el.offsetWidth,
+        ready: true,
+      });
+    }
+  }, [typeFilter]);
+
   const baseIndicators: RelatedIndicator[] = result
     ? [
         ...(result.threat_intel.sending_ip
@@ -794,12 +821,22 @@ function IndicatorsTab({ result }: { result: EmailAnalysisResult | null }) {
             className="bg-transparent text-xs text-gray-900 dark:text-gray-900 placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none w-full font-medium"
           />
         </div>
-        <div className="inline-flex w-fit max-w-full items-center gap-1 overflow-x-auto scrollbar-none p-1 rounded-lg bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 shadow-sm self-start sm:self-auto shrink-0">
+        <div className="relative inline-flex w-fit max-w-full items-center gap-1 overflow-x-auto scrollbar-none p-1 rounded-lg bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-zinc-800/80 shadow-sm self-start sm:self-auto shrink-0 select-none">
+          {typeIndicator.ready && (
+            <div
+              className="absolute top-1 bottom-1 rounded-md bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20 pointer-events-none transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+              style={{
+                left: `${typeIndicator.left}px`,
+                width: `${typeIndicator.width}px`,
+              }}
+            />
+          )}
           {types.map((t) => {
             const active = typeFilter === t;
             return (
               <button
                 key={t}
+                ref={(el) => { typeTabRefs.current[t] = el; }}
                 type="button"
                 onClick={() => setTypeFilter(t)}
                 className={`relative px-3 py-1 rounded-md text-xs font-semibold capitalize transition-colors duration-200 flex items-center justify-center shrink-0 whitespace-nowrap cursor-pointer select-none ${
@@ -808,17 +845,6 @@ function IndicatorsTab({ result }: { result: EmailAnalysisResult | null }) {
                     : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white'
                 }`}
               >
-                {active && (
-                  <motion.div
-                    layoutId="activeThreatIntelIndicatorTypeTab"
-                    className="absolute inset-0 rounded-md bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 shadow-md shadow-blue-500/20"
-                    transition={{
-                      type: 'tween',
-                      ease: [0.25, 0.1, 0.25, 1],
-                      duration: 0.22,
-                    }}
-                  />
-                )}
                 <span className="relative z-10">{t === 'all' ? 'All Types' : t}</span>
               </button>
             );

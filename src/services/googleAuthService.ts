@@ -224,6 +224,7 @@ export class GoogleAuthService {
         scope: scopes,
         hint: trimmedExpected || undefined,
         callback: async (tokenResponse: GoogleTokenResponse) => {
+          console.log('[GoogleAuth] Token response received:', tokenResponse);
           if (tokenResponse.error) {
             isResolved = true;
             reject(new Error(tokenResponse.error_description || tokenResponse.error));
@@ -239,6 +240,7 @@ export class GoogleAuthService {
           try {
             // Fetch Google user profile
             const profile = await GoogleAuthService.fetchUserProfile(tokenResponse.access_token);
+            console.log('[GoogleAuth] Profile retrieved successfully:', profile.email);
 
             // If an expectedEmail is given, strictly require that the connected account matches!
             if (trimmedExpected) {
@@ -290,19 +292,31 @@ export class GoogleAuthService {
             isResolved = true;
             resolve({ token: tokenResponse.access_token, profile });
           } catch (err) {
+            console.error('[GoogleAuth] Profile fetch error:', err);
             isResolved = true;
             reject(err);
           }
         },
         error_callback: (err: any) => {
+          console.warn('[GoogleAuth] OAuth error_callback triggered:', err);
           if (!isResolved) {
             isResolved = true;
-            reject(new Error(err?.message || 'Google OAuth prompt was cancelled or closed.'));
+            if (err?.type === 'popup_closed') {
+              reject(
+                new Error(
+                  'Google sign-in popup was closed before completing authorization. Please ensure the Gmail permission checkbox is checked and popups/third-party cookies are allowed.'
+                )
+              );
+            } else if (err?.type === 'popup_failed_to_open') {
+              reject(new Error('Google sign-in popup was blocked by your browser. Please allow popups for this site.'));
+            } else {
+              reject(new Error(err?.message || 'Google OAuth prompt was cancelled or closed.'));
+            }
           }
         },
       });
 
-      const requestConfig: { prompt?: string; hint?: string } = { prompt: 'consent' };
+      const requestConfig: { prompt?: string; hint?: string } = { prompt: 'select_account' };
       if (trimmedExpected) {
         requestConfig.hint = trimmedExpected;
       }
